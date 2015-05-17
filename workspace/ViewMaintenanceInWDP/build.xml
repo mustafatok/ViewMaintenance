@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="ViewMaintenanceInWDP">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="C:/Program Files/eclipse"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.7"/>
+    <property name="source" value="1.7"/>
+    <path id="ViewMaintenanceInWDP.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="lib/commons-configuration-1.6.jar"/>
+        <pathelement location="lib/commons-lang-2.5.jar"/>
+        <pathelement location="lib/commons-logging-1.1.1.jar"/>
+        <pathelement location="lib/google-collections-0.8.jar"/>
+        <pathelement location="lib/hadoop-core-1.0.4.jar"/>
+        <pathelement location="lib/log4j-1.2.16.jar"/>
+        <pathelement location="lib/protobuf-java-2.4.0a.jar"/>
+        <pathelement location="lib/slf4j-api-1.4.3.jar"/>
+        <pathelement location="lib/slf4j-log4j12-1.4.3.jar"/>
+        <pathelement location="lib/zookeeper-3.4.5.jar"/>
+        <pathelement location="lib/commons-codec-1.8.jar"/>
+        <pathelement location="C:/Users/Jan Adler/Downloads/hbase-0.94.13/hbase-0.94.13/hbase-0.94.13.jar"/>
+        <pathelement location="lib/jsch-0.1.50.jar"/>
+        <pathelement location="lib/commons-math3-3.2.jar"/>
+        <pathelement location="lib/commons-collections-3.2.1.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="AggregateStatistics">
+        <java classname="de.webdataplatform.test.AggregateStatistics" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="Client">
+        <java classname="de.webdataplatform.test.Client" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="ConsoleTest">
+        <java classname="de.webdataplatform.test.ConsoleTest" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="GetViews">
+        <java classname="de.webdataplatform.viewmanager.processing.GetViews" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="HBaseTest">
+        <java classname="de.webdataplatform.test.HBaseTest" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="Master">
+        <java classname="de.webdataplatform.master.Master" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="MessageResolver">
+        <java classname="de.webdataplatform.viewmanager.MessageResolver" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="Processing">
+        <java classname="de.webdataplatform.viewmanager.processing.Processing" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="PropsTest">
+        <java classname="de.webdataplatform.settings.PropsTest" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="RegionServer">
+        <java classname="de.webdataplatform.regionserver.RegionServer" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="ResultAggregator">
+        <java classname="de.webdataplatform.test.ResultAggregator" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="SSHService">
+        <java classname="de.webdataplatform.ssh.SSHService" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="SVMSystemClient">
+        <java classname="de.webdataplatform.test.SVMSystem" failonerror="true" fork="yes">
+            <arg line="client 40"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="SVMSystemStart">
+        <java classname="de.webdataplatform.test.SVMSystem" failonerror="true" fork="yes">
+            <arg line="start 40"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="SVMSystemStop">
+        <java classname="de.webdataplatform.test.SVMSystem" failonerror="true" fork="yes">
+            <arg line="stop 40"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="SystemConfig">
+        <java classname="de.webdataplatform.settings.SystemConfig" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestCase">
+        <java classname="de.webdataplatform.test.TestCase" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestClient (1)">
+        <java classname="de.webdataplatform.test.TestClient" failonerror="true" fork="yes">
+            <arg line="deltaserver1 createbasetable 10000 1000 10 100"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestClient">
+        <java classname="de.webdataplatform.test.TestClient" failonerror="true" fork="yes">
+            <arg line="deltaserver1 createviewtables 10000 1000 10 100"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestConfig">
+        <java classname="de.webdataplatform.test.TestConfig" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestHashFunction">
+        <java classname="de.webdataplatform.regionserver.TestHashFunction" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestMaster">
+        <java classname="de.webdataplatform.master.TestMaster" failonerror="true" fork="yes">
+            <arg line="master1 192.168.178.36 4133 ubuntu51"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestMessageResolver">
+        <java classname="de.webdataplatform.test.TestMessageResolver" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestRegionServer1">
+        <java classname="de.webdataplatform.regionserver.TestRegionServer" failonerror="true" fork="yes">
+            <arg line="regionserver1 4133"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestRegionServer2">
+        <java classname="de.webdataplatform.regionserver.TestRegionServer" failonerror="true" fork="yes">
+            <arg line="regionserver2 4143"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestRegionServer3">
+        <java classname="de.webdataplatform.regionserver.TestRegionServer" failonerror="true" fork="yes">
+            <arg line="regionserver3 4153"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestSettings">
+        <java classname="de.webdataplatform.settings.TestSettings" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestSetupHomeStart">
+        <java classname="de.webdataplatform.test.TestSetupHome" failonerror="true" fork="yes">
+            <arg line="start"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestSetupHomeStop">
+        <java classname="de.webdataplatform.test.TestSetupHome" failonerror="true" fork="yes">
+            <arg line="stop"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestSetupStart">
+        <java classname="de.webdataplatform.test.TestSetup" failonerror="true" fork="yes">
+            <arg line="start"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestSetupStop">
+        <java classname="de.webdataplatform.test.TestSetup" failonerror="true" fork="yes">
+            <arg line="stop"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager1">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager1  192.168.178.36  4144 4145 ubuntu51"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager10">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager5 4234 4235"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager2">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager2 192.168.178.36 4154 4155 ubuntu51"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager3">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager3 192.168.178.36 4164 4165 ubuntu51"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager4">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager4 192.168.178.36 4174 4175 deltaserver1"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager5">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager5 4184 4185"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager6">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager5 4194 4195"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager7">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager5 4204 4205"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager8">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager5 4214 4215"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestViewManager9">
+        <java classname="de.webdataplatform.viewmanager.TestViewManager" failonerror="true" fork="yes">
+            <arg line="viewmanager5 4224 4225"/>
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestWAL">
+        <java classname="de.webdataplatform.test.TestWAL" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="TestWALReplay">
+        <java classname="de.webdataplatform.test.TestWALReplay" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="WALReader">
+        <java classname="de.webdataplatform.regionserver.WALReader" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="ZipfGenerator">
+        <java classname="de.webdataplatform.test.ZipfGenerator" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+    <target name="Zipfian">
+        <java classname="de.webdataplatform.test.Zipfian" failonerror="true" fork="yes">
+            <classpath refid="ViewMaintenanceInWDP.classpath"/>
+        </java>
+    </target>
+</project>

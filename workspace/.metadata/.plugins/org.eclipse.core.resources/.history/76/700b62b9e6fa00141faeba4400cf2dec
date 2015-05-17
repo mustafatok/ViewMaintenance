@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<setup>
+    
+  <systemconfig>  
+      
+
+     <hdfs>
+   		<username>jan</username>
+   		<password></password>
+     </hdfs>
+    
+     <ssh>
+     	  <user>jan</user>
+	  	  <password>MTVdvrDV$15</password>
+	  	  <passwordlessLogin>false</passwordlessLogin>
+	  	  <privateKeyFile>/home/master/jan/.ssh/id_rsa</privateKeyFile>
+	  	  <knownHostsFile>/home/maser/jan/.ssh/known_hosts</knownHostsFile>
+     </ssh>
+     
+     <directories>
+         <hadoop>/usr/local/hadoop-1.2.1/</hadoop>
+         <hadoopStorage>/usr/local/hadoop/</hadoopStorage>
+         <hbase>/usr/local/hbase-0.98.6.1-hadoop1/</hbase>
+         <vmsystem>/usr/local/scalablevm/</vmsystem>	
+         <zookeeperStorage>/usr/local/zookeeper/</zookeeperStorage>
+     </directories>
+   
+     
+    <master>
+        <zookeeperPath>/hbase/vmaster</zookeeperPath>
+        <loadbalancingInterval></loadbalancingInterval>
+    </master>
+    
+    <viewManager>
+        <zookeeperPath>/hbase/vm</zookeeperPath>
+        <hdfsPath>/viewmanager/</hdfsPath>
+        <statusInterval>10000</statusInterval>
+        <calcStatisticsInterval>1000</calcStatisticsInterval>
+        <displayInterval>10000</displayInterval>
+        <crudOperationsAlarmThreshold>10000</crudOperationsAlarmThreshold>
+        <updatePollingInterval>2</updatePollingInterval>
+        <logUpdates>false</logUpdates>
+        <logPerformance>false</logPerformance>
+    </viewManager>
+
+    <regionServer>
+         <zookeeperPath>/hbase/rstest</zookeeperPath>
+         <statusInterval>10000</statusInterval>
+         <calcStatisticsInterval>1000</calcStatisticsInterval>
+         <maxReplicasHashring>500</maxReplicasHashring>
+         <displayInterval>10000</displayInterval>
+         <walPollingInterval>1000</walPollingInterval>
+         <logWal>false</logWal>
+    </regionServer>
+    
+    <client>
+        <logInterval>10000</logInterval>
+    </client>
+    
+	<messages>
+	    <startSequence>&lt;</startSequence>
+        <endSequence>&gt;</endSequence>
+        <splitSequence>;</splitSequence>  
+        <splitContentSequence>:</splitContentSequence>  
+        <splitIDSequence>&#44;</splitIDSequence>  
+        <markerPrefix>marker:</markerPrefix>
+	    <pollingInterval>100</pollingInterval>
+	    <length>250</length>
+	    <retryInterval>3000</retryInterval>
+        <numOfRetries>3</numOfRetries>
+	</messages>
+
+	<logging>
+	    <console>true</console>
+	    <file>false</file>
+	    <statistics>true</statistics>
+	    <statisticsLineSeparator>;</statisticsLineSeparator>
+	    <logUpdates>false</logUpdates>
+	</logging>
+	
+	<faulttolerance>
+		<signatures>true</signatures>
+		<commitlog>false</commitlog>
+		<testandset>true</testandset>
+	</faulttolerance>
+
+	
+	  
+  </systemconfig>
+
+  
+</setup>

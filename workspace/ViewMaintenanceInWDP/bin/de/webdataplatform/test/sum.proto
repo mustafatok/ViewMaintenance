@@ -1,0 +1,24 @@
+option java_package = "de.webdataplatform.test";
+option java_outer_classname = "Sum";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+message SumRequest {
+    required string family = 1;
+    required string column = 2;
+}
+
+message KeyValue {
+  required string key = 1;
+  required int64  value = 2 [default = 0];
+}
+
+ 
+message SumResponse {
+  repeated KeyValue sumMap = 1;
+}
+ 
+service SumService {
+  rpc getSum(SumRequest)
+    returns (SumResponse);
+}

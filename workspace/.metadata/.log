@@ -1,0 +1,2247 @@
+!SESSION 2015-05-10 09:09:33.666 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.ui.browser 2 0 2015-05-10 09:36:17.319
+!MESSAGE Internal browser is not available: No more handles [Unknown Mozilla path (MOZILLA_FIVE_HOME not set)]
+!SESSION 2015-05-10 09:38:04.848 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.e4.ui.workbench.swt 4 2 2015-05-10 09:38:41.872
+!MESSAGE Problems occurred when invoking code from plug-in: "org.eclipse.e4.ui.workbench.swt".
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.ui.internal.ShowInMenu.getSourcePart(ShowInMenu.java:334)
+	at org.eclipse.ui.internal.ShowInMenu.fillMenu(ShowInMenu.java:182)
+	at org.eclipse.ui.internal.ShowInMenu.fill(ShowInMenu.java:141)
+	at org.eclipse.jface.action.MenuManager.doItemFill(MenuManager.java:780)
+	at org.eclipse.jface.action.MenuManager.update(MenuManager.java:861)
+	at org.eclipse.jface.action.MenuManager.handleAboutToShow(MenuManager.java:494)
+	at org.eclipse.jface.action.MenuManager.access$1(MenuManager.java:487)
+	at org.eclipse.jface.action.MenuManager$2.menuShown(MenuManager.java:519)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:255)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1412)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1393)
+	at org.eclipse.swt.widgets.Menu.gtk_show(Menu.java:674)
+	at org.eclipse.swt.widgets.Widget.windowProc(Widget.java:2047)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4662)
+	at org.eclipse.swt.internal.gtk.OS._g_main_context_iteration(Native Method)
+	at org.eclipse.swt.internal.gtk.OS.g_main_context_iteration(OS.java:2477)
+	at org.eclipse.swt.widgets.Shell.setVisible(Shell.java:2261)
+	at org.eclipse.swt.widgets.Shell.open(Shell.java:1587)
+	at org.eclipse.e4.ui.workbench.renderers.swt.WBWRenderer.postProcess(WBWRenderer.java:744)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:678)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:766)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.access$2(PartRenderingEngine.java:737)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$7.run(PartRenderingEngine.java:731)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.createGui(PartRenderingEngine.java:715)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$9.run(PartRenderingEngine.java:1078)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1032)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:148)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:636)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:579)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:150)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:135)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:380)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:235)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:648)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:603)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1465)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1438)
+
+!ENTRY org.eclipse.e4.ui.workbench 4 0 2015-05-10 09:38:41.895
+!MESSAGE Exception occurred while rendering: org.eclipse.e4.ui.model.application.ui.basic.impl.TrimmedWindowImpl@1c36c02c (elementId: IDEWindow, tags: [topLevel], contributorURI: platform:/plugin/org.eclipse.platform) (widget: Shell {Java - Eclipse}, renderer: org.eclipse.e4.ui.workbench.renderers.swt.WBWRenderer@5b24af05, toBeRendered: true, onTop: false, visible: true, containerData: null, accessibilityPhrase: null) (label: %trimmedwindow.label.eclipseSDK, iconURI: null, tooltip: null, context: TrimmedWindowImpl (IDEWindow) Context, variables: [], x: 131, y: 58, width: 1024, height: 768)
+!STACK 0
+java.lang.NullPointerException
+	at org.eclipse.ui.internal.ShowInMenu.getSourcePart(ShowInMenu.java:334)
+	at org.eclipse.ui.internal.ShowInMenu.fillMenu(ShowInMenu.java:182)
+	at org.eclipse.ui.internal.ShowInMenu.fill(ShowInMenu.java:141)
+	at org.eclipse.jface.action.MenuManager.doItemFill(MenuManager.java:780)
+	at org.eclipse.jface.action.MenuManager.update(MenuManager.java:861)
+	at org.eclipse.jface.action.MenuManager.handleAboutToShow(MenuManager.java:494)
+	at org.eclipse.jface.action.MenuManager.access$1(MenuManager.java:487)
+	at org.eclipse.jface.action.MenuManager$2.menuShown(MenuManager.java:519)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:255)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1412)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1393)
+	at org.eclipse.swt.widgets.Menu.gtk_show(Menu.java:674)
+	at org.eclipse.swt.widgets.Widget.windowProc(Widget.java:2047)
+	at org.eclipse.swt.widgets.Display.windowProc(Display.java:4662)
+	at org.eclipse.swt.internal.gtk.OS._g_main_context_iteration(Native Method)
+	at org.eclipse.swt.internal.gtk.OS.g_main_context_iteration(OS.java:2477)
+	at org.eclipse.swt.widgets.Shell.setVisible(Shell.java:2261)
+	at org.eclipse.swt.widgets.Shell.open(Shell.java:1587)
+	at org.eclipse.e4.ui.workbench.renderers.swt.WBWRenderer.postProcess(WBWRenderer.java:744)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:678)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.safeCreateGui(PartRenderingEngine.java:766)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.access$2(PartRenderingEngine.java:737)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$7.run(PartRenderingEngine.java:731)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.createGui(PartRenderingEngine.java:715)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$9.run(PartRenderingEngine.java:1078)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1032)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:148)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:636)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:579)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:150)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:135)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:380)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:235)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:648)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:603)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1465)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1438)
+!SESSION 2015-05-10 09:40:56.820 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2015-05-10 09:42:48.867
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2015-05-10 09:50:07.012 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2015-05-10 09:50:37.081
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2015-05-12 16:02:04.953 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.core.resources 2 10035 2015-05-12 16:02:13.628
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.egit.ui 2 0 2015-05-12 16:02:50.307
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.team.svn.core.svnnature 4 0 2015-05-15 10:07:08.520
+!MESSAGE SVN: 'Load Authorization Info' operation finished with error
+!SUBENTRY 1 org.eclipse.team.svn.core.svnnature 4 0 2015-05-15 10:07:08.520
+!MESSAGE SVN: 'Load Authorization Info' operation finished with error: No password provided.
+!STACK 0
+org.eclipse.equinox.security.storage.StorageException: No password provided.
+	at org.eclipse.equinox.internal.security.storage.SecurePreferences.get(SecurePreferences.java:264)
+	at org.eclipse.equinox.internal.security.storage.SecurePreferencesWrapper.get(SecurePreferencesWrapper.java:106)
+	at org.eclipse.team.svn.core.svnstorage.AbstractSVNStorage.loadAuthInfoFromSecureStorage(AbstractSVNStorage.java:647)
+	at org.eclipse.team.svn.core.svnstorage.AbstractSVNStorage.loadAuthInfo(AbstractSVNStorage.java:624)
+	at org.eclipse.team.svn.core.svnstorage.SVNRepositoryLocation.checkAuthInfo(SVNRepositoryLocation.java:1241)
+	at org.eclipse.team.svn.core.svnstorage.SVNRepositoryLocation.getUsername(SVNRepositoryLocation.java:405)
+	at org.eclipse.team.svn.core.utility.SVNUtility.configureProxy(SVNUtility.java:849)
+	at org.eclipse.team.svn.core.svnstorage.SVNRepositoryLocation.acquireSVNProxy(SVNRepositoryLocation.java:634)
+	at org.eclipse.team.svn.core.operation.local.property.GetPropertiesOperation.runImpl(GetPropertiesOperation.java:76)
+	at org.eclipse.team.svn.core.operation.AbstractActionOperation.run(AbstractActionOperation.java:82)
+	at org.eclipse.team.svn.core.operation.LoggedOperation.run(LoggedOperation.java:40)
+	at org.eclipse.team.svn.core.utility.ProgressMonitorUtility.doTask(ProgressMonitorUtility.java:104)
+	at org.eclipse.team.svn.core.utility.ProgressMonitorUtility.doTaskExternal(ProgressMonitorUtility.java:90)
+	at org.eclipse.team.svn.core.utility.ProgressMonitorUtility.doTaskExternalDefault(ProgressMonitorUtility.java:77)
+	at org.eclipse.team.svn.ui.panel.local.CommitPanel$CollectPropertiesOperation.processProperty(CommitPanel.java:862)
+	at org.eclipse.team.svn.ui.panel.local.CommitPanel$CollectPropertiesOperation.runImpl(CommitPanel.java:848)
+	at org.eclipse.team.svn.core.operation.AbstractActionOperation.run(AbstractActionOperation.java:82)
+	at org.eclipse.team.svn.mylyn.SVNLinkedTaskInfoAdapterFactory.getBugtraqModel(SVNLinkedTaskInfoAdapterFactory.java:110)
+	at org.eclipse.team.svn.mylyn.SVNTaskRepositoryLinkProvider.getTaskRepository(SVNTaskRepositoryLinkProvider.java:27)
+	at org.eclipse.mylyn.internal.tasks.ui.TasksUiPlugin$13.run(TasksUiPlugin.java:1311)
+	at org.eclipse.core.runtime.SafeRunner.run(SafeRunner.java:42)
+	at org.eclipse.ui.internal.JFaceUtil$1.run(JFaceUtil.java:50)
+	at org.eclipse.jface.util.SafeRunnable.run(SafeRunnable.java:178)
+	at org.eclipse.mylyn.internal.tasks.ui.TasksUiPlugin.getRepositoryForResource(TasksUiPlugin.java:1304)
+	at org.eclipse.mylyn.tasks.ui.AbstractTaskHyperlinkDetector.getTaskRepository(AbstractTaskHyperlinkDetector.java:166)
+	at org.eclipse.mylyn.tasks.ui.AbstractTaskHyperlinkDetector.getTaskRepositories(AbstractTaskHyperlinkDetector.java:130)
+	at org.eclipse.mylyn.internal.tasks.ui.editors.TaskHyperlinkDetector.detectHyperlinks(TaskHyperlinkDetector.java:39)
+	at org.eclipse.mylyn.tasks.ui.AbstractTaskHyperlinkDetector.detectHyperlinks(AbstractTaskHyperlinkDetector.java:93)
+	at org.eclipse.ui.texteditor.HyperlinkDetectorRegistry$HyperlinkDetectorDelegate.detectHyperlinks(HyperlinkDetectorRegistry.java:80)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:289)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.findHyperlinks(HyperlinkManager.java:261)
+	at org.eclipse.jface.text.hyperlink.HyperlinkManager.mouseMove(HyperlinkManager.java:469)
+	at org.eclipse.swt.widgets.TypedListener.handleEvent(TypedListener.java:212)
+	at org.eclipse.swt.widgets.EventTable.sendEvent(EventTable.java:84)
+	at org.eclipse.swt.widgets.Display.sendEvent(Display.java:4454)
+	at org.eclipse.swt.widgets.Widget.sendEvent(Widget.java:1388)
+	at org.eclipse.swt.widgets.Display.runDeferredEvents(Display.java:3799)
+	at org.eclipse.swt.widgets.Display.readAndDispatch(Display.java:3409)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine$9.run(PartRenderingEngine.java:1151)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.e4.ui.internal.workbench.swt.PartRenderingEngine.run(PartRenderingEngine.java:1032)
+	at org.eclipse.e4.ui.internal.workbench.E4Workbench.createAndRunUI(E4Workbench.java:148)
+	at org.eclipse.ui.internal.Workbench$5.run(Workbench.java:636)
+	at org.eclipse.core.databinding.observable.Realm.runWithDefault(Realm.java:332)
+	at org.eclipse.ui.internal.Workbench.createAndRunWorkbench(Workbench.java:579)
+	at org.eclipse.ui.PlatformUI.createAndRunWorkbench(PlatformUI.java:150)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:135)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:380)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:235)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:648)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:603)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1465)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1438)
+
+!ENTRY org.eclipse.mylyn.tasks.ui 2 0 2015-05-15 10:07:17.555
+!MESSAGE Repository link provider took over 5000 ms to execute and was timed out: "[org.eclipse.team.svn.mylyn.SVNTaskRepositoryLinkProvider@49577fcb]"
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.203
+!MESSAGE Launch configuration JeffTest references non-existing project V.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.207
+!MESSAGE Launch configuration JeffTest references non-existing project V.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.209
+!MESSAGE Launch configuration JeffTest references non-existing project V.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.210
+!MESSAGE Launch configuration JeffTest references non-existing project V.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.230
+!MESSAGE Launch configuration JeffTest references non-existing project V.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.862
+!MESSAGE Launch configuration JeffTest references non-existing project Vi.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.864
+!MESSAGE Launch configuration JeffTest references non-existing project Vi.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.865
+!MESSAGE Launch configuration JeffTest references non-existing project Vi.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.876
+!MESSAGE Launch configuration JeffTest references non-existing project Vi.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:16.878
+!MESSAGE Launch configuration JeffTest references non-existing project Vi.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.010
+!MESSAGE Launch configuration JeffTest references non-existing project Vie.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.024
+!MESSAGE Launch configuration JeffTest references non-existing project Vie.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.026
+!MESSAGE Launch configuration JeffTest references non-existing project Vie.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.028
+!MESSAGE Launch configuration JeffTest references non-existing project Vie.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.030
+!MESSAGE Launch configuration JeffTest references non-existing project Vie.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.076
+!MESSAGE Launch configuration JeffTest references non-existing project View.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.086
+!MESSAGE Launch configuration JeffTest references non-existing project View.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.089
+!MESSAGE Launch configuration JeffTest references non-existing project View.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.091
+!MESSAGE Launch configuration JeffTest references non-existing project View.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.092
+!MESSAGE Launch configuration JeffTest references non-existing project View.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.498
+!MESSAGE Launch configuration JeffTest references non-existing project ViewM.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.501
+!MESSAGE Launch configuration JeffTest references non-existing project ViewM.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.502
+!MESSAGE Launch configuration JeffTest references non-existing project ViewM.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.504
+!MESSAGE Launch configuration JeffTest references non-existing project ViewM.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.506
+!MESSAGE Launch configuration JeffTest references non-existing project ViewM.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.712
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMa.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.715
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMa.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.716
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMa.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.718
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMa.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:17.719
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMa.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.125
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMai.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.127
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMai.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.128
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMai.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.130
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMai.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.131
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMai.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.292
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMain.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.294
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMain.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.296
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMain.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.297
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMain.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.298
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMain.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.553
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaint.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.555
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaint.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.556
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaint.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.558
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaint.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.560
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaint.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.676
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainte.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.685
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainte.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.687
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainte.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.689
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainte.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.690
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainte.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.817
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainten.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.821
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainten.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.822
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainten.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.824
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainten.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:18.826
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMainten.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.360
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintena.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.363
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintena.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.365
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintena.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.366
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintena.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.368
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintena.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.479
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenan.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.485
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenan.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.486
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenan.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.488
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenan.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.489
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenan.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.612
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenanc.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.614
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenanc.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.616
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenanc.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.623
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenanc.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.628
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenanc.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.689
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.695
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.702
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.707
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:19.710
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.363
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.365
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.367
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.370
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.371
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.533
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.535
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.536
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.537
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:24.539
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:25.039
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:25.042
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:25.043
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:25.044
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:25.045
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.146
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.159
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.161
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.163
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.165
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.290
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.292
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.293
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.295
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.298
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.368
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.370
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.375
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.378
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:26.380
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.276
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.281
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.283
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.284
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.285
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.516
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.518
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.519
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.521
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.522
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.846
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.848
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.850
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.851
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:29.852
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.485
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.486
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.488
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.489
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.490
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.678
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.681
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.683
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.684
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.685
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.757
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.764
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.774
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.776
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.778
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.966
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.967
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.969
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.971
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:30.973
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.115
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.118
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.120
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.122
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.124
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.204
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.208
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.210
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.221
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:31.230
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:34.713
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:34.717
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:34.719
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:34.724
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:34.740
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.431
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.434
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.437
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.439
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.441
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.727
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.729
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.730
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.732
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.734
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.822
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.824
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.835
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.837
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:35.838
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.640
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.642
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.643
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.644
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.645
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.837
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.840
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.842
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.843
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:36.845
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:41.672
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:41.673
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:41.677
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:41.678
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:41.679
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.302
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.304
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.305
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.307
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.309
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.474
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.475
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.476
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.477
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.478
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.614
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.615
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.617
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.618
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.619
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.759
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.760
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.761
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.763
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.766
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.925
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.927
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.930
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.931
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:42.933
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.084
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.085
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.086
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.087
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.088
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.599
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.600
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.602
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.603
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:43.604
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.276
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.278
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.279
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.280
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.281
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.336
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.338
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.346
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.355
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.364
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.590
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.591
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.592
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.593
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.609
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.898
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.899
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.902
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.911
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:44.919
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.040
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.043
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.058
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.062
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.063
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.273
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.274
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.275
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.277
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.278
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.362
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.364
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.369
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.371
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.373
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.678
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.680
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.681
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.682
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.683
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.850
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.852
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.854
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.856
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.858
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.983
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.985
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.986
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.987
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:45.989
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.184
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.185
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.187
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.188
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.190
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.470
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.472
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.473
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.474
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.475
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.575
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.576
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.578
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.579
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.580
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.722
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.724
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.726
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.727
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.728
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.835
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.837
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.839
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.841
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:46.843
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:49.891
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:49.893
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:49.895
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:49.897
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:49.899
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.814
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.815
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.817
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.818
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.819
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.971
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.974
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.975
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.976
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:50.977
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.044
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.047
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.049
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.051
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.052
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.181
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.183
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.184
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.188
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.190
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.344
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.346
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.347
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.348
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.349
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.510
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.512
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.513
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.514
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.515
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.762
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.764
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.765
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.767
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:51.768
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.680
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.682
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.684
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.687
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.689
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.925
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.927
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.928
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.930
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:52.931
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.041
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.043
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.044
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.046
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.075
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.180
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.185
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.193
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.194
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.196
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.333
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.334
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.336
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.339
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.343
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.400
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.405
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.407
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.413
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.419
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.811
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.813
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.814
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.816
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:53.818
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.075
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.077
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.077
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.078
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.079
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.214
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.216
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.219
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.221
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.222
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.354
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.356
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.357
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.358
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.359
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.556
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.558
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.560
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.562
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.563
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.752
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.754
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.755
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.756
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.757
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.900
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.903
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.910
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.911
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:54.915
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.171
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.174
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.178
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.181
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.183
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.184
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.185
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.186
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.187
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.188
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.188
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.189
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.190
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.191
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.192
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.193
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.193
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.194
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.195
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.196
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.197
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:17:58.201
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.jdt.launching 4 107 2015-05-15 11:18:00.018
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.jdt.launching 4 107 2015-05-15 11:18:27.109
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.912
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.914
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.915
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.915
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.916
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.945
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.946
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.946
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.947
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:32.948
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:33.983
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.002
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.008
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.010
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.010
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.145
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.154
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.156
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.157
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.157
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.225
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.235
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.236
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.237
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.238
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.327
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.340
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.341
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.347
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:18:34.350
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.254
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.256
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.258
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.259
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.261
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.277
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.278
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.279
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.280
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:15.281
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.096
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.101
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.104
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.112
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.115
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.254
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.255
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.256
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.258
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.259
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.289
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.290
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.293
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.294
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.295
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.353
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.357
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.358
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.358
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:16.359
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.492
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.493
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.494
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.495
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.496
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.544
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.547
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.555
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.561
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:41.562
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:43.167
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:43.169
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:43.170
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:43.171
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:43.171
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.198
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.202
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.218
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.223
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.239
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.352
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.384
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.394
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.405
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.406
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.606
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.619
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.620
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.628
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:20:44.634
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.879
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.886
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.887
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.888
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.889
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.905
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.906
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.907
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.908
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:33.908
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.822
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.823
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.824
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.825
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.826
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.877
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.878
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.879
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.879
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.880
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.928
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.929
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.930
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.931
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.932
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.978
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.979
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.980
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.981
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:34.986
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.648
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.649
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.650
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.651
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.652
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.669
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.671
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.672
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.674
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.674
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.838
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.842
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.846
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.851
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.853
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.894
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.898
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.902
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.930
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.932
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.980
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.981
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.986
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.987
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:49.988
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:50.033
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:50.036
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:50.037
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:50.038
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:22:50.053
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.011
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.018
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.019
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.020
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.021
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.036
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.037
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.038
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.039
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:25.040
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.329
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.331
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.336
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.337
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.338
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.368
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.369
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.371
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.372
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.373
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.405
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.406
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.407
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.408
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.409
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.454
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.455
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.456
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.459
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:26.460
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:29.830
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:29.832
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:29.833
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:29.834
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:29.835
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:29.837
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:29.838
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:29.839
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:30.090
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:30.097
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:30.104
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.485
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.487
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.489
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.491
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.492
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.514
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.516
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.517
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.519
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.521
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.539
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.540
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.541
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.541
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.m2e.logback.appender 4 0 2015-05-15 11:33:33.542
+!MESSAGE Launch configuration JeffTest references non-existing project ViewMaintenance.
+
+!ENTRY org.eclipse.equinox.security 4 0 2015-05-15 18:51:00.465
+!MESSAGE No password was found. Value of "password" is being stored as a non-encrypted value in the node  "/SVN/https:\2f\2fvmjacobsen7.informatik.tu-muenchen.de\2fsvn\2fViewMaintenanceInWDP\2f:10e9c6fce7f600141469ab0360767597:<https:\2f\2fvmjacobsen7.informatik.tu-muenchen.de:443> Subversion Repository".
+!STACK 0
+org.eclipse.equinox.security.storage.StorageException: No password was found. Value of "password" is being stored as a non-encrypted value in the node  "/SVN/https:\2f\2fvmjacobsen7.informatik.tu-muenchen.de\2fsvn\2fViewMaintenanceInWDP\2f:10e9c6fce7f600141469ab0360767597:<https:\2f\2fvmjacobsen7.informatik.tu-muenchen.de:443> Subversion Repository".
+	at org.eclipse.equinox.internal.security.storage.SecurePreferences.put(SecurePreferences.java:234)
+	at org.eclipse.equinox.internal.security.storage.SecurePreferencesWrapper.put(SecurePreferencesWrapper.java:110)
+	at org.eclipse.team.svn.core.svnstorage.AbstractSVNStorage.saveAuthInfo(AbstractSVNStorage.java:580)
+	at org.eclipse.team.svn.core.svnstorage.AbstractSVNStorage.saveLocations(AbstractSVNStorage.java:539)
+	at org.eclipse.team.svn.core.svnstorage.AbstractSVNStorage.saveConfiguration(AbstractSVNStorage.java:304)
+	at org.eclipse.team.svn.core.SVNTeamPlugin.stop(SVNTeamPlugin.java:212)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl$4.run(BundleContextImpl.java:827)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl$4.run(BundleContextImpl.java:1)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl.stop(BundleContextImpl.java:820)
+	at org.eclipse.osgi.internal.framework.EquinoxBundle.stopWorker0(EquinoxBundle.java:950)
+	at org.eclipse.osgi.internal.framework.EquinoxBundle$EquinoxModule.stopWorker(EquinoxBundle.java:324)
+	at org.eclipse.osgi.container.Module.doStop(Module.java:626)
+	at org.eclipse.osgi.container.Module.stop(Module.java:488)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.decStartLevel(ModuleContainer.java:1623)
+	at org.eclipse.osgi.container.ModuleContainer$ContainerStartLevel.doContainerStartLevel(ModuleContainer.java:1542)
+	at org.eclipse.osgi.container.SystemModule.stopWorker(SystemModule.java:248)
+	at org.eclipse.osgi.internal.framework.EquinoxBundle$SystemBundle$EquinoxSystemModule.stopWorker(EquinoxBundle.java:145)
+	at org.eclipse.osgi.container.Module.doStop(Module.java:626)
+	at org.eclipse.osgi.container.Module.stop(Module.java:488)
+	at org.eclipse.osgi.container.SystemModule.stop(SystemModule.java:186)
+	at org.eclipse.osgi.internal.framework.EquinoxBundle$SystemBundle$EquinoxSystemModule$1.run(EquinoxBundle.java:160)
+	at java.lang.Thread.run(Thread.java:745)
+!SESSION 2015-05-17 10:56:29.093 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.egit.ui 2 0 2015-05-17 11:00:22.400
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+!SESSION 2015-05-17 11:11:38.437 -----------------------------------------------
+eclipse.buildId=4.4.2.M20150204-1700
+java.version=1.7.0_79
+java.vendor=Oracle Corporation
+BootLoader constants: OS=linux, ARCH=x86_64, WS=gtk, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product
+Command-line arguments:  -os linux -ws gtk -arch x86_64 -product org.eclipse.epp.package.java.product
+
+!ENTRY org.eclipse.core.resources 4 567 2015-05-17 11:12:01.102
+!MESSAGE Workspace restored, but some problems occurred.
+!SUBENTRY 1 org.eclipse.core.resources 4 567 2015-05-17 11:12:01.102
+!MESSAGE Could not read metadata for 'ViewMaintenanceInWDP'.
+!STACK 1
+org.eclipse.core.internal.resources.ResourceException: The project description file (.project) for 'ViewMaintenanceInWDP' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+	at org.eclipse.core.internal.localstore.FileSystemResourceManager.read(FileSystemResourceManager.java:851)
+	at org.eclipse.core.internal.resources.SaveManager.restoreMetaInfo(SaveManager.java:884)
+	at org.eclipse.core.internal.resources.SaveManager.restoreMetaInfo(SaveManager.java:864)
+	at org.eclipse.core.internal.resources.SaveManager.restore(SaveManager.java:715)
+	at org.eclipse.core.internal.resources.SaveManager.startup(SaveManager.java:1565)
+	at org.eclipse.core.internal.resources.Workspace.startup(Workspace.java:2464)
+	at org.eclipse.core.internal.resources.Workspace.open(Workspace.java:2219)
+	at org.eclipse.core.resources.ResourcesPlugin.start(ResourcesPlugin.java:447)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl$3.run(BundleContextImpl.java:771)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl$3.run(BundleContextImpl.java:1)
+	at java.security.AccessController.doPrivileged(Native Method)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl.startActivator(BundleContextImpl.java:764)
+	at org.eclipse.osgi.internal.framework.BundleContextImpl.start(BundleContextImpl.java:721)
+	at org.eclipse.osgi.internal.framework.EquinoxBundle.startWorker0(EquinoxBundle.java:936)
+	at org.eclipse.osgi.internal.framework.EquinoxBundle$EquinoxModule.startWorker(EquinoxBundle.java:319)
+	at org.eclipse.osgi.container.Module.doStart(Module.java:571)
+	at org.eclipse.osgi.container.Module.start(Module.java:439)
+	at org.eclipse.osgi.framework.util.SecureAction.start(SecureAction.java:454)
+	at org.eclipse.osgi.internal.hooks.EclipseLazyStarter.postFindLocalClass(EclipseLazyStarter.java:107)
+	at org.eclipse.osgi.internal.loader.classpath.ClasspathManager.findLocalClass(ClasspathManager.java:531)
+	at org.eclipse.osgi.internal.loader.ModuleClassLoader.findLocalClass(ModuleClassLoader.java:324)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findLocalClass(BundleLoader.java:320)
+	at org.eclipse.osgi.internal.loader.sources.SingleSourcePackage.loadClass(SingleSourcePackage.java:36)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClassInternal(BundleLoader.java:391)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:345)
+	at org.eclipse.osgi.internal.loader.BundleLoader.findClass(BundleLoader.java:337)
+	at org.eclipse.osgi.internal.loader.ModuleClassLoader.loadClass(ModuleClassLoader.java:160)
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:358)
+	at org.eclipse.ui.internal.ide.application.IDEApplication.start(IDEApplication.java:136)
+	at org.eclipse.equinox.internal.app.EclipseAppHandle.run(EclipseAppHandle.java:196)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.runApplication(EclipseAppLauncher.java:134)
+	at org.eclipse.core.runtime.internal.adaptor.EclipseAppLauncher.start(EclipseAppLauncher.java:104)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:380)
+	at org.eclipse.core.runtime.adaptor.EclipseStarter.run(EclipseStarter.java:235)
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:606)
+	at org.eclipse.equinox.launcher.Main.invokeFramework(Main.java:648)
+	at org.eclipse.equinox.launcher.Main.basicRun(Main.java:603)
+	at org.eclipse.equinox.launcher.Main.run(Main.java:1465)
+	at org.eclipse.equinox.launcher.Main.main(Main.java:1438)
+!SUBENTRY 2 org.eclipse.core.resources 4 567 2015-05-17 11:12:01.105
+!MESSAGE The project description file (.project) for 'ViewMaintenanceInWDP' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+
+!ENTRY org.eclipse.egit.ui 2 0 2015-05-17 11:12:52.490
+!MESSAGE Warning: EGit couldn't detect the installation path "gitPrefix" of native Git. Hence EGit can't respect system level
+Git settings which might be configured in ${gitPrefix}/etc/gitconfig under the native Git installation directory.
+The most important of these settings is core.autocrlf. Git for Windows by default sets this parameter to true in
+this system level configuration. The Git installation location can be configured on the
+Team > Git > Configuration preference page's 'System Settings' tab.
+This warning can be switched off on the Team > Git > Confirmations and Warnings preference page.
+
+!ENTRY org.eclipse.core.resources 4 567 2015-05-17 11:12:55.555
+!MESSAGE The project description file (.project) for 'ViewMaintenanceInWDP' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.

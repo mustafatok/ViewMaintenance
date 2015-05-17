@@ -1,0 +1,41 @@
+2015-05-11 08:15:48,684 INFO org.apache.hadoop.hdfs.server.datanode.DataBlockScanner: Verification succeeded blk_-3680163363088365476_1111
+2015-05-11 08:15:48,687 INFO org.apache.hadoop.hdfs.server.datanode.DataBlockScanner: Verification succeeded blk_-2819020864442693082_1112
+2015-05-11 08:15:48,687 INFO org.apache.hadoop.hdfs.server.datanode.DataBlockScanner: Verification succeeded blk_-7673029480350086440_1110
+2015-05-11 08:15:48,945 WARN org.apache.hadoop.hdfs.server.datanode.DataNode: Block report is due, and been waiting for it for 29020 seconds...
+2015-05-11 08:15:48,947 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 2ms
+2015-05-11 08:15:51,946 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 08:15:59,720 INFO org.apache.hadoop.hdfs.server.datanode.DataNode.clienttrace: src: /10.0.2.4:50010, dest: /10.0.2.4:55139, bytes: 11, op: HDFS_READ, cliID: DFSClient_NONMAPREDUCE_-573137840_1, offset: 0, srvID: DS-591570910-10.0.2.4-50010-1430990042892, blockid: blk_6817078466184854276_1001, duration: 906299
+2015-05-11 08:15:59,733 INFO org.apache.hadoop.hdfs.server.datanode.DataNode.clienttrace: src: /10.0.2.4:50010, dest: /10.0.2.4:55140, bytes: 46, op: HDFS_READ, cliID: DFSClient_NONMAPREDUCE_-573137840_1, offset: 0, srvID: DS-591570910-10.0.2.4-50010-1430990042892, blockid: blk_7674130772677885049_1002, duration: 724795
+2015-05-11 08:15:59,757 INFO org.apache.hadoop.hdfs.server.datanode.DataNode.clienttrace: src: /10.0.2.4:50010, dest: /10.0.2.4:55141, bytes: 376, op: HDFS_READ, cliID: DFSClient_NONMAPREDUCE_-573137840_1, offset: 0, srvID: DS-591570910-10.0.2.4-50010-1430990042892, blockid: blk_1569603959959635286_1005, duration: 1072977
+2015-05-11 08:15:59,838 INFO org.apache.hadoop.hdfs.server.datanode.DataNode.clienttrace: src: /10.0.2.4:50010, dest: /10.0.2.4:55142, bytes: 286, op: HDFS_READ, cliID: DFSClient_NONMAPREDUCE_-573137840_1, offset: 0, srvID: DS-591570910-10.0.2.4-50010-1430990042892, blockid: blk_-4041604775065658703_1054, duration: 1588272
+2015-05-11 08:15:59,857 INFO org.apache.hadoop.hdfs.server.datanode.DataNode.clienttrace: src: /10.0.2.4:50010, dest: /10.0.2.4:55143, bytes: 382, op: HDFS_READ, cliID: DFSClient_NONMAPREDUCE_-573137840_1, offset: 0, srvID: DS-591570910-10.0.2.4-50010-1430990042892, blockid: blk_5218551546856755682_1092, duration: 1129708
+2015-05-11 08:15:59,883 INFO org.apache.hadoop.hdfs.server.datanode.DataNode.clienttrace: src: /10.0.2.4:50010, dest: /10.0.2.4:55144, bytes: 290, op: HDFS_READ, cliID: DFSClient_NONMAPREDUCE_-573137840_1, offset: 0, srvID: DS-591570910-10.0.2.4-50010-1430990042892, blockid: blk_-587032198257677768_1009, duration: 832547
+2015-05-11 09:16:41,879 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Block report is due, and been waiting for it for 273 seconds...
+2015-05-11 09:16:41,897 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 18ms
+2015-05-11 09:16:44,889 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 1 msec to generate and 10 msecs for RPC and NN processing
+2015-05-11 10:12:10,215 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 19ms
+2015-05-11 10:12:13,206 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 11:12:08,612 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 1ms
+2015-05-11 11:12:11,614 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 12:12:10,433 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 1ms
+2015-05-11 12:12:10,434 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 13:12:08,740 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 1ms
+2015-05-11 13:12:11,741 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 14:12:11,158 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 0ms
+2015-05-11 14:12:14,159 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 15:12:10,246 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 1ms
+2015-05-11 15:12:10,247 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 16:12:08,776 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 1ms
+2015-05-11 16:12:08,777 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 17:12:10,627 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 9ms
+2015-05-11 17:12:13,620 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 18:57:00,462 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: DatanodeCommand action: DNA_REGISTER
+2015-05-11 18:57:00,469 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished generating blocks being written report for 1 volumes in 0 seconds
+2015-05-11 18:57:00,480 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 10ms
+2015-05-11 18:57:03,467 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 6 msecs for RPC and NN processing
+2015-05-11 19:45:19,554 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: Finished asynchronous block report scan in 1ms
+2015-05-11 19:45:22,554 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: BlockReport of 18 blocks took 0 msec to generate and 1 msecs for RPC and NN processing
+2015-05-11 20:05:56,719 INFO org.apache.hadoop.hdfs.server.datanode.DataNode: SHUTDOWN_MSG: 
+/************************************************************
+SHUTDOWN_MSG: Shutting down DataNode at HB/10.0.2.4
+************************************************************/

@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<evaluationconfig>
+        
+      <updateProcessTimeout>1800000</updateProcessTimeout>
+    
+      <viewManager>
+		<killDelay>10000</killDelay>  
+      </viewManager>
+
+      <regionServer>
+          <overallTimeout>300000</overallTimeout>
+		  <updatesTimeout>2000</updatesTimeout> 
+		  <readWALDelay>10000</readWALDelay>  
+      </regionServer>
+
+      <client>
+	    <fillTablesTimeout>1800000</fillTablesTimeout>
+ 		<createControlTables>true</createControlTables>            
+      	<recreateTables>true</recreateTables>
+      </client>
+        
+	<evaluationSet>
+	    <evaluationParams>
+		<!--  <iterations>1</iterations>-->    
+		    <variableParam>
+		        <name>numOfViewManagers</name>
+			    <startValue>2</startValue>
+			    <endValue>10</endValue>
+		    </variableParam>  
+		    <variableParam>
+		        <name>numOfClients</name>
+			    <startValue>2</startValue>
+			    <endValue>10</endValue>
+		    </variableParam>   
+	    </evaluationParams>
+		<experiment>
+		    <numOfRegionServers>2</numOfRegionServers>
+		    <numOfViewManagers>2</numOfViewManagers>
+		    <numOfKilledViewManagers>0</numOfKilledViewManagers>
+		    <createtables>
+			    <basetable>
+					<name>bt1</name>
+					<numOfRegions>5</numOfRegions>
+			        <numOfOperations>101</numOfOperations>
+				    <distribution>uniform</distribution>
+					<useUpdates>false</useUpdates>
+				    <useDeletes>false</useDeletes>
+			    </basetable>
+<!-- 			    <basetable> -->
+<!-- 					<name>bt2</name> -->
+<!-- 					<numOfRegions>5</numOfRegions> -->
+<!-- 			        <numOfOperations>100</numOfOperations> -->
+<!-- 				    <distribution>uniform</distribution> -->
+<!-- 					<useUpdates>false</useUpdates> -->
+<!-- 				    <useDeletes>false</useDeletes> -->
+<!-- 			    </basetable> -->
+<!-- 			    <basetable> -->
+<!-- 					<name>bt3</name> -->
+<!-- 					<numOfRegions>5</numOfRegions> -->
+<!-- 			        <numOfOperations>100</numOfOperations> -->
+<!-- 				    <distribution>uniform</distribution> -->
+<!-- 					<useUpdates>false</useUpdates> -->
+<!-- 				    <useDeletes>false</useDeletes> -->
+<!-- 			    </basetable> -->
+		         <aggregationView>
+		             <name>count1</name>
+		             <type>count</type>
+		             <basetable>bt1</basetable> 
+		             <aggregationKey>colAggKey</aggregationKey>
+		             <aggregationValue>colAggVal</aggregationValue>
+			         <numOfRegions>2</numOfRegions>
+			         <controlTable>true</controlTable>
+		         </aggregationView>
+		         <aggregationView>
+		             <name>sum1</name>
+		             <type>sum</type>
+		             <basetable>bt1</basetable> 
+		             <aggregationKey>colAggKey</aggregationKey>
+		             <aggregationValue>colAggVal</aggregationValue>
+			         <numOfRegions>2</numOfRegions>
+			         <controlTable>true</controlTable>
+		         </aggregationView>
+		         <aggregationView>
+		             <name>sum2</name>
+		             <type>sum</type>
+		             <basetable>bt1</basetable> 
+		             <aggregationKey>colAggKey</aggregationKey>
+		             <aggregationValue>colAggVal</aggregationValue>
+			         <numOfRegions>2</numOfRegions>
+			         <controlTable>true</controlTable>
+		         </aggregationView>
+			         <aggregationView>
+			             <name>min1</name>
+			             <type>min</type>
+			             <basetable>bt1</basetable> 
+			             <aggregationKey>colAggKey</aggregationKey>
+			             <aggregationValue>colAggVal</aggregationValue>
+				         <numOfRegions>2</numOfRegions>
+				         <useIndex>true</useIndex>
+				         <controlTable>true</controlTable>
+			         </aggregationView>
+			         <aggregationView>
+			             <name>max1</name>
+			             <type>max</type>
+			             <basetable>bt1</basetable> 
+			             <aggregationKey>colAggKey</aggregationKey>
+			             <aggregationValue>colAggVal</aggregationValue>
+				         <numOfRegions>2</numOfRegions>
+				         <useIndex>true</useIndex>
+				         <controlTable>true</controlTable>
+			         </aggregationView>
+			         <selectionView>
+			             <name>selection1</name>
+			             <basetable>bt1</basetable> 
+			             <selectionKey>colAggVal</selectionKey>
+			             <selectionOperation>&gt;</selectionOperation>
+			             <selectionValue>10</selectionValue>
+				         <numOfRegions>2</numOfRegions>
+				         <controlTable>true</controlTable>
+			         </selectionView>
+		         <selectionView>
+		             <name>selectionsum1</name>
+		             <basetable>sum1</basetable> 
+		             <selectionKey>colAggVal</selectionKey>
+		             <selectionOperation>&gt;</selectionOperation>
+		             <selectionValue>100</selectionValue>
+			         <numOfRegions>2</numOfRegions>
+			         <controlTable>true</controlTable>
+		         </selectionView>
+		         <indexView>
+		             <name>index1</name>
+		             <basetable>bt1</basetable> 
+		             <indexKey>colAggKey</indexKey>
+		         </indexView>
+		         <joinPairView>
+		             <name>joinpair1</name>
+		             <joinPairs>
+		                 <joinPair>
+		                     <leftTable>delta1</leftTable>
+		                     <leftTableKey>colAggKey</leftTableKey>
+		                     <rightTable>delta2</rightTable>
+		                     <rightTableKey>colAggKey</rightTableKey>
+		                 </joinPair>    
+		             </joinPairs>
+			         <numOfRegions>10</numOfRegions>
+			         <controlTable>true</controlTable>
+		         </joinPairView>
+		         <joinView>
+		             <name>join1</name>
+					 <joinPairView>joinpair1</joinPairView>
+		         <joinView>      
+		               
+		         <aggregationView>
+		             <name>joinsum1</name>
+		             <type>sum</type>
+		             <basetable>join1</basetable> 
+		             <aggregationKey>colAggKey_1</aggregationKey>
+		             <aggregationValue>colAggVal_1</aggregationValue>
+			         <numOfRegions>2</numOfRegions>
+			         <controlTable>true</controlTable>
+		         </aggregationView>
+		    </createtables>
+		</experiment>         
+	</evaluationSet>	
+	<evaluationSet>
+	    <evaluationParams>
+		    <iterations>2</iterations>
+		    <variableParam>
+		        <name>numOfViewManagers</name>
+			    <startValue>2</startValue>
+			    <endValue>10</endValue>
+		    </variableParam>   
+	    </evaluationParams>
+		<experiment>
+		    <numOfRegionServers>2</numOfRegionServers>
+		    <numOfViewManagers>2</numOfViewManagers>
+		    <numOfKilledViewManagers>0</numOfKilledViewManagers>
+		    <createtables>
+			    <basetable>
+					<name>bt1</name>
+					<numOfRegions>5</numOfRegions>
+			        <numOfOperations>101</numOfOperations>
+				    <distribution>uniform</distribution>
+					<useUpdates>false</useUpdates>
+				    <useDeletes>false</useDeletes>
+			    </basetable>
+		         <aggregationView>
+		             <name>count1</name>
+		             <type>count</type>
+		             <basetable>bt1</basetable> 
+		             <aggregationKey>colAggKey</aggregationKey>
+		             <aggregationValue>colAggVal</aggregationValue>
+			         <numOfRegions>2</numOfRegions>
+			         <controlTable>true</controlTable>
+		         </aggregationView>
+
+		    </createtables>
+		</experiment>         
+	</evaluationSet>
+	
+</evaluationconfig>	  

@@ -1,0 +1,7 @@
+package de.test;
+
+import org.apache.hadoop.hbase.coprocessor.BaseRegionObserver;
+
+public class HelloCoprocessor extends BaseRegionObserver {
+
+}
