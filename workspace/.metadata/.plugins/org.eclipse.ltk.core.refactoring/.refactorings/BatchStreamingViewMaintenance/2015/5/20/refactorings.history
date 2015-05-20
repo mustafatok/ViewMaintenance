@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<session version="1.0">
-<refactoring comment="Rename resource &apos;BatchStreamingViewMaintenance/libs&apos; to &apos;lib&apos;" description="Rename resource &apos;libs&apos;" flags="7" id="org.eclipse.ltk.core.refactoring.rename.resource" input="libs" name="lib" stamp="1431243996140" updateReferences="true"/>
-</session>
