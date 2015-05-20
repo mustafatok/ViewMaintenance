@@ -1,5 +1,5 @@
 protobuf-2.6.1/**
 hadoop-1.2.1/logs/**
 hbase-0.98.12-hadoop1/logs/**
-workspace/**
+workspace/.metadata/**
 
