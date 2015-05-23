@@ -13,4 +13,4 @@ do
 done
 
 # delete logs
-"rm -r ~/Documents/hbase-0.98.12-hadoop1/logs"
+rm -r hbase-0.98.12-hadoop1/logs
