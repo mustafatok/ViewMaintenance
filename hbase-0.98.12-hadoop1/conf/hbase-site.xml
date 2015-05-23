@@ -45,7 +45,7 @@
 
 <property>
   <name>hbase.coprocessor.region.classes</name>
-  <value>de.test.SumEndPoint</value>
+  <value>org.myname.hbase.Coprocessor.endpoint.SumEndPoint</value>
 </property>
 
 </configuration>
