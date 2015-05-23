@@ -11,3 +11,6 @@ do
         kill -9 "${ary[$key-1]}"
     fi
 done
+
+# delete logs
+"rm -r ~/Documents/hbase-0.98.12-hadoop1/logs"
