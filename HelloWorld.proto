@@ -1,0 +1,29 @@
+option java_package = "com.gzhdi.coprocessor.generated";
+option java_outer_classname = "ServerHelloworld";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message HelloRequest {
+  required bytes askWord = 10;
+}
+
+message HelloResponse {
+  required bytes retWord = 10;
+}
+
+message AskRequest {
+  required bytes ask = 100;
+}
+
+message AnsResponse {
+  required bytes ans = 100;
+}
+
+service HelloWorld {
+  rpc sendHello(HelloRequest)
+    returns (HelloResponse);
+
+  rpc question(AskRequest)
+    returns (AnsResponse);
+}
