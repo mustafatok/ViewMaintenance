@@ -1,70 +1,64 @@
 package de.test;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.HColumnDescriptor;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.TableNotFoundException;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
-import org.apache.hadoop.hbase.util.Bytes;
+import org.apache.hadoop.hbase.client.coprocessor.Batch;
+import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
+import org.apache.hadoop.hbase.ipc.ServerRpcController;
+
+import com.google.protobuf.ByteString;
+import com.google.protobuf.ServiceException;
+import com.gzhdi.coprocessor.generated.ServerHelloworld.AnsResponse;
+import com.gzhdi.coprocessor.generated.ServerHelloworld.AskRequest;
+import com.gzhdi.coprocessor.generated.ServerHelloworld.HelloWorld;
+import com.lin.coprocessor.generated.SumCoprocessor.Sum;
+import com.lin.coprocessor.generated.SumCoprocessor.SumRequest;
+import com.lin.coprocessor.generated.SumCoprocessor.SumResponse;
 
 public class MainTest {
-	
 
 	public static void main(String[] args) {
 		HTable testTable;
 		Configuration config = HBaseConfiguration.create();
-        config.set("hbase.zookeeper.quorum", "HB");
+		config.set("hbase.zookeeper.quorum", "HB");
 
-        try {
-			testTable = new HTable(config, "users");
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        // set coprocessor
-        FileSystem fs = null;
+		final SumRequest req = SumRequest.newBuilder()
+				.setFamily(ByteString.copyFromUtf8("f1")).setColumn(ByteString.copyFromUtf8("score")).build();
+		
+		SumResponse resp = null;
 		try {
-			fs = FileSystem.get(config);
+			HTable table = new HTable(config, "t1");
+			Map<byte[], ByteString> re = table.coprocessorService(
+					Sum.class, null, null,
+					new Batch.Call<Sum, ByteString>() {
+
+						@Override
+						public ByteString call(Sum instance)
+								throws IOException {
+							ServerRpcController controller = new ServerRpcController();
+							BlockingRpcCallback<SumResponse> rpccall = new BlockingRpcCallback<SumResponse>();
+							instance.getSum(controller, req, rpccall);
+							SumResponse resp = rpccall.get();
+
+							// result
+							System.out.println("resp:"
+									+ resp.getSum());
+
+							return ByteString.copyFromUtf8(resp.getSum()+"");
+						}
+
+						
+
+					});
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-        // get location of jar file
-        Path path = new Path(fs.getUri()+Path.SEPARATOR+"user"+Path.SEPARATOR+"jeff"+Path.SEPARATOR+"HelloCoprocessor.jar");
-        // define a table descriptor
-        HTableDescriptor htd = new HTableDescriptor("users");
-        htd.addFamily(new HColumnDescriptor("colfam1"));
-        htd.setValue("coprocessor1", path.toString()+"|"+HelloCoprocessor.class.getCanonicalName()+"|"+Coprocessor.PRIORITY_USER);
-        HBaseAdmin admin = null;
-		try {
-			admin = new HBaseAdmin(config);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (ServiceException e) {
 			e.printStackTrace();
-		}
-        try {
-			admin.modifyTable("users", htd);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        
-        try {
-			System.out.println(admin.getTableDescriptor(Bytes.toBytes("users")));
-		} catch (TableNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
 	}
