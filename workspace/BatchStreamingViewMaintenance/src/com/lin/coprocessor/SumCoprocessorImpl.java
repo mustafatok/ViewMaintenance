@@ -65,6 +65,7 @@ public class SumCoprocessorImpl extends Sum implements Coprocessor,
             do {
                 hasMore = scanner.next(results);
                 for (Cell cell : results) {
+                	System.out.println(cell.toString());
                     sum = sum + Bytes.toLong(CellUtil.cloneValue(cell));
                 }
                 results.clear();
