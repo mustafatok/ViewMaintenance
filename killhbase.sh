@@ -14,3 +14,6 @@ done
 
 # delete logs
 rm -r hbase-0.98.12-hadoop1/logs
+
+# delete zookeeper folder
+rm -r ../zookeeper
