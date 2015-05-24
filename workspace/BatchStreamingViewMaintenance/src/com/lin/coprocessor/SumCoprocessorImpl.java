@@ -70,7 +70,7 @@ public class SumCoprocessorImpl extends Sum implements Coprocessor,
                 	System.out.println("cloneValue:"+CellUtil.cloneValue(cell));
                 	System.out.println("getValue:"+cell.getValue());
                 	System.out.println("converte value to long:"+Long.parseLong(new String(cell.getValue())));
-                    sum = sum + Bytes.toLong(CellUtil.cloneValue(cell));
+                    sum = sum + Long.parseLong(new String(cell.getValue()));
                 }
                 results.clear();
             } while (hasMore);
