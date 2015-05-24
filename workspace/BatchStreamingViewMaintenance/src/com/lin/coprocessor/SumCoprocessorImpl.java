@@ -8,6 +8,7 @@ import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
+import org.apache.hadoop.hbase.client.ResultScanner;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorException;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
@@ -65,7 +66,8 @@ public class SumCoprocessorImpl extends Sum implements Coprocessor,
             do {
                 hasMore = scanner.next(results);
                 for (Cell cell : results) {
-                	System.out.println(cell.toString());
+                	System.out.println("cell:"+cell);
+                	System.out.println("cloneValue:"+CellUtil.cloneValue(cell));
                     sum = sum + Bytes.toLong(CellUtil.cloneValue(cell));
                 }
                 results.clear();
