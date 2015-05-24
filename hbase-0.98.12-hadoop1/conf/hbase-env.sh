@@ -29,7 +29,7 @@
 export JAVA_HOME=/usr
 
 # Extra Java CLASSPATH elements.  Optional.
- export HBASE_CLASSPATH="/home/jeff/Documents/hbase-0.98.12-hadoop1/lib/Sum.jar"
+# export HBASE_CLASSPATH="/home/jeff/Documents/hbase-0.98.12-hadoop1/lib/Sum.jar"
 
 # The maximum amount of heap to use, in MB. Default is 1000.
 # export HBASE_HEAPSIZE=1000
