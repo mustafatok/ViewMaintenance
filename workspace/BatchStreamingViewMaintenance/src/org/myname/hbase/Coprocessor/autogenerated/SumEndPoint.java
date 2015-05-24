@@ -36,8 +36,10 @@ public class SumEndPoint extends SumService implements Coprocessor,
 
 	@Override
 	public void start(CoprocessorEnvironment env) throws IOException {
+		System.out.println("jeff said env instanceof Environment "+(env instanceof RegionCoprocessorEnvironment));
 		if (env instanceof RegionCoprocessorEnvironment) {
             this.env = (RegionCoprocessorEnvironment)env;
+            System.out.println("Now we are seeting env : "+this.env.toString());
         } else {
             throw new CoprocessorException("Must be loaded on a table region!");
         }
