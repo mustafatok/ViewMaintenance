@@ -37,7 +37,7 @@ public class SelectCoprocessorImpl extends Select implements
 	}
 
 	@Override
-	public void start(CoprocessorEnvironment arg0) throws IOException {
+	public void start(CoprocessorEnvironment env) throws IOException {
 		if (env instanceof RegionCoprocessorEnvironment) {
 			this.env = (RegionCoprocessorEnvironment) env;
 		} else {
