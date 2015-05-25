@@ -1,0 +1,19 @@
+option java_package = "com.lin.coprocessor.generated";
+option java_outer_classname = "SumCoprocessor";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message SumRequest{
+    required bytes family = 1;
+    required bytes column = 2;
+}
+
+message SumResponse{
+    required int64 sum = 1;
+}
+
+service Sum{
+    rpc getSum(SumRequest)
+        returns (SumResponse);
+}

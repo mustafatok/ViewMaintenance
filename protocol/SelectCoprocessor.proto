@@ -1,0 +1,22 @@
+option java_package = "com.lin.coprocessor.generated";
+option java_outer_classname = "SelectCoprocessor";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+import "Client.proto";
+
+message SelectRequest{
+    required bytes projection = 1;
+    required bytes family = 2;
+    repeated bytes condition = 3;
+}
+
+message SelectResponse{
+    repeated Result resultRows = 1;
+}
+
+service Select{
+    rpc performSelect(SelectRequest)
+        returns (SelectResponse);
+}
