@@ -1,4 +1,4 @@
-package de.test;
+package com.lin.test;
 
 import static org.junit.Assert.*;
 
