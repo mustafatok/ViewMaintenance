@@ -53,7 +53,9 @@ public class SelectCoprocessorImpl extends Select implements
 	public void performSelect(RpcController controller, SelectRequest request,
 			RpcCallback<SelectResponse> done) {
 		Scan scan = new Scan();
+		System.out.println("going to set family " + request.getFamily());
         scan.addFamily(request.getFamily().toByteArray());
+        System.out.println("going to set column " + request.getProjection());
         scan.addColumn(request.getFamily().toByteArray(), request.getProjection().toByteArray());
         SelectResponse response = null;
         InternalScanner scanner = null;
@@ -64,6 +66,7 @@ public class SelectCoprocessorImpl extends Select implements
             boolean hasMore = false;
             do {
                 hasMore = scanner.next(results);
+                System.out.println("we have " + results.size() + " results here");
                 org.apache.hadoop.hbase.protobuf.generated.ClientProtos.Result oneResult = null;
                 for (Cell cell : results) {
                 	System.out.println("getFamilyArray:"+cell.getFamilyArray());
