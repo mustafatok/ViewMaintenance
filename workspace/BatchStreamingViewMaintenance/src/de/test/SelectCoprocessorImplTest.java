@@ -28,11 +28,11 @@ public class SelectCoprocessorImplTest {
 		config.set("hbase.zookeeper.quorum", "HB");
 
 		final SelectRequest req = SelectRequest.newBuilder()
-				.setFamily(ByteString.copyFromUtf8("bt1")).setProjection(ByteString.copyFromUtf8("colAggKey")).build();
+				.setFamily(ByteString.copyFromUtf8("f1")).setProjection(ByteString.copyFromUtf8("c1")).build();
 		
 		SelectResponse resp = null;
 		try {
-			HTable table = new HTable(config, "bt1");
+			HTable table = new HTable(config, "t1");
 			Map<byte[], ByteString> re = table.coprocessorService(
 					Select.class, null, null,
 					new Batch.Call<Select, ByteString>() {
