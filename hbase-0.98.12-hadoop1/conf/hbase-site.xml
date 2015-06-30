@@ -43,6 +43,11 @@
       <value>HB,HBNode1,HBNode2</value>
 </property>
 
+<property>
+  <name>hbase.coprocessor.regionserver.classes</name>
+  <value>com.lin.coprocessor.SelectCoprocessorImpl</value>
+</property>
+
 
 </configuration>
 
