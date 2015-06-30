@@ -3,6 +3,7 @@ package com.lin.test;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
+import java.util.Map;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.FileSystem;
@@ -13,12 +14,20 @@ import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.HTableDescriptor;
 import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.coprocessor.Batch;
+import org.apache.hadoop.hbase.ipc.BlockingRpcCallback;
+import org.apache.hadoop.hbase.ipc.ServerRpcController;
 import org.apache.hadoop.hbase.util.Bytes;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.google.protobuf.ByteString;
+import com.google.protobuf.ServiceException;
 import com.lin.coprocessor.SelectCoprocessorImpl;
+import com.lin.coprocessor.generated.SelectCoprocessor.Select;
+import com.lin.coprocessor.generated.SelectCoprocessor.SelectRequest;
+import com.lin.coprocessor.generated.SelectCoprocessor.SelectResponse;
 
 public class SelectCoprocessorImplTest {
 	Configuration conf = null;
@@ -65,6 +74,45 @@ public class SelectCoprocessorImplTest {
 	@Test
 	public void test() {
 		Exception exception = null;
+
+		Configuration config = HBaseConfiguration.create();
+		config.set("hbase.zookeeper.quorum", "HB");
+
+		final SelectRequest req = SelectRequest.newBuilder()
+				.setFamily(ByteString.copyFromUtf8("bt1"))
+				.setProjection(ByteString.copyFromUtf8("colAggKey")).build();
+
+		try {
+			Map<byte[], ByteString> re = table.coprocessorService(Select.class,
+					null, null, new Batch.Call<Select, ByteString>() {
+
+						@Override
+						public ByteString call(Select instance)
+								throws IOException {
+							ServerRpcController controller = new ServerRpcController();
+							BlockingRpcCallback<SelectResponse> rpccall = new BlockingRpcCallback<SelectResponse>();
+							instance.performSelect(controller, req, rpccall);
+							SelectResponse resp = rpccall.get();
+
+							System.out.println("there are "
+									+ resp.getResultRowsCount() + " results");
+
+							// result
+							System.out.println("resp:" + resp);
+
+							return ByteString.copyFromUtf8(resp + "");
+						}
+					});
+			// TODO combine 
+		} catch (IOException e) {
+			e.printStackTrace();
+			exception = e;
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			exception = e;
+		} catch (Throwable e) {
+			e.printStackTrace();
+		}
 
 		if (exception != null) {
 			fail("Exception not empty!");

@@ -22,6 +22,7 @@ import com.lin.coprocessor.generated.SelectCoprocessor;
 import com.lin.coprocessor.generated.SelectCoprocessor.Select;
 import com.lin.coprocessor.generated.SelectCoprocessor.SelectRequest;
 import com.lin.coprocessor.generated.SelectCoprocessor.SelectResponse;
+import com.lin.coprocessor.generated.SelectCoprocessor.SelectResponse.Builder;
 import com.lin.coprocessor.generated.SumCoprocessor.SumResponse;
 
 public class SelectCoprocessorImpl extends Select implements
@@ -59,6 +60,7 @@ public class SelectCoprocessorImpl extends Select implements
         try {
             scanner = env.getRegion().getScanner(scan);
             List<Cell> results = new ArrayList<Cell>();
+            Builder builder = response.newBuilder();
             boolean hasMore = false;
             do {
                 hasMore = scanner.next(results);
@@ -79,10 +81,10 @@ public class SelectCoprocessorImpl extends Select implements
                 }
                 results.clear();
                 
-                response = response.newBuilder().addResultRows(oneResult).build();
+                builder.addResultRows(oneResult);
             } while (hasMore);
  
-             
+            response = builder.build();
         } catch (IOException ioe) {
             ResponseConverter.setControllerException(controller, ioe);
         } finally {
