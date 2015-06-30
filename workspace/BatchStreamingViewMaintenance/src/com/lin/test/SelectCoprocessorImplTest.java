@@ -35,20 +35,22 @@ public class SelectCoprocessorImplTest {
 			// Get the location of the JAR file containing the coprocessor
 			// implementation.
 			FileSystem fs = FileSystem.get(conf);
-			Path path = new Path(fs.getUri() + Path.SEPARATOR + "BSVM.jar");
 
+			// disable table
+			HBaseAdmin admin = new HBaseAdmin(conf);
+			admin.disableTable("bt1");
 			// Define a table descriptor
-			HTableDescriptor htd = new HTableDescriptor("bt1");
-			htd.addFamily(new HColumnDescriptor("colfam1"));
+			HTableDescriptor htd = table.getTableDescriptor();
+			// htd.addFamily(new HColumnDescriptor("colfam1"));
 			// Add the coprocessor definition to the descriptor.
-			htd.setValue("COPROCESSOR$1", path.toString() + "|"
+			htd.setValue("COPROCESSOR$1", "/BSVM.jar" + "|"
 					+ SelectCoprocessorImpl.class.getCanonicalName() + "|"
 					+ Coprocessor.PRIORITY_USER);
 
 			// Instantiate an administrative API to the cluster and add the
 			// table.
-			HBaseAdmin admin = new HBaseAdmin(conf);
-			admin.createTable(htd);
+			admin.modifyTable("bt1", htd);
+			admin.enableTable("bt1");
 
 			// Verify if the definition has been applied as expected.
 			System.out.println(admin.getTableDescriptor(Bytes.toBytes("bt1")));
