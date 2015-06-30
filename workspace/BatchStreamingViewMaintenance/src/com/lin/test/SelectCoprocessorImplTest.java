@@ -52,7 +52,7 @@ public class SelectCoprocessorImplTest {
 			HTableDescriptor htd = table.getTableDescriptor();
 			// htd.addFamily(new HColumnDescriptor("colfam1"));
 			// Add the coprocessor definition to the descriptor.
-			htd.setValue("COPROCESSOR$1", "/BSVM.jar" + "|"
+			htd.setValue("COPROCESSOR$1", "hdfs:///BSVM.jar" + "|"
 					+ SelectCoprocessorImpl.class.getCanonicalName() + "|"
 					+ Coprocessor.PRIORITY_USER);
 

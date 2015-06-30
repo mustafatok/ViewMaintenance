@@ -1,0 +1,7 @@
+#!/bin/bash
+
+#remove existing file
+hadoop-1.2.1/bin/hadoop fs -rmr /BSVM.jar
+
+#copy from local
+hadoop-1.2.1/bin/hadoop fs -copyFromLocal hbase-0.98.12-hadoop1/lib/BSVM.jar /BSVM.jar
