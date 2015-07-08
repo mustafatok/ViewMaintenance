@@ -1,0 +1,23 @@
+option java_package = "com.lin.coprocessor.generated";
+option java_outer_classname = "ProjectionProtos";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message ProjectionRequest{
+	required bytes family = 1;
+	required bytes column = 2;
+}
+
+message Cell{
+	required string value = 1;
+}
+
+message ProjectionResponse{
+	repeated Cell results = 1;
+}
+
+service Projection{
+	rpc sendProjection(ProjectionRequest)
+		returns (ProjectionResponse);
+}
