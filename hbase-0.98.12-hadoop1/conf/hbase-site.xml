@@ -50,7 +50,7 @@
 
 <property>
   <name>hbase.coprocessor.user.region.classes</name>
-  <value>coprocessor.RowCountEndpoint</value>
+  <value>com.lin.coprocessor.RowCountEndpoint</value>
 </property>
 
 
