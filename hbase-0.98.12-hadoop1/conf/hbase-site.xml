@@ -45,12 +45,7 @@
 
 <property>
   <name>hbase.coprocessor.user.region.classes</name>
-  <value>com.lin.coprocessor.SelectCoprocessorImpl</value>
-</property>
-
-<property>
-  <name>hbase.coprocessor.user.region.classes</name>
-  <value>coprocessor.RowCountEndpoint</value>
+  <value>com.lin.coprocessor.SelectCoprocessorImpl,coprocessor.RowCountEndpoint</value>
 </property>
 
 
