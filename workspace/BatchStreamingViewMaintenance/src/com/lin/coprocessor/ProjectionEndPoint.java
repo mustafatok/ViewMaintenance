@@ -35,6 +35,8 @@ public class ProjectionEndPoint extends Projection implements Coprocessor,
 
 	@Override
 	public void start(CoprocessorEnvironment arg0) throws IOException {
+		System.out.println("jeff+++++++++++++");
+		System.out.println(arg0);
 		if (env instanceof RegionCoprocessorEnvironment) {
 			this.env = (RegionCoprocessorEnvironment) env;
 		} else {
