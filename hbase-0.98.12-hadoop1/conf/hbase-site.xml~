@@ -44,7 +44,7 @@
 </property>
 
 <property>
-  <name>hbase.coprocessor.region.classes</name>
+  <name>hbase.coprocessor.user.region.classes</name>
   <value>com.lin.coprocessor.ProjectionEndPoint</value>
 </property>
 
