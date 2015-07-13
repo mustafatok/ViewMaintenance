@@ -39,7 +39,7 @@ public class SelectCoprocessorImplTest {
 			// Define a table
 			conf = HBaseConfiguration.create();
 			conf.set("hbase.zookeeper.quorum", "HB");
-			table = new HTable(conf, "t1");
+			table = new HTable(conf, "testtable");
 			/*
 			// Get the location of the JAR file containing the coprocessor
 			// implementation.
@@ -79,8 +79,8 @@ public class SelectCoprocessorImplTest {
 		config.set("hbase.zookeeper.quorum", "HB");
 
 		final SelectRequest req = SelectRequest.newBuilder()
-				.setFamily(ByteString.copyFromUtf8("f1"))
-				.setProjection(ByteString.copyFromUtf8("c1")).build();
+				.setFamily(ByteString.copyFromUtf8("colfam1"))
+				.setProjection(ByteString.copyFromUtf8("col1")).build();
 
 		try {
 			Map<byte[], ByteString> re = table.coprocessorService(Select.class,
