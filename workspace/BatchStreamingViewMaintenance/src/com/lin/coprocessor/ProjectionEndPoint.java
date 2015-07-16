@@ -11,11 +11,13 @@ import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorException;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
+import org.apache.hadoop.hbase.coprocessor.MasterCoprocessorEnvironment;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
+import org.apache.hadoop.hbase.coprocessor.RegionServerCoprocessorEnvironment;
+import org.apache.hadoop.hbase.coprocessor.WALCoprocessorEnvironment;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
@@ -39,8 +41,12 @@ public class ProjectionEndPoint extends Projection implements Coprocessor,
 		System.out.println(arg0);
 		if (env instanceof RegionCoprocessorEnvironment) {
 			this.env = (RegionCoprocessorEnvironment) env;
-		} else {
-			throw new CoprocessorException("Must be loaded on a table region!");
+		} else if(env instanceof MasterCoprocessorEnvironment){
+			throw new CoprocessorException("Must be loaded on a table region! This is MasterCoprocessorEnvironment!");
+		} else if(env instanceof RegionServerCoprocessorEnvironment){
+			throw new CoprocessorException("Must be loaded on a table region! This is RegionServerCoprocessorEnvironment!");
+		} else if(env instanceof WALCoprocessorEnvironment){
+			throw new CoprocessorException("Must be loaded on a table region! This is WALCoprocessorEnvironment!");
 		}
 	}
 

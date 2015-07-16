@@ -46,8 +46,7 @@ public class ProjectionEndPointTest {
 				}
 
 			HTable table = new HTable(conf, "testtable");
-			final ProjectionRequest request = ProjectionRequest
-					.getDefaultInstance();
+			ProjectionRequest request = ProjectionRequest.newBuilder().setFamily(ByteString.copyFrom(Bytes.toBytes("colfam1"))).setColumn(ByteString.copyFrom(Bytes.toBytes("qual1"))).build();
 			Map<byte[], ProjectionResponse> results = table
 					.batchCoprocessorService(Projection.getDescriptor()
 							.findMethodByName("sendProjection"), request,

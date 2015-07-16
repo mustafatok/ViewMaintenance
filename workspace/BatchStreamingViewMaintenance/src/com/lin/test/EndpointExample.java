@@ -57,8 +57,8 @@ public class EndpointExample {
 	      final RowCounterProtos.CountRequest request =
 	        RowCounterProtos.CountRequest.getDefaultInstance();
 	      Map<byte[], Long> results = table.coprocessorService(
-	        RowCounterProtos.RowCountService.class, // co EndpointExample-1-ClassName Define the protocol interface being invoked.
-	        null, null, // co EndpointExample-2-Rows Set start and end row key to "null" to count all rows.
+	        RowCounterProtos.RowCountService.class, 
+	        null, null, 
 	        new Batch.Call<RowCounterProtos.RowCountService, Long>() { // co EndpointExample-3-Batch Create an anonymous class to be sent to all region servers.
 	          public Long call(RowCounterProtos.RowCountService counter)
 	          throws IOException {
