@@ -96,7 +96,8 @@ public class ProjectionEndPoint extends Projection implements Coprocessor,
 			e.printStackTrace();
 		} finally {
 			try {
-				scanner.close();
+				if(scanner != null)
+					scanner.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			} catch (Exception e) {
