@@ -36,18 +36,19 @@ public class ProjectionEndPoint extends Projection implements Coprocessor,
 	}
 
 	@Override
-	public void start(CoprocessorEnvironment arg0) throws IOException {
+	public void start(CoprocessorEnvironment arg0)  {
 		System.out.println("jeff+++++++++++++");
 		System.out.println(arg0);
 		if (env instanceof RegionCoprocessorEnvironment) {
-			this.env = (RegionCoprocessorEnvironment) env;
+			System.out.println("This is RegionCoprocessorEnvironment!");
 		} else if(env instanceof MasterCoprocessorEnvironment){
-			throw new CoprocessorException("Must be loaded on a table region! This is MasterCoprocessorEnvironment!");
+			System.out.println("This is MasterCoprocessorEnvironment!");
 		} else if(env instanceof RegionServerCoprocessorEnvironment){
-			throw new CoprocessorException("Must be loaded on a table region! This is RegionServerCoprocessorEnvironment!");
+			System.out.println("This is RegionServerCoprocessorEnvironment!");
 		} else if(env instanceof WALCoprocessorEnvironment){
-			throw new CoprocessorException("Must be loaded on a table region! This is WALCoprocessorEnvironment!");
+			System.out.println("This is WALCoprocessorEnvironment!");
 		}
+		this.env = (RegionCoprocessorEnvironment) env;
 	}
 
 	@Override
