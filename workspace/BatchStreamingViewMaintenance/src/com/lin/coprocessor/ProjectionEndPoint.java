@@ -36,9 +36,9 @@ public class ProjectionEndPoint extends Projection implements Coprocessor,
 	}
 
 	@Override
-	public void start(CoprocessorEnvironment arg0)  {
+	public void start(CoprocessorEnvironment env)  {// shit! eclipse auto generate the code to be arg0
 		System.out.println("jeff+++++++++++++");
-		System.out.println(arg0);
+		System.out.println(env);
 		if (env instanceof RegionCoprocessorEnvironment) {
 			System.out.println("This is RegionCoprocessorEnvironment!");
 		} else if(env instanceof MasterCoprocessorEnvironment){
