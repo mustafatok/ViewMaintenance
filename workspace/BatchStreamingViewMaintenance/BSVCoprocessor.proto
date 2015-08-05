@@ -1,0 +1,41 @@
+option java_package = "com.lin.coprocessor.generated";
+option java_outer_classname = "BSVCoprocessorProtos";
+option java_generic_services = true;
+option java_generate_equals_and_hash = true;
+option optimize_for = SPEED;
+
+message BSVColumn{
+	required bytes family=1;
+	required bytes column=2;
+}
+
+message Condition{
+	required BSVColumn column=1;
+	required bytes operator=2;
+	required bytes value=3;
+}
+
+message ParameterMessage{
+	repeated BSVColumn column=1;
+	repeated Condition condition=2;
+	repeated bytes aggregation=3;
+}
+
+message KeyValue{
+	required bytes key=1;
+	required bytes value=2;
+}
+
+message BSVRow{
+	repeated KeyValue keyValue=1;
+}
+
+message ResultMessage{
+	repeated BSVRow row=1;
+	required int64 size=2;
+}
+
+service Execute{
+	rpc batch(ParameterMessage)
+		returns (ResultMessage);
+}
