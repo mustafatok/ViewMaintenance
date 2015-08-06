@@ -14,6 +14,7 @@ import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
 
+import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
@@ -92,7 +93,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				System.out.println((new Date())+"[INFO] Building row" + count);
 				for(Cell cell:row){
 					System.out.println((new Date())+"[INFO] Building cell " + cell);
-					KeyValue keyvalue = KeyValue.parseFrom(CellUtil.cloneQualifier(cell));
+					KeyValue.Builder keyvalue = KeyValue.newBuilder();
+					keyvalue.setKey(ByteString.copyFrom(CellUtil.cloneQualifier(cell)));
 					bsvRow.addKeyValue(keyvalue);
 				}
 				response.addRow(bsvRow);
