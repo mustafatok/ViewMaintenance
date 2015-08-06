@@ -32,7 +32,7 @@ message BSVRow{
 
 message ResultMessage{
 	repeated BSVRow row=1;
-	required int64 size=2;
+	optional int64 size=2 [default = 0];
 }
 
 service Execute{

@@ -3869,13 +3869,13 @@ public final class BSVCoprocessorProtos {
     com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVRowOrBuilder getRowOrBuilder(
         int index);
 
-    // required int64 size = 2;
+    // optional int64 size = 2 [default = 0];
     /**
-     * <code>required int64 size = 2;</code>
+     * <code>optional int64 size = 2 [default = 0];</code>
      */
     boolean hasSize();
     /**
-     * <code>required int64 size = 2;</code>
+     * <code>optional int64 size = 2 [default = 0];</code>
      */
     long getSize();
   }
@@ -4022,17 +4022,17 @@ public final class BSVCoprocessorProtos {
       return row_.get(index);
     }
 
-    // required int64 size = 2;
+    // optional int64 size = 2 [default = 0];
     public static final int SIZE_FIELD_NUMBER = 2;
     private long size_;
     /**
-     * <code>required int64 size = 2;</code>
+     * <code>optional int64 size = 2 [default = 0];</code>
      */
     public boolean hasSize() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required int64 size = 2;</code>
+     * <code>optional int64 size = 2 [default = 0];</code>
      */
     public long getSize() {
       return size_;
@@ -4047,10 +4047,6 @@ public final class BSVCoprocessorProtos {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
-      if (!hasSize()) {
-        memoizedIsInitialized = 0;
-        return false;
-      }
       for (int i = 0; i < getRowCount(); i++) {
         if (!getRow(i).isInitialized()) {
           memoizedIsInitialized = 0;
@@ -4347,10 +4343,6 @@ public final class BSVCoprocessorProtos {
       }
 
       public final boolean isInitialized() {
-        if (!hasSize()) {
-          
-          return false;
-        }
         for (int i = 0; i < getRowCount(); i++) {
           if (!getRow(i).isInitialized()) {
             
@@ -4619,22 +4611,22 @@ public final class BSVCoprocessorProtos {
         return rowBuilder_;
       }
 
-      // required int64 size = 2;
+      // optional int64 size = 2 [default = 0];
       private long size_ ;
       /**
-       * <code>required int64 size = 2;</code>
+       * <code>optional int64 size = 2 [default = 0];</code>
        */
       public boolean hasSize() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
       /**
-       * <code>required int64 size = 2;</code>
+       * <code>optional int64 size = 2 [default = 0];</code>
        */
       public long getSize() {
         return size_;
       }
       /**
-       * <code>required int64 size = 2;</code>
+       * <code>optional int64 size = 2 [default = 0];</code>
        */
       public Builder setSize(long value) {
         bitField0_ |= 0x00000002;
@@ -4643,7 +4635,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>required int64 size = 2;</code>
+       * <code>optional int64 size = 2 [default = 0];</code>
        */
       public Builder clearSize() {
         bitField0_ = (bitField0_ & ~0x00000002);
@@ -4942,11 +4934,11 @@ public final class BSVCoprocessorProtos {
       "on\030\002 \003(\0132\n.Condition\022\023\n\013aggregation\030\003 \003(" +
       "\014\"&\n\010KeyValue\022\013\n\003key\030\001 \002(\014\022\r\n\005value\030\002 \002(" +
       "\014\"%\n\006BSVRow\022\033\n\010keyValue\030\001 \003(\0132\t.KeyValue" +
-      "\"3\n\rResultMessage\022\024\n\003row\030\001 \003(\0132\007.BSVRow\022" +
-      "\014\n\004size\030\002 \002(\00325\n\007Execute\022*\n\005batch\022\021.Para",
-      "meterMessage\032\016.ResultMessageB=\n\035com.lin." +
-      "coprocessor.generatedB\024BSVCoprocessorPro" +
-      "tosH\001\210\001\001\240\001\001"
+      "\"6\n\rResultMessage\022\024\n\003row\030\001 \003(\0132\007.BSVRow\022" +
+      "\017\n\004size\030\002 \001(\003:\001025\n\007Execute\022*\n\005batch\022\021.P",
+      "arameterMessage\032\016.ResultMessageB=\n\035com.l" +
+      "in.coprocessor.generatedB\024BSVCoprocessor" +
+      "ProtosH\001\210\001\001\240\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
