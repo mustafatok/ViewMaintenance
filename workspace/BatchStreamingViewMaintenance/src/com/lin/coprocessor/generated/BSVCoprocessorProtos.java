@@ -2577,23 +2577,33 @@ public final class BSVCoprocessorProtos {
   public interface KeyValueOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // required bytes key = 1;
+    // required bytes rowKey = 1;
     /**
-     * <code>required bytes key = 1;</code>
+     * <code>required bytes rowKey = 1;</code>
+     */
+    boolean hasRowKey();
+    /**
+     * <code>required bytes rowKey = 1;</code>
+     */
+    com.google.protobuf.ByteString getRowKey();
+
+    // required bytes key = 2;
+    /**
+     * <code>required bytes key = 2;</code>
      */
     boolean hasKey();
     /**
-     * <code>required bytes key = 1;</code>
+     * <code>required bytes key = 2;</code>
      */
     com.google.protobuf.ByteString getKey();
 
-    // required bytes value = 2;
+    // required bytes value = 3;
     /**
-     * <code>required bytes value = 2;</code>
+     * <code>required bytes value = 3;</code>
      */
     boolean hasValue();
     /**
-     * <code>required bytes value = 2;</code>
+     * <code>required bytes value = 3;</code>
      */
     com.google.protobuf.ByteString getValue();
   }
@@ -2650,11 +2660,16 @@ public final class BSVCoprocessorProtos {
             }
             case 10: {
               bitField0_ |= 0x00000001;
-              key_ = input.readBytes();
+              rowKey_ = input.readBytes();
               break;
             }
             case 18: {
               bitField0_ |= 0x00000002;
+              key_ = input.readBytes();
+              break;
+            }
+            case 26: {
+              bitField0_ |= 0x00000004;
               value_ = input.readBytes();
               break;
             }
@@ -2698,39 +2713,56 @@ public final class BSVCoprocessorProtos {
     }
 
     private int bitField0_;
-    // required bytes key = 1;
-    public static final int KEY_FIELD_NUMBER = 1;
-    private com.google.protobuf.ByteString key_;
+    // required bytes rowKey = 1;
+    public static final int ROWKEY_FIELD_NUMBER = 1;
+    private com.google.protobuf.ByteString rowKey_;
     /**
-     * <code>required bytes key = 1;</code>
+     * <code>required bytes rowKey = 1;</code>
      */
-    public boolean hasKey() {
+    public boolean hasRowKey() {
       return ((bitField0_ & 0x00000001) == 0x00000001);
     }
     /**
-     * <code>required bytes key = 1;</code>
+     * <code>required bytes rowKey = 1;</code>
+     */
+    public com.google.protobuf.ByteString getRowKey() {
+      return rowKey_;
+    }
+
+    // required bytes key = 2;
+    public static final int KEY_FIELD_NUMBER = 2;
+    private com.google.protobuf.ByteString key_;
+    /**
+     * <code>required bytes key = 2;</code>
+     */
+    public boolean hasKey() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>required bytes key = 2;</code>
      */
     public com.google.protobuf.ByteString getKey() {
       return key_;
     }
 
-    // required bytes value = 2;
-    public static final int VALUE_FIELD_NUMBER = 2;
+    // required bytes value = 3;
+    public static final int VALUE_FIELD_NUMBER = 3;
     private com.google.protobuf.ByteString value_;
     /**
-     * <code>required bytes value = 2;</code>
+     * <code>required bytes value = 3;</code>
      */
     public boolean hasValue() {
-      return ((bitField0_ & 0x00000002) == 0x00000002);
+      return ((bitField0_ & 0x00000004) == 0x00000004);
     }
     /**
-     * <code>required bytes value = 2;</code>
+     * <code>required bytes value = 3;</code>
      */
     public com.google.protobuf.ByteString getValue() {
       return value_;
     }
 
     private void initFields() {
+      rowKey_ = com.google.protobuf.ByteString.EMPTY;
       key_ = com.google.protobuf.ByteString.EMPTY;
       value_ = com.google.protobuf.ByteString.EMPTY;
     }
@@ -2739,6 +2771,10 @@ public final class BSVCoprocessorProtos {
       byte isInitialized = memoizedIsInitialized;
       if (isInitialized != -1) return isInitialized == 1;
 
+      if (!hasRowKey()) {
+        memoizedIsInitialized = 0;
+        return false;
+      }
       if (!hasKey()) {
         memoizedIsInitialized = 0;
         return false;
@@ -2755,10 +2791,13 @@ public final class BSVCoprocessorProtos {
                         throws java.io.IOException {
       getSerializedSize();
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
-        output.writeBytes(1, key_);
+        output.writeBytes(1, rowKey_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
-        output.writeBytes(2, value_);
+        output.writeBytes(2, key_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(3, value_);
       }
       getUnknownFields().writeTo(output);
     }
@@ -2771,11 +2810,15 @@ public final class BSVCoprocessorProtos {
       size = 0;
       if (((bitField0_ & 0x00000001) == 0x00000001)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(1, key_);
+          .computeBytesSize(1, rowKey_);
       }
       if (((bitField0_ & 0x00000002) == 0x00000002)) {
         size += com.google.protobuf.CodedOutputStream
-          .computeBytesSize(2, value_);
+          .computeBytesSize(2, key_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(3, value_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2800,6 +2843,11 @@ public final class BSVCoprocessorProtos {
       com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue other = (com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue) obj;
 
       boolean result = true;
+      result = result && (hasRowKey() == other.hasRowKey());
+      if (hasRowKey()) {
+        result = result && getRowKey()
+            .equals(other.getRowKey());
+      }
       result = result && (hasKey() == other.hasKey());
       if (hasKey()) {
         result = result && getKey()
@@ -2823,6 +2871,10 @@ public final class BSVCoprocessorProtos {
       }
       int hash = 41;
       hash = (19 * hash) + getDescriptorForType().hashCode();
+      if (hasRowKey()) {
+        hash = (37 * hash) + ROWKEY_FIELD_NUMBER;
+        hash = (53 * hash) + getRowKey().hashCode();
+      }
       if (hasKey()) {
         hash = (37 * hash) + KEY_FIELD_NUMBER;
         hash = (53 * hash) + getKey().hashCode();
@@ -2940,10 +2992,12 @@ public final class BSVCoprocessorProtos {
 
       public Builder clear() {
         super.clear();
-        key_ = com.google.protobuf.ByteString.EMPTY;
+        rowKey_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000001);
-        value_ = com.google.protobuf.ByteString.EMPTY;
+        key_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000002);
+        value_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000004);
         return this;
       }
 
@@ -2975,9 +3029,13 @@ public final class BSVCoprocessorProtos {
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
           to_bitField0_ |= 0x00000001;
         }
-        result.key_ = key_;
+        result.rowKey_ = rowKey_;
         if (((from_bitField0_ & 0x00000002) == 0x00000002)) {
           to_bitField0_ |= 0x00000002;
+        }
+        result.key_ = key_;
+        if (((from_bitField0_ & 0x00000004) == 0x00000004)) {
+          to_bitField0_ |= 0x00000004;
         }
         result.value_ = value_;
         result.bitField0_ = to_bitField0_;
@@ -2996,6 +3054,9 @@ public final class BSVCoprocessorProtos {
 
       public Builder mergeFrom(com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue other) {
         if (other == com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.getDefaultInstance()) return this;
+        if (other.hasRowKey()) {
+          setRowKey(other.getRowKey());
+        }
         if (other.hasKey()) {
           setKey(other.getKey());
         }
@@ -3007,6 +3068,10 @@ public final class BSVCoprocessorProtos {
       }
 
       public final boolean isInitialized() {
+        if (!hasRowKey()) {
+          
+          return false;
+        }
         if (!hasKey()) {
           
           return false;
@@ -3037,73 +3102,109 @@ public final class BSVCoprocessorProtos {
       }
       private int bitField0_;
 
-      // required bytes key = 1;
-      private com.google.protobuf.ByteString key_ = com.google.protobuf.ByteString.EMPTY;
+      // required bytes rowKey = 1;
+      private com.google.protobuf.ByteString rowKey_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>required bytes key = 1;</code>
+       * <code>required bytes rowKey = 1;</code>
        */
-      public boolean hasKey() {
+      public boolean hasRowKey() {
         return ((bitField0_ & 0x00000001) == 0x00000001);
       }
       /**
-       * <code>required bytes key = 1;</code>
+       * <code>required bytes rowKey = 1;</code>
+       */
+      public com.google.protobuf.ByteString getRowKey() {
+        return rowKey_;
+      }
+      /**
+       * <code>required bytes rowKey = 1;</code>
+       */
+      public Builder setRowKey(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000001;
+        rowKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>required bytes rowKey = 1;</code>
+       */
+      public Builder clearRowKey() {
+        bitField0_ = (bitField0_ & ~0x00000001);
+        rowKey_ = getDefaultInstance().getRowKey();
+        onChanged();
+        return this;
+      }
+
+      // required bytes key = 2;
+      private com.google.protobuf.ByteString key_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>required bytes key = 2;</code>
+       */
+      public boolean hasKey() {
+        return ((bitField0_ & 0x00000002) == 0x00000002);
+      }
+      /**
+       * <code>required bytes key = 2;</code>
        */
       public com.google.protobuf.ByteString getKey() {
         return key_;
       }
       /**
-       * <code>required bytes key = 1;</code>
+       * <code>required bytes key = 2;</code>
        */
       public Builder setKey(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000001;
+  bitField0_ |= 0x00000002;
         key_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required bytes key = 1;</code>
+       * <code>required bytes key = 2;</code>
        */
       public Builder clearKey() {
-        bitField0_ = (bitField0_ & ~0x00000001);
+        bitField0_ = (bitField0_ & ~0x00000002);
         key_ = getDefaultInstance().getKey();
         onChanged();
         return this;
       }
 
-      // required bytes value = 2;
+      // required bytes value = 3;
       private com.google.protobuf.ByteString value_ = com.google.protobuf.ByteString.EMPTY;
       /**
-       * <code>required bytes value = 2;</code>
+       * <code>required bytes value = 3;</code>
        */
       public boolean hasValue() {
-        return ((bitField0_ & 0x00000002) == 0x00000002);
+        return ((bitField0_ & 0x00000004) == 0x00000004);
       }
       /**
-       * <code>required bytes value = 2;</code>
+       * <code>required bytes value = 3;</code>
        */
       public com.google.protobuf.ByteString getValue() {
         return value_;
       }
       /**
-       * <code>required bytes value = 2;</code>
+       * <code>required bytes value = 3;</code>
        */
       public Builder setValue(com.google.protobuf.ByteString value) {
         if (value == null) {
     throw new NullPointerException();
   }
-  bitField0_ |= 0x00000002;
+  bitField0_ |= 0x00000004;
         value_ = value;
         onChanged();
         return this;
       }
       /**
-       * <code>required bytes value = 2;</code>
+       * <code>required bytes value = 3;</code>
        */
       public Builder clearValue() {
-        bitField0_ = (bitField0_ & ~0x00000002);
+        bitField0_ = (bitField0_ & ~0x00000004);
         value_ = getDefaultInstance().getValue();
         onChanged();
         return this;
@@ -3123,27 +3224,27 @@ public final class BSVCoprocessorProtos {
   public interface BSVRowOrBuilder
       extends com.google.protobuf.MessageOrBuilder {
 
-    // repeated .KeyValue keyValue = 1;
+    // repeated .KeyValue keyValue = 2;
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     java.util.List<com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue> 
         getKeyValueList();
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue getKeyValue(int index);
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     int getKeyValueCount();
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     java.util.List<? extends com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValueOrBuilder> 
         getKeyValueOrBuilderList();
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValueOrBuilder getKeyValueOrBuilder(
         int index);
@@ -3199,7 +3300,7 @@ public final class BSVCoprocessorProtos {
               }
               break;
             }
-            case 10: {
+            case 18: {
               if (!((mutable_bitField0_ & 0x00000001) == 0x00000001)) {
                 keyValue_ = new java.util.ArrayList<com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue>();
                 mutable_bitField0_ |= 0x00000001;
@@ -3249,36 +3350,36 @@ public final class BSVCoprocessorProtos {
       return PARSER;
     }
 
-    // repeated .KeyValue keyValue = 1;
-    public static final int KEYVALUE_FIELD_NUMBER = 1;
+    // repeated .KeyValue keyValue = 2;
+    public static final int KEYVALUE_FIELD_NUMBER = 2;
     private java.util.List<com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue> keyValue_;
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     public java.util.List<com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue> getKeyValueList() {
       return keyValue_;
     }
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     public java.util.List<? extends com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValueOrBuilder> 
         getKeyValueOrBuilderList() {
       return keyValue_;
     }
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     public int getKeyValueCount() {
       return keyValue_.size();
     }
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     public com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue getKeyValue(int index) {
       return keyValue_.get(index);
     }
     /**
-     * <code>repeated .KeyValue keyValue = 1;</code>
+     * <code>repeated .KeyValue keyValue = 2;</code>
      */
     public com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValueOrBuilder getKeyValueOrBuilder(
         int index) {
@@ -3307,7 +3408,7 @@ public final class BSVCoprocessorProtos {
                         throws java.io.IOException {
       getSerializedSize();
       for (int i = 0; i < keyValue_.size(); i++) {
-        output.writeMessage(1, keyValue_.get(i));
+        output.writeMessage(2, keyValue_.get(i));
       }
       getUnknownFields().writeTo(output);
     }
@@ -3320,7 +3421,7 @@ public final class BSVCoprocessorProtos {
       size = 0;
       for (int i = 0; i < keyValue_.size(); i++) {
         size += com.google.protobuf.CodedOutputStream
-          .computeMessageSize(1, keyValue_.get(i));
+          .computeMessageSize(2, keyValue_.get(i));
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -3590,7 +3691,7 @@ public final class BSVCoprocessorProtos {
       }
       private int bitField0_;
 
-      // repeated .KeyValue keyValue = 1;
+      // repeated .KeyValue keyValue = 2;
       private java.util.List<com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue> keyValue_ =
         java.util.Collections.emptyList();
       private void ensureKeyValueIsMutable() {
@@ -3604,7 +3705,7 @@ public final class BSVCoprocessorProtos {
           com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue, com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.Builder, com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValueOrBuilder> keyValueBuilder_;
 
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public java.util.List<com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue> getKeyValueList() {
         if (keyValueBuilder_ == null) {
@@ -3614,7 +3715,7 @@ public final class BSVCoprocessorProtos {
         }
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public int getKeyValueCount() {
         if (keyValueBuilder_ == null) {
@@ -3624,7 +3725,7 @@ public final class BSVCoprocessorProtos {
         }
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue getKeyValue(int index) {
         if (keyValueBuilder_ == null) {
@@ -3634,7 +3735,7 @@ public final class BSVCoprocessorProtos {
         }
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder setKeyValue(
           int index, com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue value) {
@@ -3651,7 +3752,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder setKeyValue(
           int index, com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.Builder builderForValue) {
@@ -3665,7 +3766,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder addKeyValue(com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue value) {
         if (keyValueBuilder_ == null) {
@@ -3681,7 +3782,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder addKeyValue(
           int index, com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue value) {
@@ -3698,7 +3799,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder addKeyValue(
           com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.Builder builderForValue) {
@@ -3712,7 +3813,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder addKeyValue(
           int index, com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.Builder builderForValue) {
@@ -3726,7 +3827,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder addAllKeyValue(
           java.lang.Iterable<? extends com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue> values) {
@@ -3740,7 +3841,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder clearKeyValue() {
         if (keyValueBuilder_ == null) {
@@ -3753,7 +3854,7 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public Builder removeKeyValue(int index) {
         if (keyValueBuilder_ == null) {
@@ -3766,14 +3867,14 @@ public final class BSVCoprocessorProtos {
         return this;
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.Builder getKeyValueBuilder(
           int index) {
         return getKeyValueFieldBuilder().getBuilder(index);
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValueOrBuilder getKeyValueOrBuilder(
           int index) {
@@ -3783,7 +3884,7 @@ public final class BSVCoprocessorProtos {
         }
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public java.util.List<? extends com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValueOrBuilder> 
            getKeyValueOrBuilderList() {
@@ -3794,14 +3895,14 @@ public final class BSVCoprocessorProtos {
         }
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.Builder addKeyValueBuilder() {
         return getKeyValueFieldBuilder().addBuilder(
             com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.getDefaultInstance());
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.Builder addKeyValueBuilder(
           int index) {
@@ -3809,7 +3910,7 @@ public final class BSVCoprocessorProtos {
             index, com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.getDefaultInstance());
       }
       /**
-       * <code>repeated .KeyValue keyValue = 1;</code>
+       * <code>repeated .KeyValue keyValue = 2;</code>
        */
       public java.util.List<com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue.Builder> 
            getKeyValueBuilderList() {
@@ -4932,13 +5033,13 @@ public final class BSVCoprocessorProtos {
       "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"b\n\020ParameterMessag" +
       "e\022\032\n\006column\030\001 \003(\0132\n.BSVColumn\022\035\n\tconditi" +
       "on\030\002 \003(\0132\n.Condition\022\023\n\013aggregation\030\003 \003(" +
-      "\014\"&\n\010KeyValue\022\013\n\003key\030\001 \002(\014\022\r\n\005value\030\002 \002(" +
-      "\014\"%\n\006BSVRow\022\033\n\010keyValue\030\001 \003(\0132\t.KeyValue" +
-      "\"6\n\rResultMessage\022\024\n\003row\030\001 \003(\0132\007.BSVRow\022" +
-      "\017\n\004size\030\002 \001(\003:\001025\n\007Execute\022*\n\005batch\022\021.P",
-      "arameterMessage\032\016.ResultMessageB=\n\035com.l" +
-      "in.coprocessor.generatedB\024BSVCoprocessor" +
-      "ProtosH\001\210\001\001\240\001\001"
+      "\014\"6\n\010KeyValue\022\016\n\006rowKey\030\001 \002(\014\022\013\n\003key\030\002 \002" +
+      "(\014\022\r\n\005value\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010keyValue\030" +
+      "\002 \003(\0132\t.KeyValue\"6\n\rResultMessage\022\024\n\003row" +
+      "\030\001 \003(\0132\007.BSVRow\022\017\n\004size\030\002 \001(\003:\001025\n\007Exec",
+      "ute\022*\n\005batch\022\021.ParameterMessage\032\016.Result" +
+      "MessageB=\n\035com.lin.coprocessor.generated" +
+      "B\024BSVCoprocessorProtosH\001\210\001\001\240\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -4968,7 +5069,7 @@ public final class BSVCoprocessorProtos {
           internal_static_KeyValue_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_KeyValue_descriptor,
-              new java.lang.String[] { "Key", "Value", });
+              new java.lang.String[] { "RowKey", "Key", "Value", });
           internal_static_BSVRow_descriptor =
             getDescriptor().getMessageTypes().get(4);
           internal_static_BSVRow_fieldAccessorTable = new

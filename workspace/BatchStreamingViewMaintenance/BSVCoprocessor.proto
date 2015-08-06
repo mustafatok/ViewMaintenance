@@ -22,12 +22,13 @@ message ParameterMessage{
 }
 
 message KeyValue{
-	required bytes key=1;
-	required bytes value=2;
+	required bytes rowKey=1;
+	required bytes key=2;
+	required bytes value=3;
 }
 
 message BSVRow{
-	repeated KeyValue keyValue=1;
+	repeated KeyValue keyValue=2;
 }
 
 message ResultMessage{
