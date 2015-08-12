@@ -94,7 +94,9 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				for(Cell cell:row){
 					System.out.println((new Date())+"[INFO] Building cell " + cell);
 					KeyValue.Builder keyvalue = KeyValue.newBuilder();
-					keyvalue.setRowKey(ByteString.copyFrom(CellUtil.cloneRow(cell)));
+					byte[] rowBytes = new byte[cell.getRowLength()];
+					System.arraycopy(cell.getRowArray(), cell.getRowOffset(), rowBytes, 0, cell.getRowLength());
+					keyvalue.setRowKey(ByteString.copyFrom(rowBytes));
 					keyvalue.setKey(ByteString.copyFrom(CellUtil.cloneQualifier(cell)));
 					keyvalue.setValue(ByteString.copyFrom(CellUtil.cloneValue(cell)));
 					bsvRow.addKeyValue(keyvalue);
