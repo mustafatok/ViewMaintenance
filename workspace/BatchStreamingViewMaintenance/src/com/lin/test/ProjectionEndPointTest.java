@@ -26,7 +26,7 @@ public class ProjectionEndPointTest {
 		HBaseAdmin admin = null;
 		HBaseHelper helper;
 		try {
-			helper = HBaseHelper.getHelper(conf);
+			/*helper = HBaseHelper.getHelper(conf);
 			helper.dropTable("testtable");
 			helper.createTable("testtable", "colfam1", "colfam2");
 			helper.put("testtable", new String[] { "row1", "row2", "row3",
@@ -43,10 +43,10 @@ public class ProjectionEndPointTest {
 				try {
 					Thread.sleep(1000);
 				} catch (InterruptedException e) {
-				}
+				}*/
 
-			HTable table = new HTable(conf, "testtable");
-			ProjectionRequest request = ProjectionRequest.newBuilder().setFamily(ByteString.copyFrom(Bytes.toBytes("colfam1"))).setColumn(ByteString.copyFrom(Bytes.toBytes("qual1"))).build();
+			HTable table = new HTable(conf, "bt1");
+			ProjectionRequest request = ProjectionRequest.newBuilder().setFamily(ByteString.copyFrom(Bytes.toBytes("colfam1"))).setColumn(ByteString.copyFrom(Bytes.toBytes("colAggKey"))).build();
 			Map<byte[], ProjectionResponse> results = table
 					.batchCoprocessorService(Projection.getDescriptor()
 							.findMethodByName("sendProjection"), request,
