@@ -49,19 +49,19 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	public void batch(RpcController controller, ParameterMessage request,
 			RpcCallback<ResultMessage> done) {
 		System.out.println("============================================================");
-		System.out.println((new Date())+"[INFO] Begin to execute");
+		System.out.println((new Date())+"Begin to execute");
 		// initialize scan
 		Scan scan = new Scan();
 		scan.setMaxVersions(1);
 		
 		for(BSVColumn bsvColumn:request.getColumnList()){
-			System.out.println((new Date())+"[INFO] Begin to add column: "+bsvColumn);
+			System.out.println((new Date())+"Begin to add column: "+bsvColumn);
 			// get parameters
 			byte[] family = bsvColumn.getFamily().toByteArray();
 			byte[] column = bsvColumn.getColumn().toByteArray();
 			
 			scan.addColumn(family, column);			
-			System.out.println((new Date())+"[INFO] Finish adding column: "+bsvColumn);
+			System.out.println((new Date())+"Finish adding column: "+bsvColumn);
 		}
 
 		// response
@@ -76,23 +76,25 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			List<List<Cell>> results = new ArrayList<List<Cell>>();
 			boolean finish = false;
 			Date begin = new Date();
-			System.out.println(begin+"[INFO] Begin to scan");
+			System.out.println(begin+"Begin to scan");
 			do {
 				curVals.clear();
 				finish = scanner.next(curVals);
+				System.out.println("Scan one result "+ curVals.toString());
 				results.add(curVals);
 			} while (finish);
 			Date end = new Date();
 			System.out.println(end+"[INFO] Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
+			System.out.println("Scann result are: " + results.toString());
 
 			// build every cell
 			long count = 0;
-			System.out.println((new Date())+"[INFO] Begin to build response message");
+			System.out.println((new Date())+"Begin to build response message");
 			for (List<Cell> row : results) {
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
-				System.out.println((new Date())+"[INFO] Building row" + count);
+				System.out.println((new Date())+"Building row " + count + ": " + bsvRow);
 				for(Cell cell:row){
-					System.out.println((new Date())+"[INFO] Building cell " + cell);
+					System.out.println((new Date())+"Building cell " + cell);
 					KeyValue.Builder keyvalue = KeyValue.newBuilder();
 					byte[] rowBytes = new byte[cell.getRowLength()];
 					System.arraycopy(cell.getRowArray(), cell.getRowOffset(), rowBytes, 0, cell.getRowLength());
@@ -104,7 +106,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				response.addRow(bsvRow);
 				count++;
 			}
-			System.out.println((new Date())+"[INFO] Finish building response message");
+			System.out.println((new Date())+"Finish building response message");
 			response.setSize(count);
 
 			done.run(response.build());
