@@ -81,7 +81,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				curVals.clear();
 				finish = scanner.next(curVals);
 				System.out.println("Scan one result "+ curVals.toString());
-				results.add(curVals);
+				List<Cell> tmp = new ArrayList<Cell>(curVals);
+				results.add(tmp);
 			} while (finish);
 			Date end = new Date();
 			System.out.println(end+"[INFO] Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
