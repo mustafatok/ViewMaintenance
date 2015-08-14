@@ -4,3 +4,4 @@ hbase-0.98.12-hadoop1/logs/**
 workspace/.metadata/**
 porm.xml
 
+workspace/.recommenders
