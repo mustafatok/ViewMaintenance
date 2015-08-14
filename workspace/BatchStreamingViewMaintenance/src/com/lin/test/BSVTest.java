@@ -90,8 +90,6 @@ public class BSVTest {
 	// test 2
 	public static void main(String[] args) {
 		Configuration conf = HBaseConfiguration.create();
-		TableName tableName = TableName.valueOf("testtable2");
-		HBaseAdmin admin = null;
 		HBaseHelper helper;
 		try {
 			helper = HBaseHelper.getHelper(conf);
