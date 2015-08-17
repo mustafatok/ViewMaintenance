@@ -96,7 +96,7 @@ public class CmdInterface {
 						String[] rows = {};
 						List<String> stringArray = new ArrayList<String>();
 						for(int i = 1; i <= 100; i++){
-							helper.put("testtable2", "row"+i, "colfam1", "qual1", 1, "val"+i);
+							helper.put("testtable1", "row"+i, "colfam1", "qual1", 1, "val"+i);
 						}
 					} catch(IOException e){
 						e.printStackTrace();
