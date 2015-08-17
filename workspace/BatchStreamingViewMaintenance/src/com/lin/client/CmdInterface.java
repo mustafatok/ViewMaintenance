@@ -15,9 +15,9 @@ import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 
+import com.lin.sql.JsqlParser;
 import com.lin.sql.LogicalElement;
 import com.lin.sql.SimpleLogicalPlan;
-import com.lin.sql.SimpleSqlParser;
 import com.lin.test.HBaseHelper;
 
 public class CmdInterface {
@@ -54,7 +54,7 @@ public class CmdInterface {
 	 * @param input
 	 */
 	public static void handleSQL(String input) {
-		SimpleLogicalPlan simpleLogicalPlan = SimpleSqlParser.parse(input);
+		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input);
 		
 		System.out.println(simpleLogicalPlan);
 		

@@ -116,4 +116,5 @@ public class LogicalElement {
 				+ columns + ", conditions=" + conditions + "]";
 	}
 
+
 }
