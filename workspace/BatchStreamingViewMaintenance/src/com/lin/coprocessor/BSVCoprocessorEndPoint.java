@@ -54,6 +54,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		Scan scan = new Scan();
 		scan.setMaxVersions(1);
 		
+		// add column as filter 
 		for(BSVColumn bsvColumn:request.getColumnList()){
 			System.out.println((new Date())+"Begin to add column: "+bsvColumn);
 			// get parameters

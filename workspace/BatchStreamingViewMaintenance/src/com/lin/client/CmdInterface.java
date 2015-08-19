@@ -85,18 +85,39 @@ public class CmdInterface {
 				String tableName = cmd.getOptionValue("name");
 
 				System.out.println("loading " + tableName);
+				
+				// testtable 1
 				if(tableName.equals("testtable1")){
 					Configuration conf = HBaseConfiguration.create();
 					HBaseHelper helper;
 					try {
 						helper = HBaseHelper.getHelper(conf);
-						helper.dropTable("testtable1");
-						helper.createTable("testtable1", "colfam1");
+						helper.dropTable(tableName);
+						helper.createTable(tableName, "colfam1");
 						
 						String[] rows = {};
 						List<String> stringArray = new ArrayList<String>();
 						for(int i = 1; i <= 100; i++){
-							helper.put("testtable1", "row"+i, "colfam1", "qual1", 1, "val"+i);
+							helper.put(tableName, "row"+i, "colfam1", "qual1", 1, "val"+i);
+						}
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+				
+				// testtable 2
+				if(tableName.equals("testtable2")){
+					Configuration conf = HBaseConfiguration.create();
+					HBaseHelper helper;
+					try {
+						helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						helper.createTable(tableName, "colfam1");
+						
+						String[] rows = {};
+						List<String> stringArray = new ArrayList<String>();
+						for(int i = 1; i <= 100; i++){
+							helper.put(tableName, "row"+i, "colfam1", "qual1", 1, "" + i);
 						}
 					} catch(IOException e){
 						e.printStackTrace();
