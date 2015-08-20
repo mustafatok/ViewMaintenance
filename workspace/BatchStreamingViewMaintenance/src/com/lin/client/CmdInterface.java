@@ -98,6 +98,7 @@ public class CmdInterface {
 						String[] rows = {};
 						List<String> stringArray = new ArrayList<String>();
 						for(int i = 1; i <= 100; i++){
+							System.out.println("put row " + i);
 							helper.put(tableName, "row"+i, "colfam1", "qual1", 1, "val"+i);
 						}
 					} catch(IOException e){
@@ -117,6 +118,7 @@ public class CmdInterface {
 						String[] rows = {};
 						List<String> stringArray = new ArrayList<String>();
 						for(int i = 1; i <= 100; i++){
+							System.out.println("put row " + i);
 							helper.put(tableName, "row"+i, "colfam1", "qual1", 1, "" + i);
 						}
 					} catch(IOException e){
