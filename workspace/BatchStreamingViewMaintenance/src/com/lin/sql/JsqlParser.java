@@ -5,6 +5,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
@@ -12,6 +13,7 @@ import net.sf.jsqlparser.statement.select.SelectExpressionItem;
 
 import com.google.protobuf.ByteString;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
+import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
 
 public class JsqlParser {
 
@@ -53,7 +55,30 @@ public class JsqlParser {
 										.setFamily(ByteString.copyFrom(famCol.split("\\.")[0].getBytes()))
 										.setColumn(ByteString.copyFrom(famCol.split("\\.")[1].getBytes())).build();
 								
-								element.getColumns().add(column); // set column name
+								// add column to logical element
+								element.getColumns().add(column); 
+							}
+							
+							// Find all the condition statements and add them to plan
+							if(plainSelect.getWhere() instanceof GreaterThan){
+								GreaterThan greaterThan = (GreaterThan) plainSelect.getWhere();
+								String famCol = greaterThan.getLeftExpression().toString();
+								String rightExpression = greaterThan.getRightExpression().toString();
+								System.out.println("detected condition: [left] " + famCol + " [OP] > " + " [right] " + rightExpression);
+								
+								// left operation should be a BSVColumn
+								BSVColumn column = BSVColumn.newBuilder()
+										.setFamily(ByteString.copyFrom(famCol.split("\\.")[0].getBytes()))
+										.setColumn(ByteString.copyFrom(famCol.split("\\.")[1].getBytes())).build();
+								
+								// build condition
+								Condition condition = Condition.newBuilder()
+										.setColumn(column)
+										.setOperator(ByteString.copyFrom(">".getBytes()))
+										.setValue(ByteString.copyFrom(rightExpression.getBytes())).build();
+								
+								// add condition to logical element
+								element.getConditions().add(condition);
 							}
 						}
 						

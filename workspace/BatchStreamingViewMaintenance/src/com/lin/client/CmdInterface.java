@@ -61,7 +61,7 @@ public class CmdInterface {
 		LogicalElement logicalElement = simpleLogicalPlan.getHead();
 		do{
 			logicalElement.execute();
-		}while(logicalElement.getNext() != null);
+		}while((logicalElement = logicalElement.getNext()) != null);
 	}
 
 	/**
