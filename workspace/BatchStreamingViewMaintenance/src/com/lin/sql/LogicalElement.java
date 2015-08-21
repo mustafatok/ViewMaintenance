@@ -46,7 +46,7 @@ public class LogicalElement {
 			for(Condition condition:conditions){
 				request.addCondition(condition);
 			}
-			
+			 
 			System.out.println("=======================================================================");
 			Date begin = new Date();
 			System.out.println(begin + " Beging to execute batch job");

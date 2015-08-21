@@ -206,8 +206,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			if(condition.getOperator().equals(ByteString.copyFrom(">".getBytes()))){
 				System.out.println("true");
 				String value = new String(CellUtil.cloneValue(cell));
-				String compare = condition.getOperator().toString();
-				System.out.println("Comparing " + Integer.parseInt(value) + " with " + Integer.parseInt(compare));
+				String compare = condition.getValue().toString();
+				System.out.println("Comparing " + value + " with " + compare);
 				if(Integer.parseInt(value) <= Integer.parseInt(compare)){
 					System.out.println("less or equal true");
 					checkCell = false;
