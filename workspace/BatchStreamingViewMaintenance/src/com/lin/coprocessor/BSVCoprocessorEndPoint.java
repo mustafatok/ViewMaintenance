@@ -96,12 +96,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			do {
 				curVals.clear();
 				finish = scanner.next(curVals);
-				System.out.println("Scan one result "+ curVals.toString());
 				List<Cell> tmp = new ArrayList<Cell>(curVals);
 				results.add(tmp);
 			} while (finish);
 			Date end = new Date();
-			System.out.println(end+"[INFO] Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
+			System.out.println(end+" Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
 			System.out.println("Scann result are: " + results.toString());
 
 			long count = 0;
@@ -110,7 +109,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			// handle results
 			for (List<Cell> row : results) {
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
-				System.out.println((new Date())+"Building row " + count + ": " + bsvRow);
+				System.out.println((new Date())+"Building row no." + count);
 				
 				boolean meetCondition = handleRow(request, row, bsvRow);
 				
@@ -202,10 +201,15 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		boolean checkCell = true;
 		for(Condition condition:request.getConditionList()){
 			// greater than
+			System.out.println("Check if cell meet condition " + condition.getColumn().toString() + condition.getOperator().toString() + condition.getValue().toString());
+			System.out.println("Comparing " + condition.getOperator() + " with " + ByteString.copyFrom(">".getBytes()));
 			if(condition.getOperator().equals(ByteString.copyFrom(">".getBytes()))){
+				System.out.println("true");
 				String value = new String(CellUtil.cloneValue(cell));
 				String compare = condition.getOperator().toString();
+				System.out.println("Comparing " + Integer.parseInt(value) + " with " + Integer.parseInt(compare));
 				if(Integer.parseInt(value) <= Integer.parseInt(compare)){
+					System.out.println("less or equal true");
 					checkCell = false;
 					break;
 				}
