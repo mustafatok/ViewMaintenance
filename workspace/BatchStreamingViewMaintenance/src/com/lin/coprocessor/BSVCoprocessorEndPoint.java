@@ -1,6 +1,8 @@
 package com.lin.coprocessor;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -206,7 +208,13 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			if(condition.getOperator().equals(ByteString.copyFrom(">".getBytes()))){
 				System.out.println("true");
 				String value = new String(CellUtil.cloneValue(cell));
-				String compare = condition.getValue().toString();
+				String compare = "";
+				try {
+					compare = condition.getValue().toString(StandardCharsets.UTF_8.displayName());
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				System.out.println("Comparing " + value + " with " + compare);
 				if(Integer.parseInt(value) <= Integer.parseInt(compare)){
 					System.out.println("less or equal true");
