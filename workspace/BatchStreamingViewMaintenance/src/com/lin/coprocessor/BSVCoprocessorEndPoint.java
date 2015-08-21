@@ -107,52 +107,12 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			long count = 0;
 			System.out.println((new Date())+"Begin to build response message");
 			
-			// row
+			// handle results
 			for (List<Cell> row : results) {
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
 				System.out.println((new Date())+"Building row " + count + ": " + bsvRow);
 				
-				// cell
-				// in cell we have to consider the conditions
-				boolean meetCondition = true;
-				for(Cell cell:row){
-					// test value for every condition
-					boolean checkCell = true;
-					for(Condition condition:request.getConditionList()){
-						// greater than
-						if(condition.getOperator().equals(ByteString.copyFrom(">".getBytes()))){
-							String value = new String(CellUtil.cloneValue(cell));
-							String compare = condition.getOperator().toString();
-							if(Integer.parseInt(value) <= Integer.parseInt(compare)){
-								checkCell = false;
-								break;
-							}
-						}
-					}
-					
-					// if this cell doesn't meet any one of the conditions, this row doesn't pass
-					if(!checkCell){
-						meetCondition = false;
-						break;
-					}
-					
-					// pass all the conditions
-					// now start to build cell body
-					System.out.println((new Date())+"Building cell " + cell);
-					KeyValue.Builder keyvalue = KeyValue.newBuilder();
-					
-					// row key
-					byte[] rowBytes = new byte[cell.getRowLength()];
-					System.arraycopy(cell.getRowArray(), cell.getRowOffset(), rowBytes, 0, cell.getRowLength());
-					keyvalue.setRowKey(ByteString.copyFrom(rowBytes));
-					
-					// qualifier
-					keyvalue.setKey(ByteString.copyFrom(CellUtil.cloneQualifier(cell)));
-					
-					// value
-					keyvalue.setValue(ByteString.copyFrom(CellUtil.cloneValue(cell)));
-					bsvRow.addKeyValue(keyvalue);
-				}
+				boolean meetCondition = handleRow(request, row, bsvRow);
 				
 				// discard the whole row if the cell fails to meet the condition
 				if(meetCondition){
@@ -177,6 +137,81 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				e.printStackTrace();
 			}
 		}
+	}
+
+	/**
+	 * If all cells pass the conditions build the whole row
+	 * @param request
+	 * @param row
+	 * @param bsvRow
+	 * @return
+	 */
+	public boolean handleRow(ParameterMessage request, List<Cell> row,
+			BSVRow.Builder bsvRow) {
+		// in cell we have to consider the conditions
+		boolean meetCondition = true;
+		for(Cell cell:row){
+			boolean checkCell = checkCellForConditions(request, cell);
+			
+			// if this cell doesn't meet any one of the conditions, this row doesn't pass
+			if(!checkCell){
+				meetCondition = false;
+				break;
+			}
+			
+			// pass all the conditions
+			// now start to build cell body
+			KeyValue.Builder keyvalue = KeyValue.newBuilder();
+			System.out.println((new Date())+"Building cell " + cell);
+			
+			byte[] rowBytes = handleCell(cell, keyvalue);
+			bsvRow.addKeyValue(keyvalue);
+		}
+		return meetCondition;
+	}
+
+	/**
+	 * Check if all cells pass the conditions.
+	 * If yes than build the cell
+	 * @param cell
+	 * @param keyvalue
+	 * @return
+	 */
+	public byte[] handleCell(Cell cell, KeyValue.Builder keyvalue) {
+		// row key
+		byte[] rowBytes = new byte[cell.getRowLength()];
+		System.arraycopy(cell.getRowArray(), cell.getRowOffset(), rowBytes, 0, cell.getRowLength());
+		keyvalue.setRowKey(ByteString.copyFrom(rowBytes));
+		
+		// qualifier
+		keyvalue.setKey(ByteString.copyFrom(CellUtil.cloneQualifier(cell)));
+		
+		// value
+		keyvalue.setValue(ByteString.copyFrom(CellUtil.cloneValue(cell)));
+		return rowBytes;
+	}
+
+	/**
+	 * Check if cell meets all the conditions 
+	 * @param request
+	 * @param cell
+	 * @return
+	 */
+	public boolean checkCellForConditions(ParameterMessage request, Cell cell) {
+		// test value for every condition
+		boolean checkCell = true;
+		for(Condition condition:request.getConditionList()){
+			// greater than
+			if(condition.getOperator().equals(ByteString.copyFrom(">".getBytes()))){
+				String value = new String(CellUtil.cloneValue(cell));
+				String compare = condition.getOperator().toString();
+				if(Integer.parseInt(value) <= Integer.parseInt(compare)){
+					checkCell = false;
+					break;
+				}
+			}
+		}
+		return checkCell;
 	}
 
 }
