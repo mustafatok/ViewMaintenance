@@ -36,12 +36,17 @@ public class LogicalElement {
 		try {
 			table = new HTable(conf, this.tableName);
 			ParameterMessage.Builder request = ParameterMessage.newBuilder();
-//			BSVColumn.Builder bsvColumn = BSVColumn.newBuilder();
-//			bsvColumn.setFamily(ByteString.copyFrom(Bytes.toBytes("colfam1")));
-//			bsvColumn.setColumn(ByteString.copyFrom(Bytes.toBytes("qual1")));
+			
+			// add columns
 			for(BSVColumn bsvColumn:this.columns){
 				request.addColumn(bsvColumn);
 			}
+			
+			// add conditions
+			for(Condition condition:conditions){
+				request.addCondition(condition);
+			}
+			
 			System.out.println("=======================================================================");
 			Date begin = new Date();
 			System.out.println(begin + " Beging to execute batch job");
