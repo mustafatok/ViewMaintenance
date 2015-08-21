@@ -6,6 +6,9 @@ import java.util.List;
 
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
+import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
+import net.sf.jsqlparser.expression.operators.relational.MinorThan;
+import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
@@ -61,24 +64,60 @@ public class JsqlParser {
 							
 							// Find all the condition statements and add them to plan
 							if(plainSelect.getWhere() instanceof GreaterThan){
+								String GREATER_THAN = ">";
+								
 								GreaterThan greaterThan = (GreaterThan) plainSelect.getWhere();
-								String famCol = greaterThan.getLeftExpression().toString();
+								String leftExpression = greaterThan.getLeftExpression().toString();
 								String rightExpression = greaterThan.getRightExpression().toString();
-								System.out.println("detected condition: [left] " + famCol + " [OP] > " + " [right] " + rightExpression);
+								System.out.println("detected condition: [left] " + leftExpression + " [OP] > " + " [right] " + rightExpression);
 								
-								// left operation should be a BSVColumn
-								BSVColumn column = BSVColumn.newBuilder()
-										.setFamily(ByteString.copyFrom(famCol.split("\\.")[0].getBytes()))
-										.setColumn(ByteString.copyFrom(famCol.split("\\.")[1].getBytes())).build();
+								buildCondition(
+										leftExpression, 
+										rightExpression,
+										GREATER_THAN, 
+										element);
+							}
+							else if(plainSelect.getWhere() instanceof MinorThan){
+								String LESS_THAN = "<";
 								
-								// build condition
-								Condition condition = Condition.newBuilder()
-										.setColumn(column)
-										.setOperator(ByteString.copyFrom(">".getBytes()))
-										.setValue(ByteString.copyFrom(rightExpression.getBytes())).build();
+								MinorThan minorThan = (MinorThan) plainSelect.getWhere();
+								String leftExpression = minorThan.getLeftExpression().toString();
+								String rightExpression = minorThan.getRightExpression().toString();
+								System.out.println("detected condition: [left] " + leftExpression + " [OP] > " + " [right] " + rightExpression);
 								
-								// add condition to logical element
-								element.getConditions().add(condition);
+								buildCondition(
+										leftExpression, 
+										rightExpression,
+										LESS_THAN,
+										element);
+							}
+							else if(plainSelect.getWhere() instanceof GreaterThanEquals){
+								String GREATER_THAN_EQUALS = ">=";
+								
+								GreaterThanEquals greaterThanEquals = (GreaterThanEquals) plainSelect.getWhere();
+								String leftExpression = greaterThanEquals.getLeftExpression().toString();
+								String rightExpression = greaterThanEquals.getRightExpression().toString();
+								System.out.println("detected condition: [left] " + leftExpression + " [OP] > " + " [right] " + rightExpression);
+								
+								buildCondition(
+										leftExpression, 
+										rightExpression,
+										GREATER_THAN_EQUALS,
+										element);
+							}
+							else if(plainSelect.getWhere() instanceof MinorThanEquals){
+								String GREATER_THAN_EQUALS = "<=";
+								
+								MinorThanEquals minorThanEquals = (MinorThanEquals) plainSelect.getWhere();
+								String leftExpression = minorThanEquals.getLeftExpression().toString();
+								String rightExpression = minorThanEquals.getRightExpression().toString();
+								System.out.println("detected condition: [left] " + leftExpression + " [OP] > " + " [right] " + rightExpression);
+								
+								buildCondition(
+										leftExpression, 
+										rightExpression,
+										GREATER_THAN_EQUALS,
+										element);
 							}
 						}
 						
@@ -91,6 +130,23 @@ public class JsqlParser {
 			e.printStackTrace();
 		}
 		return logicalPlan;
+	}
+
+	public static void buildCondition(String leftExpression,
+			String rightExpression, String GREATER_THAN, LogicalElement element) {
+		// left operation should be a BSVColumn
+		BSVColumn column = BSVColumn.newBuilder()
+				.setFamily(ByteString.copyFrom(leftExpression.split("\\.")[0].getBytes()))
+				.setColumn(ByteString.copyFrom(leftExpression.split("\\.")[1].getBytes())).build();
+		
+		// build condition
+		Condition condition = Condition.newBuilder()
+				.setColumn(column)
+				.setOperator(ByteString.copyFrom(GREATER_THAN.getBytes()))
+				.setValue(ByteString.copyFrom(rightExpression.getBytes())).build();
+		
+		// add condition to logical element
+		element.getConditions().add(condition);
 	}
 	
 }

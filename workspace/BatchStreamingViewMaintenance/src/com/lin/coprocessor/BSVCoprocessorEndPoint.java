@@ -202,22 +202,40 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		// test value for every condition
 		boolean checkCell = true;
 		for(Condition condition:request.getConditionList()){
+			// get left expression and right expression
+			String value = new String(CellUtil.cloneValue(cell));
+			String compare = "";
+			try {
+				compare = condition.getValue().toString(StandardCharsets.UTF_8.displayName());
+			} catch (UnsupportedEncodingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			// greater than
-			System.out.println("Check if cell meet condition " + condition.getColumn().toString() + condition.getOperator().toString() + condition.getValue().toString());
-			System.out.println("Comparing " + condition.getOperator() + " with " + ByteString.copyFrom(">".getBytes()));
 			if(condition.getOperator().equals(ByteString.copyFrom(">".getBytes()))){
-				System.out.println("true");
-				String value = new String(CellUtil.cloneValue(cell));
-				String compare = "";
-				try {
-					compare = condition.getValue().toString(StandardCharsets.UTF_8.displayName());
-				} catch (UnsupportedEncodingException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				System.out.println("Comparing " + value + " with " + compare);
 				if(Integer.parseInt(value) <= Integer.parseInt(compare)){
-					System.out.println("less or equal true");
+					checkCell = false;
+					break;
+				}
+			}
+			// less than
+			else if(condition.getOperator().equals(ByteString.copyFrom("<".getBytes()))){
+				if(Integer.parseInt(value) >= Integer.parseInt(compare)){
+					checkCell = false;
+					break;
+				}
+			}
+			// greater than equal
+			else if(condition.getOperator().equals(ByteString.copyFrom(">=".getBytes()))){
+				if(Integer.parseInt(value) < Integer.parseInt(compare)){
+					checkCell = false;
+					break;
+				}
+			}
+			// less than equal
+			else if(condition.getOperator().equals(ByteString.copyFrom("<=".getBytes()))){
+				if(Integer.parseInt(value) > Integer.parseInt(compare)){
 					checkCell = false;
 					break;
 				}

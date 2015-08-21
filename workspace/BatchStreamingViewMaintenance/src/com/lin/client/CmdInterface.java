@@ -40,9 +40,9 @@ public class CmdInterface {
 				} else{
 					handleSQL(input);
 				}
-			} catch (IOException e) {
+			}catch (IOException e) {
 				e.printStackTrace();
-			} catch (Exception generalEx) {
+			}catch (Exception generalEx) {
 				generalEx.printStackTrace();
 				System.out.println("Error in command");
 			}
