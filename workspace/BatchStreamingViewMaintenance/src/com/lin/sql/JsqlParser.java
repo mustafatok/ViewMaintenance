@@ -5,11 +5,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.Expression;
+import net.sf.jsqlparser.expression.Function;
 import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
 import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
 import net.sf.jsqlparser.expression.operators.relational.MinorThan;
 import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
+import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.SelectExpressionItem;
@@ -51,15 +54,38 @@ public class JsqlParser {
 							
 							// construct column message(protobuf) and add to logical element
 							for(int j = 0; j < columnList.size(); j++){
-								String famCol = columnList.get(j).toString();
-								System.out.println("detected family and column " + famCol);
-
-								BSVColumn column = BSVColumn.newBuilder()
-										.setFamily(ByteString.copyFrom(famCol.split("\\.")[0].getBytes()))
-										.setColumn(ByteString.copyFrom(famCol.split("\\.")[1].getBytes())).build();
-								
-								// add column to logical element
-								element.getColumns().add(column); 
+								// find aggregation
+								if(columnList.get(j).getExpression() instanceof Function){
+									System.out.println("detected aggreagation function");
+									Function aggFunction = (Function) columnList.get(j).getExpression();
+									
+									// construct aggregation as following format:
+									// sum:colFam1
+									String aggString = aggFunction.getName() + ":";
+									int n = 0;
+									for(Object expression:aggFunction.getParameters().getExpressions()){
+										if(n != 0){ // if more than one parameter seperate them by comma
+											aggString += ",";
+										}
+										Column column = (Column)expression;
+										String famCol = column.getWholeColumnName();
+										aggString += famCol;
+										n++;
+									}
+									element.getAggregations().add(ByteString.copyFrom(aggString.getBytes()));
+								}
+								// find simple columns
+								else{
+									String famCol = columnList.get(j).toString();
+									System.out.println("detected family and column " + famCol);
+	
+									BSVColumn column = BSVColumn.newBuilder()
+											.setFamily(ByteString.copyFrom(famCol.split("\\.")[0].getBytes()))
+											.setColumn(ByteString.copyFrom(famCol.split("\\.")[1].getBytes())).build();
+									
+									// add column to logical element
+									element.getColumns().add(column);
+								}
 							}
 							
 							// Find all the condition statements and add them to plan

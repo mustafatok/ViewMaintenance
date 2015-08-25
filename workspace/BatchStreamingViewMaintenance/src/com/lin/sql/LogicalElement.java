@@ -25,6 +25,7 @@ public class LogicalElement {
 	private String tableName = null;
 	private List<BSVColumn> columns = new ArrayList<BSVColumn>();
 	private List<Condition> conditions = new ArrayList<Condition>();
+	private List<ByteString> aggregations = new ArrayList<ByteString>();
 
 	public LogicalElement getNext() {
 		return next;
@@ -45,6 +46,11 @@ public class LogicalElement {
 			// add conditions
 			for(Condition condition:conditions){
 				request.addCondition(condition);
+			}
+			
+			// add aggregation
+			for(ByteString aggregation:aggregations){
+				request.addAggregation(aggregation);
 			}
 			 
 			System.out.println("=======================================================================");
@@ -115,10 +121,18 @@ public class LogicalElement {
 		this.conditions = conditions;
 	}
 
+	public List<ByteString> getAggregations() {
+		return aggregations;
+	}
+
+	public void setAggregations(List<ByteString> aggregations) {
+		this.aggregations = aggregations;
+	}
+
 	@Override
 	public String toString() {
 		return "LogicalElement [tableName=" + tableName + ", columns="
-				+ columns + ", conditions=" + conditions + "]";
+				+ columns + ", aggregations=" + aggregations + " conditions=" + conditions + "]";
 	}
 
 
