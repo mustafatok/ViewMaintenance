@@ -148,8 +148,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					keyValue.setKey(ByteString.copyFrom(entry.getKey().getBytes()));
 					// set value as result of aggregation
 					keyValue.setValue(ByteString.copyFrom((aggregation.getResult()+"").getBytes()));
+					
+					bsvRow.addKeyValue(keyValue.build());
 				}
 			}
+			response.addRow(bsvRow.build());
 
 			done.run(response.build());
 		} catch (IOException e) {
