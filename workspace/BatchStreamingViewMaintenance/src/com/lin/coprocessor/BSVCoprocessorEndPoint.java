@@ -34,7 +34,6 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		CoprocessorService {
 	private RegionCoprocessorEnvironment env;
-	private List<KeyValue> aggregations = new ArrayList<KeyValue>();
 	private AggregationManager aggregationManager = null;
 
 	@Override
@@ -136,7 +135,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			// add aggregation result to response
 			// put all the aggregation in one row
 			BSVRow.Builder bsvRow = BSVRow.newBuilder();
-			for (Entry<String, List<Aggregation>> entry : aggregationManager.getList().entrySet())
+			for (Entry<String, List<Aggregation>> entry : aggregationManager.getAggregations().entrySet())
 			{
 				for(Aggregation aggregation:entry.getValue()){
 					KeyValue.Builder keyValue = KeyValue.newBuilder();
@@ -287,14 +286,14 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 * For every cell, there should be a list of aggregation
 		 * Use the family
 		 */
-		private Map<String, List<Aggregation>> list;
+		private Map<String, List<Aggregation>> aggregations;
 		
 		/**
 		 * Loop check request.aggregations and add them to aggregation list
 		 * @param request
 		 */
 		public AggregationManager(ParameterMessage request){
-			list = new HashedMap();
+			aggregations = new HashedMap();
 			for(ByteString aggregation:request.getAggregationList()){
 				// aggregation is in following format
 				// sum:family.qualifier
@@ -311,15 +310,26 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				if(function.equalsIgnoreCase("sum")){
 					agg = new Sum();
 				}
-				// TODO more aggregation
+				else if(function.equalsIgnoreCase("max")){
+					agg = new Max();
+				}
+				else if(function.equalsIgnoreCase("min")){
+					agg = new Min();
+				}
+				else if(function.equalsIgnoreCase("avg")){
+					agg = new Avg();
+				}
+				else if(function.equalsIgnoreCase("count")){
+					agg = new Count();
+				}
 				
 				// first check if the list is created
 				// for every key build a list
-				if(!list.containsKey(key)){
+				if(!aggregations.containsKey(key)){
 					List<Aggregation> aggList = new ArrayList<Aggregation>();
-					list.put(key, aggList);
+					aggregations.put(key, aggList);
 				}
-				list.get(key).add(agg);
+				aggregations.get(key).add(agg);
 			}
 			
 			
@@ -335,21 +345,23 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			String key = family + "." + qualifier;
 			
 			// for each cell
-			if(list.containsKey(key)){
+			if(aggregations.containsKey(key)){
 				// for each aggregation
-				for(Aggregation aggregation:list.get(key)){
+				for(Aggregation aggregation:aggregations.get(key)){
 					aggregation.execute(cell);
 				}
 			}
 		}
-		
-		public Map<String, List<Aggregation>> getList() {
-			return list;
+
+		public Map<String, List<Aggregation>> getAggregations() {
+			return aggregations;
+		}
+
+		public void setAggregations(Map<String, List<Aggregation>> aggregations) {
+			this.aggregations = aggregations;
 		}
 		
-		public void setList(Map<String, List<Aggregation>> list) {
-			this.list = list;
-		}
+		
 	}
 	
 	/**
@@ -396,6 +408,113 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		@Override
 		public String getName() {
 			return "SUM";
+		}
+		
+	}
+	
+	/**
+	 * Max implementation
+	 * @author xiaojielin
+	 *
+	 */
+	public class Max implements Aggregation{
+		private int max = Integer.MIN_VALUE;
+
+		@Override
+		public int getResult() {
+			return max;
+		}
+
+		@Override
+		public void execute(Cell cell) {
+			String value = new String(CellUtil.cloneValue(cell));
+			int val = Integer.parseInt(value);
+			max = Math.max(val, max);
+		}
+
+		@Override
+		public String getName() {
+			return "MAX";
+		}
+	}
+	
+	/**
+	 * Min implementation
+	 * @author xiaojielin
+	 *
+	 */
+	public class Min implements Aggregation{
+		private int min = Integer.MAX_VALUE;
+
+		@Override
+		public int getResult() {
+			return min;
+		}
+
+		@Override
+		public void execute(Cell cell) {
+			String value = new String(CellUtil.cloneValue(cell));
+			int val = Integer.parseInt(value);
+			min = Math.min(val, min);
+		}
+
+		@Override
+		public String getName() {
+			return "MIN";
+		}
+		
+	}
+	
+	/**
+	 * Agerage implementation
+	 * @author xiaojielin
+	 *
+	 */
+	public class Avg implements Aggregation{
+		private int sum = 0;
+		private int count = 0;
+
+		@Override
+		public int getResult() {
+			return sum / count;
+		}
+
+		@Override
+		public void execute(Cell cell) {
+			String value = new String(CellUtil.cloneValue(cell));
+			int val = Integer.parseInt(value);
+			sum += val;
+			count++;
+		}
+
+		@Override
+		public String getName() {
+			return "AVG";
+		}
+		
+	}
+	
+	/**
+	 * Count implementation
+	 * @author xiaojielin
+	 *
+	 */
+	public class Count implements Aggregation{
+		private int count = 0;
+
+		@Override
+		public int getResult() {
+			return count;
+		}
+
+		@Override
+		public void execute(Cell cell) {
+			count++;
+		}
+
+		@Override
+		public String getName() {
+			return "COUNT";
 		}
 		
 	}
