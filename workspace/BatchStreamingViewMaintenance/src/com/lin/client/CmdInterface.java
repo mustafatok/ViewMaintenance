@@ -31,7 +31,6 @@ public class CmdInterface {
 			try {
 				System.out.print("Enter input: ");
 				input = br.readLine();
-				input = "select sum(colfam1.qual1) from testtable2 where colfam1.qual1<2";
 				String[] argIn = input.split(" ");
 
 				if (argIn[0].equals("quit")) {
