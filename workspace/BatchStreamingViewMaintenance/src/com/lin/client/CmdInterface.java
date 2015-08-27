@@ -125,6 +125,48 @@ public class CmdInterface {
 						e.printStackTrace();
 					}
 				}
+				
+				// testtable3
+				if(tableName.equals("testtable3")){
+					Configuration conf = HBaseConfiguration.create();
+					HBaseHelper helper;
+					try {
+						helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						helper.createTable(tableName, "colfam");
+						
+						String[] rows = {};
+						List<String> stringArray = new ArrayList<String>();
+						for(int i = 1; i <= 100; i++){
+							System.out.println("put row " + i);
+							helper.put(tableName, "row"+i, "colfam", "joinkey", 1, "x" + i);
+							helper.put(tableName, "row"+i, "colfam", "qualifier_testtable3", 1, "" + i);
+						}
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+				
+				// testtable4
+				if(tableName.equals("testtable4")){
+					Configuration conf = HBaseConfiguration.create();
+					HBaseHelper helper;
+					try {
+						helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						helper.createTable(tableName, "colfam");
+						
+						String[] rows = {};
+						List<String> stringArray = new ArrayList<String>();
+						for(int i = 100; i >= 0; i--){
+							System.out.println("put row " + (101 - i));
+							helper.put(tableName, "row"+(101 - i), "colfam", "joinkey", 1, "x" + i);
+							helper.put(tableName, "row"+(101 - i), "colfam", "qualifier_testtable4", 1, "" + (101 - i));
+						}
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
 			} else {
 				System.out.println("Must specify the table name");
 			}

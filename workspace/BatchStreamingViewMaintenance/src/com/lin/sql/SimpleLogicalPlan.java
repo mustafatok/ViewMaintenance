@@ -36,7 +36,7 @@ public class SimpleLogicalPlan{
 		LogicalElement le = head;
 		do{
 			str += "[ " + le.toString() + " ] ";
-		}while(le.getNext() != null);
+		}while((le = le.getNext()) != null);
 		
 		return str;
 	}
