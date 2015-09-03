@@ -1383,6 +1383,36 @@ public final class BSVCoprocessorProtos {
      * <code>repeated bytes aggregation = 3;</code>
      */
     com.google.protobuf.ByteString getAggregation(int index);
+
+    // optional bytes joinKey = 4;
+    /**
+     * <code>optional bytes joinKey = 4;</code>
+     */
+    boolean hasJoinKey();
+    /**
+     * <code>optional bytes joinKey = 4;</code>
+     */
+    com.google.protobuf.ByteString getJoinKey();
+
+    // optional bytes aggregationKey = 5;
+    /**
+     * <code>optional bytes aggregationKey = 5;</code>
+     */
+    boolean hasAggregationKey();
+    /**
+     * <code>optional bytes aggregationKey = 5;</code>
+     */
+    com.google.protobuf.ByteString getAggregationKey();
+
+    // optional bytes joinTable = 6;
+    /**
+     * <code>optional bytes joinTable = 6;</code>
+     */
+    boolean hasJoinTable();
+    /**
+     * <code>optional bytes joinTable = 6;</code>
+     */
+    com.google.protobuf.ByteString getJoinTable();
   }
   /**
    * Protobuf type {@code ParameterMessage}
@@ -1459,6 +1489,21 @@ public final class BSVCoprocessorProtos {
               aggregation_.add(input.readBytes());
               break;
             }
+            case 34: {
+              bitField0_ |= 0x00000001;
+              joinKey_ = input.readBytes();
+              break;
+            }
+            case 42: {
+              bitField0_ |= 0x00000002;
+              aggregationKey_ = input.readBytes();
+              break;
+            }
+            case 50: {
+              bitField0_ |= 0x00000004;
+              joinTable_ = input.readBytes();
+              break;
+            }
           }
         }
       } catch (com.google.protobuf.InvalidProtocolBufferException e) {
@@ -1507,6 +1552,7 @@ public final class BSVCoprocessorProtos {
       return PARSER;
     }
 
+    private int bitField0_;
     // repeated .BSVColumn column = 1;
     public static final int COLUMN_FIELD_NUMBER = 1;
     private java.util.List<com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn> column_;
@@ -1602,10 +1648,61 @@ public final class BSVCoprocessorProtos {
       return aggregation_.get(index);
     }
 
+    // optional bytes joinKey = 4;
+    public static final int JOINKEY_FIELD_NUMBER = 4;
+    private com.google.protobuf.ByteString joinKey_;
+    /**
+     * <code>optional bytes joinKey = 4;</code>
+     */
+    public boolean hasJoinKey() {
+      return ((bitField0_ & 0x00000001) == 0x00000001);
+    }
+    /**
+     * <code>optional bytes joinKey = 4;</code>
+     */
+    public com.google.protobuf.ByteString getJoinKey() {
+      return joinKey_;
+    }
+
+    // optional bytes aggregationKey = 5;
+    public static final int AGGREGATIONKEY_FIELD_NUMBER = 5;
+    private com.google.protobuf.ByteString aggregationKey_;
+    /**
+     * <code>optional bytes aggregationKey = 5;</code>
+     */
+    public boolean hasAggregationKey() {
+      return ((bitField0_ & 0x00000002) == 0x00000002);
+    }
+    /**
+     * <code>optional bytes aggregationKey = 5;</code>
+     */
+    public com.google.protobuf.ByteString getAggregationKey() {
+      return aggregationKey_;
+    }
+
+    // optional bytes joinTable = 6;
+    public static final int JOINTABLE_FIELD_NUMBER = 6;
+    private com.google.protobuf.ByteString joinTable_;
+    /**
+     * <code>optional bytes joinTable = 6;</code>
+     */
+    public boolean hasJoinTable() {
+      return ((bitField0_ & 0x00000004) == 0x00000004);
+    }
+    /**
+     * <code>optional bytes joinTable = 6;</code>
+     */
+    public com.google.protobuf.ByteString getJoinTable() {
+      return joinTable_;
+    }
+
     private void initFields() {
       column_ = java.util.Collections.emptyList();
       condition_ = java.util.Collections.emptyList();
       aggregation_ = java.util.Collections.emptyList();
+      joinKey_ = com.google.protobuf.ByteString.EMPTY;
+      aggregationKey_ = com.google.protobuf.ByteString.EMPTY;
+      joinTable_ = com.google.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1640,6 +1737,15 @@ public final class BSVCoprocessorProtos {
       for (int i = 0; i < aggregation_.size(); i++) {
         output.writeBytes(3, aggregation_.get(i));
       }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        output.writeBytes(4, joinKey_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        output.writeBytes(5, aggregationKey_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        output.writeBytes(6, joinTable_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1665,6 +1771,18 @@ public final class BSVCoprocessorProtos {
         }
         size += dataSize;
         size += 1 * getAggregationList().size();
+      }
+      if (((bitField0_ & 0x00000001) == 0x00000001)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(4, joinKey_);
+      }
+      if (((bitField0_ & 0x00000002) == 0x00000002)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(5, aggregationKey_);
+      }
+      if (((bitField0_ & 0x00000004) == 0x00000004)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(6, joinTable_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1695,6 +1813,21 @@ public final class BSVCoprocessorProtos {
           .equals(other.getConditionList());
       result = result && getAggregationList()
           .equals(other.getAggregationList());
+      result = result && (hasJoinKey() == other.hasJoinKey());
+      if (hasJoinKey()) {
+        result = result && getJoinKey()
+            .equals(other.getJoinKey());
+      }
+      result = result && (hasAggregationKey() == other.hasAggregationKey());
+      if (hasAggregationKey()) {
+        result = result && getAggregationKey()
+            .equals(other.getAggregationKey());
+      }
+      result = result && (hasJoinTable() == other.hasJoinTable());
+      if (hasJoinTable()) {
+        result = result && getJoinTable()
+            .equals(other.getJoinTable());
+      }
       result = result &&
           getUnknownFields().equals(other.getUnknownFields());
       return result;
@@ -1719,6 +1852,18 @@ public final class BSVCoprocessorProtos {
       if (getAggregationCount() > 0) {
         hash = (37 * hash) + AGGREGATION_FIELD_NUMBER;
         hash = (53 * hash) + getAggregationList().hashCode();
+      }
+      if (hasJoinKey()) {
+        hash = (37 * hash) + JOINKEY_FIELD_NUMBER;
+        hash = (53 * hash) + getJoinKey().hashCode();
+      }
+      if (hasAggregationKey()) {
+        hash = (37 * hash) + AGGREGATIONKEY_FIELD_NUMBER;
+        hash = (53 * hash) + getAggregationKey().hashCode();
+      }
+      if (hasJoinTable()) {
+        hash = (37 * hash) + JOINTABLE_FIELD_NUMBER;
+        hash = (53 * hash) + getJoinTable().hashCode();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -1845,6 +1990,12 @@ public final class BSVCoprocessorProtos {
         }
         aggregation_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000004);
+        joinKey_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000008);
+        aggregationKey_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000010);
+        joinTable_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000020);
         return this;
       }
 
@@ -1872,6 +2023,7 @@ public final class BSVCoprocessorProtos {
       public com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage buildPartial() {
         com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage result = new com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage(this);
         int from_bitField0_ = bitField0_;
+        int to_bitField0_ = 0;
         if (columnBuilder_ == null) {
           if (((bitField0_ & 0x00000001) == 0x00000001)) {
             column_ = java.util.Collections.unmodifiableList(column_);
@@ -1895,6 +2047,19 @@ public final class BSVCoprocessorProtos {
           bitField0_ = (bitField0_ & ~0x00000004);
         }
         result.aggregation_ = aggregation_;
+        if (((from_bitField0_ & 0x00000008) == 0x00000008)) {
+          to_bitField0_ |= 0x00000001;
+        }
+        result.joinKey_ = joinKey_;
+        if (((from_bitField0_ & 0x00000010) == 0x00000010)) {
+          to_bitField0_ |= 0x00000002;
+        }
+        result.aggregationKey_ = aggregationKey_;
+        if (((from_bitField0_ & 0x00000020) == 0x00000020)) {
+          to_bitField0_ |= 0x00000004;
+        }
+        result.joinTable_ = joinTable_;
+        result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
       }
@@ -1971,6 +2136,15 @@ public final class BSVCoprocessorProtos {
             aggregation_.addAll(other.aggregation_);
           }
           onChanged();
+        }
+        if (other.hasJoinKey()) {
+          setJoinKey(other.getJoinKey());
+        }
+        if (other.hasAggregationKey()) {
+          setAggregationKey(other.getAggregationKey());
+        }
+        if (other.hasJoinTable()) {
+          setJoinTable(other.getJoinTable());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2559,6 +2733,114 @@ public final class BSVCoprocessorProtos {
       public Builder clearAggregation() {
         aggregation_ = java.util.Collections.emptyList();
         bitField0_ = (bitField0_ & ~0x00000004);
+        onChanged();
+        return this;
+      }
+
+      // optional bytes joinKey = 4;
+      private com.google.protobuf.ByteString joinKey_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes joinKey = 4;</code>
+       */
+      public boolean hasJoinKey() {
+        return ((bitField0_ & 0x00000008) == 0x00000008);
+      }
+      /**
+       * <code>optional bytes joinKey = 4;</code>
+       */
+      public com.google.protobuf.ByteString getJoinKey() {
+        return joinKey_;
+      }
+      /**
+       * <code>optional bytes joinKey = 4;</code>
+       */
+      public Builder setJoinKey(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        joinKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes joinKey = 4;</code>
+       */
+      public Builder clearJoinKey() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        joinKey_ = getDefaultInstance().getJoinKey();
+        onChanged();
+        return this;
+      }
+
+      // optional bytes aggregationKey = 5;
+      private com.google.protobuf.ByteString aggregationKey_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes aggregationKey = 5;</code>
+       */
+      public boolean hasAggregationKey() {
+        return ((bitField0_ & 0x00000010) == 0x00000010);
+      }
+      /**
+       * <code>optional bytes aggregationKey = 5;</code>
+       */
+      public com.google.protobuf.ByteString getAggregationKey() {
+        return aggregationKey_;
+      }
+      /**
+       * <code>optional bytes aggregationKey = 5;</code>
+       */
+      public Builder setAggregationKey(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000010;
+        aggregationKey_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes aggregationKey = 5;</code>
+       */
+      public Builder clearAggregationKey() {
+        bitField0_ = (bitField0_ & ~0x00000010);
+        aggregationKey_ = getDefaultInstance().getAggregationKey();
+        onChanged();
+        return this;
+      }
+
+      // optional bytes joinTable = 6;
+      private com.google.protobuf.ByteString joinTable_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes joinTable = 6;</code>
+       */
+      public boolean hasJoinTable() {
+        return ((bitField0_ & 0x00000020) == 0x00000020);
+      }
+      /**
+       * <code>optional bytes joinTable = 6;</code>
+       */
+      public com.google.protobuf.ByteString getJoinTable() {
+        return joinTable_;
+      }
+      /**
+       * <code>optional bytes joinTable = 6;</code>
+       */
+      public Builder setJoinTable(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000020;
+        joinTable_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes joinTable = 6;</code>
+       */
+      public Builder clearJoinTable() {
+        bitField0_ = (bitField0_ & ~0x00000020);
+        joinTable_ = getDefaultInstance().getJoinTable();
         onChanged();
         return this;
       }
@@ -5030,16 +5312,18 @@ public final class BSVCoprocessorProtos {
       "\n\024BSVCoprocessor.proto\"+\n\tBSVColumn\022\016\n\006f" +
       "amily\030\001 \002(\014\022\016\n\006column\030\002 \002(\014\"H\n\tCondition" +
       "\022\032\n\006column\030\001 \002(\0132\n.BSVColumn\022\020\n\010operator" +
-      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"b\n\020ParameterMessag" +
-      "e\022\032\n\006column\030\001 \003(\0132\n.BSVColumn\022\035\n\tconditi" +
-      "on\030\002 \003(\0132\n.Condition\022\023\n\013aggregation\030\003 \003(" +
-      "\014\"6\n\010KeyValue\022\016\n\006rowKey\030\001 \002(\014\022\013\n\003key\030\002 \002" +
-      "(\014\022\r\n\005value\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010keyValue\030" +
-      "\002 \003(\0132\t.KeyValue\"6\n\rResultMessage\022\024\n\003row" +
-      "\030\001 \003(\0132\007.BSVRow\022\017\n\004size\030\002 \001(\003:\001025\n\007Exec",
-      "ute\022*\n\005batch\022\021.ParameterMessage\032\016.Result" +
-      "MessageB=\n\035com.lin.coprocessor.generated" +
-      "B\024BSVCoprocessorProtosH\001\210\001\001\240\001\001"
+      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\236\001\n\020ParameterMessa" +
+      "ge\022\032\n\006column\030\001 \003(\0132\n.BSVColumn\022\035\n\tcondit" +
+      "ion\030\002 \003(\0132\n.Condition\022\023\n\013aggregation\030\003 \003" +
+      "(\014\022\017\n\007joinKey\030\004 \001(\014\022\026\n\016aggregationKey\030\005 " +
+      "\001(\014\022\021\n\tjoinTable\030\006 \001(\014\"6\n\010KeyValue\022\016\n\006ro" +
+      "wKey\030\001 \002(\014\022\013\n\003key\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"%" +
+      "\n\006BSVRow\022\033\n\010keyValue\030\002 \003(\0132\t.KeyValue\"6\n",
+      "\rResultMessage\022\024\n\003row\030\001 \003(\0132\007.BSVRow\022\017\n\004" +
+      "size\030\002 \001(\003:\001025\n\007Execute\022*\n\005batch\022\021.Para" +
+      "meterMessage\032\016.ResultMessageB=\n\035com.lin." +
+      "coprocessor.generatedB\024BSVCoprocessorPro" +
+      "tosH\001\210\001\001\240\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5063,7 +5347,7 @@ public final class BSVCoprocessorProtos {
           internal_static_ParameterMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ParameterMessage_descriptor,
-              new java.lang.String[] { "Column", "Condition", "Aggregation", });
+              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", });
           internal_static_KeyValue_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_KeyValue_fieldAccessorTable = new

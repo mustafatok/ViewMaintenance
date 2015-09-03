@@ -26,6 +26,9 @@ public class LogicalElement {
 	private List<BSVColumn> columns = new ArrayList<BSVColumn>();
 	private List<Condition> conditions = new ArrayList<Condition>();
 	private List<ByteString> aggregations = new ArrayList<ByteString>();
+	private String aggregationKey = "";
+	private String joinKey = "";
+	private String joinTable = "";
 
 	public LogicalElement getNext() {
 		return next;
@@ -51,6 +54,12 @@ public class LogicalElement {
 			// add aggregation
 			for(ByteString aggregation:aggregations){
 				request.addAggregation(aggregation);
+			}
+			
+			// add join key and join table
+			if(!joinKey.trim().equals("")){
+				request.setJoinKey(ByteString.copyFrom(joinKey.getBytes()));
+				request.setJoinTable(ByteString.copyFrom(joinTable.getBytes()));
 			}
 			 
 			System.out.println("=======================================================================");
@@ -128,11 +137,38 @@ public class LogicalElement {
 	public void setAggregations(List<ByteString> aggregations) {
 		this.aggregations = aggregations;
 	}
+	
+	public String getAggregationKey() {
+		return aggregationKey;
+	}
+
+	public void setAggregationKey(String aggregationKey) {
+		this.aggregationKey = aggregationKey;
+	}
+
+	public String getJoinKey() {
+		return joinKey;
+	}
+
+	public void setJoinKey(String joinKey) {
+		this.joinKey = joinKey;
+	}
+
+	public String getJoinTable() {
+		return joinTable;
+	}
+
+	public void setJoinTable(String joinTable) {
+		this.joinTable = joinTable;
+	}
 
 	@Override
 	public String toString() {
 		return "LogicalElement [tableName=" + tableName + ", columns="
-				+ columns + ", aggregations=" + aggregations + " conditions=" + conditions + "]";
+				+ columns + ", aggregations=" + aggregations + " conditions=" + conditions 
+				+ "aggregationKey=" + aggregationKey 
+				+ "joinKey=" + joinKey 
+				+ "joinTable=" + joinTable + "]";
 	}
 
 

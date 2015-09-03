@@ -19,6 +19,9 @@ message ParameterMessage{
 	repeated BSVColumn column=1;
 	repeated Condition condition=2;
 	repeated bytes aggregation=3;
+	optional bytes joinKey=4;
+	optional bytes aggregationKey=5;
+	optional bytes joinTable=6;
 }
 
 message KeyValue{
