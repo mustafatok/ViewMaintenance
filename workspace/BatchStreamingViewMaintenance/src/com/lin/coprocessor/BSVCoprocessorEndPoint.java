@@ -187,7 +187,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				}
 			}
 			
-			joinTable.close();
+//			joinTable.close();
 			
 			System.out.println((new Date())+"Finish building response message");
 			response.setSize(count);
