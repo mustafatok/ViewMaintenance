@@ -20,7 +20,7 @@ import org.apache.hadoop.hbase.client.Result;
 import org.apache.hadoop.hbase.util.Bytes;
 
 public class HBaseHelper {
-	private Configuration configuration = null;
+	  private Configuration configuration = null;
 	  private HTable connection = null;
 	  private HBaseAdmin admin = null;
 

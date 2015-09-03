@@ -10,14 +10,19 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.commons.collections.map.HashedMap;
+import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
+import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
+import org.apache.hadoop.hbase.util.Bytes;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
@@ -35,6 +40,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		CoprocessorService {
 	private RegionCoprocessorEnvironment env;
 	private AggregationManager aggregationManager = null;
+	private boolean isMaterialize = false;
+	private String joinFamily = null;
+	private String joinQualifier = null;
+	private HTable joinTable = null;
 
 	@Override
 	public Service getService() {
@@ -57,12 +66,36 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		System.out.println("============================================================");
 		System.out.println((new Date())+"Begin to execute");
 		
+		
 		// initialize aggregation manager
 		aggregationManager = new AggregationManager(request);
 		
 		// initialize scan
 		Scan scan = new Scan();
 		scan.setMaxVersions(1);
+		
+		// check if join
+		// If join, set is-materialize to be true.
+		// Fill joinKey and joinTable for later use
+		if(request.getJoinKey() != null){
+			isMaterialize = true;
+			
+			// Connect to the join table using the join table name from request
+			Configuration configuration = HBaseConfiguration.create();;
+			try {
+				joinTable = new HTable(configuration, request.getJoinTable().toByteArray());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			// fill join family and join qualifier for later use
+			joinFamily = request.getJoinKey().toStringUtf8().split("\\.")[0];
+			joinQualifier = request.getJoinKey().toStringUtf8().split("\\.")[1];
+			
+			// add joinkey to the scan filter
+			scan.addColumn(joinFamily.getBytes(), joinQualifier.getBytes());
+		}
 		
 		// add column as filter
 		// add all columns in the "column" field 
@@ -87,7 +120,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			scan.addColumn(family, column);
 		}
 
-		// response
+		// response builder
 		ResultMessage.Builder response = ResultMessage.newBuilder();
 
 		// use an internal scanner to perform scanning.
@@ -126,6 +159,29 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				if(meetCondition){
 					response.addRow(bsvRow);
 					count++;
+					
+					// if is materialize put it to join table
+					if(isMaterialize){
+						// find join key
+						for(Cell cell:row){
+							String cellFamilyClone = new String(CellUtil.cloneFamily(cell));
+							String cellQualifierClone = new String(CellUtil.cloneQualifier(cell));
+							String cellString = cellFamilyClone + "." + cellQualifierClone;
+
+							// use join key to put a row in reverse join table, use join key 
+							// value as the row key
+							if(cellString.equals(joinFamily + "." + joinQualifier)){
+								Put put = new Put(cellString.getBytes());
+								
+								for(Cell cellForAdd:row){
+									put.add(cellForAdd);
+								}
+								
+								joinTable.put(put);
+							}
+						}
+						
+					}
 				}
 			}
 			

@@ -1,10 +1,16 @@
 package com.lin.sql;
 
+import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Function;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
 import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
 import net.sf.jsqlparser.expression.operators.relational.MinorThan;
@@ -12,7 +18,6 @@ import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.select.FromItem;
 import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
@@ -21,6 +26,7 @@ import net.sf.jsqlparser.statement.select.SelectExpressionItem;
 import com.google.protobuf.ByteString;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
+import com.lin.test.HBaseHelper;
 
 public class JsqlParser {
 
@@ -60,22 +66,58 @@ public class JsqlParser {
 							// build plan for the first table of from
 							LogicalElement element = new LogicalElement();
 							handleJoinTable(plainSelect, tableName, element);
-							logicalPlan.add(element);
 							
-							// build plan for every join table
-							for(Object obj:plainSelect.getJoins()){
-								Join join = (Join)obj;
-								
-								LogicalElement elementJoin = new LogicalElement();
-								handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
-								logicalPlan.add(elementJoin);
+							// build plan for join table
+							// Assert only one join
+							Join join = (Join)plainSelect.getJoins().get(0);
+							LogicalElement elementJoin = new LogicalElement();
+							handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
+							
+							// For each of the plan, the join key field should be filled
+							// Assert the join key of the left table is on the left and 
+							// the right join key of the right table is on the right
+							String leftJoinKey = ((Column) ((EqualsTo) ((Join) plainSelect.getJoins().get(0)).getOnExpression()).getLeftExpression()).getWholeColumnName();
+							System.out.println("left join key: " + leftJoinKey);
+							element.setJoinKey(leftJoinKey);
+							String rightJoinKey = ((Column) ((EqualsTo) ((Join) plainSelect.getJoins().get(0)).getOnExpression()).getRightExpression()).getWholeColumnName();
+							System.out.println("right join key: " + rightJoinKey);
+							elementJoin.setJoinKey(rightJoinKey);
+							
+							// Since the two plan above cannot know other plan
+							// So we need to transfer the join table name to each of them
+							String joinTableName = "join" + tableName + "With" + ((Table)join.getRightItem()).getWholeTableName();
+							element.setJoinTable(joinTableName);
+							elementJoin.setJoinTable(joinTableName);
+							
+							// now we create an empty join table
+							// if already exist, delete it first
+							// The column family of join table will be fixed as colfam1
+							Configuration conf = HBaseConfiguration.create();
+							HBaseHelper helper;
+							try {
+								helper = HBaseHelper.getHelper(conf);
+								helper.dropTable(joinTableName);
+								helper.createTable(joinTableName, "colfam1");
+							} catch(IOException e){
+								e.printStackTrace();
 							}
+							
+							// add the two join plan element to the logical plan
+							logicalPlan.add(element);
+							logicalPlan.add(elementJoin);
+							
+							// Create a third plan for join operation
+							// since reverse join table will be generated in the last two plan
+							// the third plan will just scan the results from it.
+							// Assert the third plan have the name of "joinTableAWithTableB"
+							LogicalElement elementResult = new LogicalElement();
+							elementResult.setTableName(joinTableName);
+							
 						}
 					} // if(tableName != null)
 				} // if(selectStatement.getSelectBody() instanceof PlainSelect)
 			}// if (statement instanceof Select)
 		} catch (JSQLParserException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return logicalPlan;
