@@ -171,19 +171,23 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 							// use join key to put a row in reverse join table, use join key 
 							// value as the row key
 							if(cellString.equals(joinFamily + "." + joinQualifier)){
-								Put put = new Put(cellString.getBytes());
+								Put put = new Put(CellUtil.cloneValue(cell));
 								
 								for(Cell cellForAdd:row){
 									put.add(CellUtil.cloneFamily(cellForAdd), CellUtil.cloneQualifier(cellForAdd), CellUtil.cloneValue(cellForAdd));
 								}
 								
 								joinTable.put(put);
+								
+								break;
 							}
 						}
 						
 					}
 				}
 			}
+			
+			joinTable.close();
 			
 			System.out.println((new Date())+"Finish building response message");
 			response.setSize(count);
