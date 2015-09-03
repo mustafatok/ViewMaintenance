@@ -97,7 +97,7 @@ public class JsqlParser {
 							try {
 								helper = HBaseHelper.getHelper(conf);
 								helper.dropTable(joinTableName);
-								helper.createTable(joinTableName, "colfam1");
+								helper.createTable(joinTableName, "colfam");
 							} catch(IOException e){
 								e.printStackTrace();
 							}
