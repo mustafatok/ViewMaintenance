@@ -174,7 +174,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 								Put put = new Put(cellString.getBytes());
 								
 								for(Cell cellForAdd:row){
-									put.add(cellForAdd);
+									put.add(CellUtil.cloneFamily(cellForAdd), CellUtil.cloneQualifier(cellForAdd), CellUtil.cloneValue(cellForAdd));
 								}
 								
 								joinTable.put(put);
