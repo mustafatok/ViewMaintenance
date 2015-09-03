@@ -77,7 +77,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		// check if join
 		// If join, set is-materialize to be true.
 		// Fill joinKey and joinTable for later use
-		if(request.getJoinKey() != null){
+		if(!request.getJoinKey().toStringUtf8().equals("")){
 			isMaterialize = true;
 			
 			// Connect to the join table using the join table name from request

@@ -112,7 +112,7 @@ public class JsqlParser {
 							// Assert the third plan have the name of "joinTableAWithTableB"
 							LogicalElement elementResult = new LogicalElement();
 							elementResult.setTableName(joinTableName);
-							
+							logicalPlan.add(elementResult);
 						}
 					} // if(tableName != null)
 				} // if(selectStatement.getSelectBody() instanceof PlainSelect)
