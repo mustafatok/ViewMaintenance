@@ -131,29 +131,33 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			// scan a row of results every time and add this row to 
 			// the result arraylist
 			List<Cell> curVals = new ArrayList<Cell>();
-			List<List<Cell>> results = new ArrayList<List<Cell>>();
+//			List<List<Cell>> results = new ArrayList<List<Cell>>();
 			boolean finish = false;
+			long count = 0;
 			Date begin = new Date();
 			System.out.println(begin+"Begin to scan");
 			do {
 				curVals.clear();
 				finish = scanner.next(curVals);
-				List<Cell> tmp = new ArrayList<Cell>(curVals);
-				results.add(tmp);
-			} while (finish);
-			Date end = new Date();
-			System.out.println(end+" Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
-			System.out.println("Scann result are: " + results.toString());
-
-			long count = 0;
-			System.out.println((new Date())+"Begin to build response message");
-			
-			// handle results
-			for (List<Cell> row : results) {
+				List<Cell> row = new ArrayList<Cell>(curVals);
+				
+				// find the aggregation key first
+				String aggKey = "";
+				for(Cell cell:row){
+					String columnName = new String(CellUtil.cloneFamily(cell)) + "." + new String(CellUtil.cloneQualifier(cell));
+					if(columnName.equals(request.getAggregationKey().toStringUtf8())){
+						aggKey = new String(CellUtil.cloneValue(cell));
+						break;
+					}
+				}
+				
+				/*
+				 * start of handling result
+				 */
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
 				System.out.println((new Date())+"Building row no." + count);
 				
-				boolean meetCondition = handleRow(request, row, bsvRow);
+				boolean meetCondition = handleRow(request, row, bsvRow, aggKey);
 				
 				// discard the whole row if the cell fails to meet the condition
 				if(meetCondition){
@@ -185,9 +189,23 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 						
 					}
 				}
-			}
-			
-//			joinTable.close();
+				/*
+				 * End of handling result
+				 */
+				
+//				results.add(row);
+			} while (finish);
+			Date end = new Date();
+			System.out.println(end+" Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
+//			System.out.println("Scann result are: " + results.toString());
+
+			// these code are abandoned because we don't want to store the whole
+			// result in memory
+//			System.out.println((new Date())+"Begin to build response message");
+			// handle results
+//			for (List<Cell> row : results) {
+//				
+//			}
 			
 			System.out.println((new Date())+"Finish building response message");
 			response.setSize(count);
@@ -233,10 +251,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @param request
 	 * @param row
 	 * @param bsvRow
+	 * @param aggKey 
 	 * @return
 	 */
 	public boolean handleRow(ParameterMessage request, List<Cell> row,
-			BSVRow.Builder bsvRow) {
+			BSVRow.Builder bsvRow, String aggKey) {
 		// in cell we have to consider the conditions
 		boolean meetCondition = true;
 		for(Cell cell:row){
@@ -253,7 +272,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			KeyValue.Builder keyvalue = KeyValue.newBuilder();
 			System.out.println((new Date())+"Building cell " + cell);
 			
-			handleCell(cell, keyvalue, request);
+			handleCell(cell, keyvalue, request, aggKey);
 			
 			bsvRow.addKeyValue(keyvalue);
 		}
@@ -266,11 +285,12 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @param cell
 	 * @param keyvalue
 	 * @param request 
+	 * @param aggKey 
 	 * @return
 	 */
-	public byte[] handleCell(Cell cell, KeyValue.Builder keyvalue, ParameterMessage request) {
+	public byte[] handleCell(Cell cell, KeyValue.Builder keyvalue, ParameterMessage request, String aggKey) {
 		// handle aggregation
-		aggregationManager.handle(cell);
+		aggregationManager.handle(cell, aggKey);
 		// row key
 		byte[] rowBytes = new byte[cell.getRowLength()];
 		System.arraycopy(cell.getRowArray(), cell.getRowOffset(), rowBytes, 0, cell.getRowLength());
@@ -398,14 +418,23 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		/**
 		 * Identify the aggregation for a cell and execute all the aggregation for the cell
 		 * @param cell
+		 * @param aggKey 
 		 */
-		public void handle(Cell cell) {
+		public void handle(Cell cell, String aggKey) {
 			String family = new String(CellUtil.cloneFamily(cell));
 			String qualifier = new String(CellUtil.cloneQualifier(cell));
-			String key = family + "." + qualifier;
+			String keyPrefix = family + "." + qualifier;
+			String key = family + "." + qualifier + "." + aggKey;
 			
-			// for each cell
-			if(aggregations.containsKey(key)){
+			// check if there is colfam.qualifier exist
+			//   if yes, check if there is colfam.qualifier.aggkey exist
+			//     if yes, execute aggregation
+			//     if no, copy the list of aggregation from the list given the key of colfam.qualifier and then execute the aggregation
+			if(aggregations.containsKey(keyPrefix)){
+				if(!aggregations.containsKey(key)){
+					aggregations.put(key, aggregations.get(keyPrefix));
+				}
+				
 				// for each aggregation
 				for(Aggregation aggregation:aggregations.get(key)){
 					aggregation.execute(cell);

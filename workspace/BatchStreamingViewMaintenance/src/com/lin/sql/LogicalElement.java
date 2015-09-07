@@ -164,11 +164,14 @@ public class LogicalElement {
 
 	@Override
 	public String toString() {
-		return "LogicalElement [tableName=" + tableName + ", columns="
-				+ columns + ", aggregations=" + aggregations + " conditions=" + conditions 
-				+ "aggregationKey=" + aggregationKey 
-				+ "joinKey=" + joinKey 
-				+ "joinTable=" + joinTable + "]";
+		return "LogicalElement ["
+				+ "tableName=" + tableName 
+				+ ", columns=" + columns 
+				+ ", aggregations=" + aggregations 
+				+ ", conditions=" + conditions 
+				+ ", aggregationKey=" + aggregationKey 
+				+ ", joinKey=" + joinKey 
+				+ ", joinTable=" + joinTable + "]";
 	}
 
 

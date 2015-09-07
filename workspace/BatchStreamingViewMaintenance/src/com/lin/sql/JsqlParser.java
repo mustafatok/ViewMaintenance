@@ -2,11 +2,7 @@ package com.lin.sql;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
-
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Function;
@@ -22,6 +18,9 @@ import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
 import net.sf.jsqlparser.statement.select.SelectExpressionItem;
+
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.hbase.HBaseConfiguration;
 
 import com.google.protobuf.ByteString;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
@@ -351,6 +350,10 @@ public class JsqlParser {
 					GREATER_THAN_EQUALS,
 					element);
 		}
+		
+		// handle group by
+		String groupBy = ((Column) plainSelect.getGroupByColumnReferences().get(0)).getWholeColumnName();
+		element.setAggregationKey(groupBy);
 	}
 
 	public static void buildCondition(String leftExpression,
