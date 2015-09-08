@@ -1,6 +1,7 @@
 package com.lin.coprocessor;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
@@ -493,7 +494,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Sum implements Aggregation{
+	public class Sum implements Aggregation, Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 106771354797782417L;
 		private int result = 0;
 
 		@Override
@@ -520,7 +525,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Max implements Aggregation{
+	public class Max implements Aggregation, Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 6453606385965904013L;
 		private int max = Integer.MIN_VALUE;
 
 		@Override
@@ -546,7 +555,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Min implements Aggregation{
+	public class Min implements Aggregation, Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 8038689438114620751L;
 		private int min = Integer.MAX_VALUE;
 
 		@Override
@@ -573,7 +586,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Avg implements Aggregation{
+	public class Avg implements Aggregation, Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = -405392127065261904L;
 		private int sum = 0;
 		private int count = 0;
 
@@ -602,7 +619,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Count implements Aggregation{
+	public class Count implements Aggregation, Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3581913240113105418L;
 		private int count = 0;
 
 		@Override
