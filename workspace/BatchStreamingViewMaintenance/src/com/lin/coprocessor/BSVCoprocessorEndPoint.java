@@ -39,7 +39,11 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
 import com.lin.utils.Common;
 
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
-		CoprocessorService {
+		CoprocessorService, Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1483864940814623937L;
 	private RegionCoprocessorEnvironment env;
 	private AggregationManager aggregationManager = null;
 	private boolean isMaterialize = false;
