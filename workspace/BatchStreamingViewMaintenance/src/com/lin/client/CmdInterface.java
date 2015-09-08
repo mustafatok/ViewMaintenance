@@ -167,6 +167,27 @@ public class CmdInterface {
 						e.printStackTrace();
 					}
 				}
+				
+				// testtable5
+				if(tableName.equals("testtable5")){
+					Configuration conf = HBaseConfiguration.create();
+					HBaseHelper helper;
+					try {
+						helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						helper.createTable(tableName, "colfam");
+						
+						String[] rows = {};
+						List<String> stringArray = new ArrayList<String>();
+						for(int i = 100; i >= 0; i--){
+							System.out.println("put row " + (101 - i));
+							helper.put(tableName, "row"+(101 - i), "colfam", "aggKey", 1, "x" + i % 20);
+							helper.put(tableName, "row"+(101 - i), "colfam", "value", 1, "" + (101 - i));
+						}
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
 			} else {
 				System.out.println("Must specify the table name");
 			}
