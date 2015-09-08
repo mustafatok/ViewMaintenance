@@ -56,6 +56,9 @@ public class LogicalElement {
 				request.addAggregation(aggregation);
 			}
 			
+			// set aggregation key
+			request.setAggregationKey(ByteString.copyFrom(aggregationKey.getBytes()));
+			
 			// add join key and join table
 			if(!joinKey.trim().equals("")){
 				request.setJoinKey(ByteString.copyFrom(joinKey.getBytes()));
