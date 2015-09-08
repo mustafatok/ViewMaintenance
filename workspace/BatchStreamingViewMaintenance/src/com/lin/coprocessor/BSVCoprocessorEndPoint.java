@@ -35,6 +35,7 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.Execute;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
+import com.lin.utils.Common;
 
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		CoprocessorService {
@@ -436,8 +437,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			if(aggregations.containsKey(keyPrefix)){
 				System.out.println("Check if contains key " + key);
 				if(!aggregations.containsKey(key)){
-					System.out.println("Yes contains " + key);
-					aggregations.put(key, new ArrayList<Aggregation>(aggregations.get(keyPrefix)));
+					System.out.println("Don't contains " + key);
+					
+					// deep copy the list
+					aggregations.put(key, (ArrayList<Aggregation>)Common.deepCopy(aggregations.get(keyPrefix)));
 					System.out.println("After put into aggregations: " + aggregations);
 				}
 				
@@ -478,6 +481,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 */
 		public void execute(Cell cell);
 		
+		/**
+		 * Get human readable name
+		 * @return
+		 */
 		public String getName();
 	}
 	
