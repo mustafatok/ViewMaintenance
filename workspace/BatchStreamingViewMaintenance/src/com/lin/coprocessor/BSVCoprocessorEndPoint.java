@@ -437,7 +437,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				System.out.println("Check if contains key " + key);
 				if(!aggregations.containsKey(key)){
 					System.out.println("Yes contains " + key);
-					aggregations.put(key, aggregations.get(keyPrefix));
+					aggregations.put(key, new ArrayList<Aggregation>(aggregations.get(keyPrefix)));
 					System.out.println("After put into aggregations: " + aggregations);
 				}
 				
