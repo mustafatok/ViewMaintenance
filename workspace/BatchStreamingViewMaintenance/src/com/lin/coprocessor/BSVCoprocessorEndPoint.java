@@ -369,7 +369,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class AggregationManager{
+	public class AggregationManager implements Serializable{
+		/**
+		 * 
+		 */
+		private static final long serialVersionUID = 3858867995910160121L;
 		/**
 		 * For every cell, there should be a list of aggregation
 		 * Use the family
