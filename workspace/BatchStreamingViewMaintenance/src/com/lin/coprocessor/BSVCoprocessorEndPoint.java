@@ -39,11 +39,7 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
 import com.lin.utils.Common;
 
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
-		CoprocessorService, Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1483864940814623937L;
+		CoprocessorService{
 	private RegionCoprocessorEnvironment env;
 	private AggregationManager aggregationManager = null;
 	private boolean isMaterialize = false;
@@ -449,7 +445,15 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					System.out.println("Don't contains " + key);
 					
 					// deep copy the list
-					aggregations.put(key, (ArrayList<Aggregation>)Common.deepCopy(aggregations.get(keyPrefix)));
+					ArrayList<Aggregation> copyList = new ArrayList<Aggregation>();
+					for(Aggregation tmpApp:aggregations.get(keyPrefix)){
+						try {
+							copyList.add((Aggregation) tmpApp.clone());
+						} catch (CloneNotSupportedException e) {
+							e.printStackTrace();
+						}
+					}
+					aggregations.put(key, copyList);
 					System.out.println("After put into aggregations: " + aggregations);
 				}
 				
@@ -477,36 +481,38 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public interface Aggregation{
+	public abstract class Aggregation implements Cloneable{
 		/**
 		 * Return the final result of this aggregation
 		 * @return
 		 */
-		public int getResult();
+		public abstract int getResult();
 		
 		/**
 		 * Handle a cell
 		 * @param cell
 		 */
-		public void execute(Cell cell);
+		public abstract void execute(Cell cell);
 		
 		/**
 		 * Get human readable name
 		 * @return
 		 */
-		public String getName();
+		public abstract String getName();
+
+		@Override
+		protected Object clone() throws CloneNotSupportedException {
+			return super.clone();
+		}
 	}
+	
 	
 	/**
 	 * Sum implementation
 	 * @author xiaojielin
 	 *
 	 */
-	public class Sum implements Aggregation, Serializable{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 106771354797782417L;
+	public class Sum extends Aggregation implements Cloneable{
 		private int result = 0;
 
 		@Override
@@ -525,7 +531,13 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		public String getName() {
 			return "SUM";
 		}
-		
+
+		@Override
+		protected Object clone() throws CloneNotSupportedException {
+			Sum sum = (Sum) super.clone(); 
+			sum.result = result;
+			return sum;
+		}
 	}
 	
 	/**
@@ -533,11 +545,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Max implements Aggregation, Serializable{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 6453606385965904013L;
+	public class Max extends Aggregation implements Cloneable{
 		private int max = Integer.MIN_VALUE;
 
 		@Override
@@ -556,6 +564,13 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		public String getName() {
 			return "MAX";
 		}
+		
+		@Override
+		protected Object clone() throws CloneNotSupportedException {
+			Max maxObj = (Max) super.clone(); 
+			maxObj.max = max;
+			return maxObj;
+		}
 	}
 	
 	/**
@@ -563,11 +578,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Min implements Aggregation, Serializable{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 8038689438114620751L;
+	public class Min extends Aggregation implements Cloneable{
 		private int min = Integer.MAX_VALUE;
 
 		@Override
@@ -586,7 +597,13 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		public String getName() {
 			return "MIN";
 		}
-		
+
+		@Override
+		protected Object clone() throws CloneNotSupportedException {
+			Min minObj = (Min)super.clone();
+			minObj.min = min;
+			return minObj;
+		}
 	}
 	
 	/**
@@ -594,11 +611,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Avg implements Aggregation, Serializable{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = -405392127065261904L;
+	public class Avg extends Aggregation implements Cloneable{
 		private int sum = 0;
 		private int count = 0;
 
@@ -619,6 +632,14 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		public String getName() {
 			return "AVG";
 		}
+
+		@Override
+		protected Object clone() throws CloneNotSupportedException {
+			Avg avgObj = (Avg)super.clone();
+			avgObj.sum = sum;
+			avgObj.count = count;
+			return avgObj;
+		}
 		
 	}
 	
@@ -627,11 +648,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 * @author xiaojielin
 	 *
 	 */
-	public class Count implements Aggregation, Serializable{
-		/**
-		 * 
-		 */
-		private static final long serialVersionUID = 3581913240113105418L;
+	public class Count extends Aggregation implements Cloneable{
 		private int count = 0;
 
 		@Override
@@ -647,6 +664,13 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		@Override
 		public String getName() {
 			return "COUNT";
+		}
+
+		@Override
+		protected Object clone() throws CloneNotSupportedException {
+			Count countObj = (Count)super.clone();
+			countObj.count = count;
+			return countObj;
 		}
 		
 	}
