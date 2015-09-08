@@ -145,6 +145,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				String aggKey = "";
 				for(Cell cell:row){
 					String columnName = new String(CellUtil.cloneFamily(cell)) + "." + new String(CellUtil.cloneQualifier(cell));
+					System.out.println("Finding the aggregation key of the row: " + columnName + " and " + request.getAggregationKey().toStringUtf8());
 					if(columnName.equals(request.getAggregationKey().toStringUtf8())){
 						aggKey = new String(CellUtil.cloneValue(cell));
 						System.out.println("Found aggregation key: " + aggKey);
