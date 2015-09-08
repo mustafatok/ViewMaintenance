@@ -147,6 +147,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					String columnName = new String(CellUtil.cloneFamily(cell)) + "." + new String(CellUtil.cloneQualifier(cell));
 					if(columnName.equals(request.getAggregationKey().toStringUtf8())){
 						aggKey = new String(CellUtil.cloneValue(cell));
+						System.out.println("Found aggregation key: " + aggKey);
 						break;
 					}
 				}
@@ -430,12 +431,17 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			//   if yes, check if there is colfam.qualifier.aggkey exist
 			//     if yes, execute aggregation
 			//     if no, copy the list of aggregation from the list given the key of colfam.qualifier and then execute the aggregation
+			System.out.println("Aggregation handler: check if aggregations " + aggregations + " contains prefix " + keyPrefix);
 			if(aggregations.containsKey(keyPrefix)){
+				System.out.println("Check if contains key " + key);
 				if(!aggregations.containsKey(key)){
+					System.out.println("Yes contains " + key);
 					aggregations.put(key, aggregations.get(keyPrefix));
+					System.out.println("After put into aggregations: " + aggregations);
 				}
 				
 				// for each aggregation
+				System.out.println("Execute over " + aggregations);
 				for(Aggregation aggregation:aggregations.get(key)){
 					aggregation.execute(cell);
 				}
