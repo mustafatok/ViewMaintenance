@@ -422,19 +422,18 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			String keyPrefix = family + "." + qualifier;
 			String key = family + "." + qualifier + "." + aggKey;
 			
-			if(aggKey.equals("")){
-				// for each aggregation
-				System.out.println("Execute over " + aggregations);
-				for(Aggregation aggregation:aggregations.get(keyPrefix)){
-					aggregation.execute(cell);
-				}
-			}else{
-				// check if there is colfam.qualifier exist
-				//   if yes, check if there is colfam.qualifier.aggkey exist
-				//     if yes, execute aggregation
-				//     if no, copy the list of aggregation from the list given the key of colfam.qualifier and then execute the aggregation
-				System.out.println("Aggregation handler: check if aggregations " + aggregations + " contains prefix " + keyPrefix);
-				if(aggregations.containsKey(keyPrefix)){
+		
+			// check if there is colfam.qualifier exist
+			//   if yes, check if there is colfam.qualifier.aggkey exist
+			//     if yes, execute aggregation
+			//     if no, copy the list of aggregation from the list given the key of colfam.qualifier and then execute the aggregation
+			System.out.println("Aggregation handler: check if aggregations " + aggregations + " contains prefix " + keyPrefix);
+			if(aggregations.containsKey(keyPrefix)){
+				if(aggKey.equals("")){
+					for(Aggregation aggregation:aggregations.get(keyPrefix)){
+						aggregation.execute(cell);
+					}
+				}else{
 					System.out.println("Check if contains key " + key);
 					if(!aggregations.containsKey(key)){
 						System.out.println("Don't contains " + key);
@@ -459,6 +458,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					}
 				}
 			}
+			
 		}
 
 		public Map<String, List<Aggregation>> getAggregations() {
