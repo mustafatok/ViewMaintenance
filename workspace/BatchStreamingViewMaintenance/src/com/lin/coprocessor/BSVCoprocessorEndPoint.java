@@ -422,33 +422,41 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			String keyPrefix = family + "." + qualifier;
 			String key = family + "." + qualifier + "." + aggKey;
 			
-			// check if there is colfam.qualifier exist
-			//   if yes, check if there is colfam.qualifier.aggkey exist
-			//     if yes, execute aggregation
-			//     if no, copy the list of aggregation from the list given the key of colfam.qualifier and then execute the aggregation
-			System.out.println("Aggregation handler: check if aggregations " + aggregations + " contains prefix " + keyPrefix);
-			if(aggregations.containsKey(keyPrefix)){
-				System.out.println("Check if contains key " + key);
-				if(!aggregations.containsKey(key)){
-					System.out.println("Don't contains " + key);
-					
-					// deep copy the list
-					ArrayList<Aggregation> copyList = new ArrayList<Aggregation>();
-					for(Aggregation tmpApp:aggregations.get(keyPrefix)){
-						try {
-							copyList.add((Aggregation) tmpApp.clone());
-						} catch (CloneNotSupportedException e) {
-							e.printStackTrace();
-						}
-					}
-					aggregations.put(key, copyList);
-					System.out.println("After put into aggregations: " + aggregations);
-				}
-				
+			if(aggKey.equals("")){
 				// for each aggregation
 				System.out.println("Execute over " + aggregations);
-				for(Aggregation aggregation:aggregations.get(key)){
+				for(Aggregation aggregation:aggregations.get(keyPrefix)){
 					aggregation.execute(cell);
+				}
+			}else{
+				// check if there is colfam.qualifier exist
+				//   if yes, check if there is colfam.qualifier.aggkey exist
+				//     if yes, execute aggregation
+				//     if no, copy the list of aggregation from the list given the key of colfam.qualifier and then execute the aggregation
+				System.out.println("Aggregation handler: check if aggregations " + aggregations + " contains prefix " + keyPrefix);
+				if(aggregations.containsKey(keyPrefix)){
+					System.out.println("Check if contains key " + key);
+					if(!aggregations.containsKey(key)){
+						System.out.println("Don't contains " + key);
+						
+						// deep copy the list
+						ArrayList<Aggregation> copyList = new ArrayList<Aggregation>();
+						for(Aggregation tmpApp:aggregations.get(keyPrefix)){
+							try {
+								copyList.add((Aggregation) tmpApp.clone());
+							} catch (CloneNotSupportedException e) {
+								e.printStackTrace();
+							}
+						}
+						aggregations.put(key, copyList);
+						System.out.println("After put into aggregations: " + aggregations);
+					}
+					
+					// for each aggregation
+					System.out.println("Execute over " + aggregations);
+					for(Aggregation aggregation:aggregations.get(key)){
+						aggregation.execute(cell);
+					}
 				}
 			}
 		}
@@ -605,7 +613,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 		@Override
 		public int getResult() {
-			return sum / count;
+			if(count == 0){
+				return 0;
+			}else{
+				return sum / count;
+			}
 		}
 
 		@Override
