@@ -37,7 +37,10 @@ public class CmdInterface {
 					esc = true;
 				} else if (argIn[0].equals("load")) {
 					load(argIn);
-				} else{
+				} else if(argIn[0].equals("test")){
+					test(argIn);
+				}
+				else{
 					handleSQL(input);
 				}
 			}catch (IOException e) {
@@ -47,6 +50,29 @@ public class CmdInterface {
 				System.out.println("Error in command");
 			}
 		}
+	}
+
+	private static void test(String[] args) {
+		// create Options object
+				Options options = new Options();
+				
+				options.addOption(OptionBuilder.withLongOpt("system")
+						.withDescription("test all the case").hasArg()
+						.withArgName("SYSTEM").create());
+				
+				String testCase1="select colfam1.qual1 from testtable1";
+
+				CommandLineParser parser = new BasicParser();
+				try {
+					CommandLine cmd = parser.parse(options, args);
+					
+					if(cmd.hasOption("system")){
+						System.out.println(testCase1);
+						handleSQL(testCase1);
+					}
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
 	}
 
 	/**

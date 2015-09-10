@@ -356,8 +356,10 @@ public class JsqlParser {
 		}
 		
 		// handle group by
-		String groupBy = ((Column) plainSelect.getGroupByColumnReferences().get(0)).getWholeColumnName();
-		element.setAggregationKey(groupBy);
+		if(!plainSelect.getGroupByColumnReferences().isEmpty()){
+			String groupBy = ((Column) plainSelect.getGroupByColumnReferences().get(0)).getWholeColumnName();
+			element.setAggregationKey(groupBy);
+		}
 	}
 
 	public static void buildCondition(String leftExpression,
