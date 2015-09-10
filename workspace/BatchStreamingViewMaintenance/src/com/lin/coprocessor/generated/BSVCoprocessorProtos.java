@@ -1413,6 +1413,16 @@ public final class BSVCoprocessorProtos {
      * <code>optional bytes joinTable = 6;</code>
      */
     com.google.protobuf.ByteString getJoinTable();
+
+    // optional bool isMaterialize = 7;
+    /**
+     * <code>optional bool isMaterialize = 7;</code>
+     */
+    boolean hasIsMaterialize();
+    /**
+     * <code>optional bool isMaterialize = 7;</code>
+     */
+    boolean getIsMaterialize();
   }
   /**
    * Protobuf type {@code ParameterMessage}
@@ -1502,6 +1512,11 @@ public final class BSVCoprocessorProtos {
             case 50: {
               bitField0_ |= 0x00000004;
               joinTable_ = input.readBytes();
+              break;
+            }
+            case 56: {
+              bitField0_ |= 0x00000008;
+              isMaterialize_ = input.readBool();
               break;
             }
           }
@@ -1696,6 +1711,22 @@ public final class BSVCoprocessorProtos {
       return joinTable_;
     }
 
+    // optional bool isMaterialize = 7;
+    public static final int ISMATERIALIZE_FIELD_NUMBER = 7;
+    private boolean isMaterialize_;
+    /**
+     * <code>optional bool isMaterialize = 7;</code>
+     */
+    public boolean hasIsMaterialize() {
+      return ((bitField0_ & 0x00000008) == 0x00000008);
+    }
+    /**
+     * <code>optional bool isMaterialize = 7;</code>
+     */
+    public boolean getIsMaterialize() {
+      return isMaterialize_;
+    }
+
     private void initFields() {
       column_ = java.util.Collections.emptyList();
       condition_ = java.util.Collections.emptyList();
@@ -1703,6 +1734,7 @@ public final class BSVCoprocessorProtos {
       joinKey_ = com.google.protobuf.ByteString.EMPTY;
       aggregationKey_ = com.google.protobuf.ByteString.EMPTY;
       joinTable_ = com.google.protobuf.ByteString.EMPTY;
+      isMaterialize_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1746,6 +1778,9 @@ public final class BSVCoprocessorProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         output.writeBytes(6, joinTable_);
       }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        output.writeBool(7, isMaterialize_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1783,6 +1818,10 @@ public final class BSVCoprocessorProtos {
       if (((bitField0_ & 0x00000004) == 0x00000004)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBytesSize(6, joinTable_);
+      }
+      if (((bitField0_ & 0x00000008) == 0x00000008)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(7, isMaterialize_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1828,6 +1867,11 @@ public final class BSVCoprocessorProtos {
         result = result && getJoinTable()
             .equals(other.getJoinTable());
       }
+      result = result && (hasIsMaterialize() == other.hasIsMaterialize());
+      if (hasIsMaterialize()) {
+        result = result && (getIsMaterialize()
+            == other.getIsMaterialize());
+      }
       result = result &&
           getUnknownFields().equals(other.getUnknownFields());
       return result;
@@ -1864,6 +1908,10 @@ public final class BSVCoprocessorProtos {
       if (hasJoinTable()) {
         hash = (37 * hash) + JOINTABLE_FIELD_NUMBER;
         hash = (53 * hash) + getJoinTable().hashCode();
+      }
+      if (hasIsMaterialize()) {
+        hash = (37 * hash) + ISMATERIALIZE_FIELD_NUMBER;
+        hash = (53 * hash) + hashBoolean(getIsMaterialize());
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -1996,6 +2044,8 @@ public final class BSVCoprocessorProtos {
         bitField0_ = (bitField0_ & ~0x00000010);
         joinTable_ = com.google.protobuf.ByteString.EMPTY;
         bitField0_ = (bitField0_ & ~0x00000020);
+        isMaterialize_ = false;
+        bitField0_ = (bitField0_ & ~0x00000040);
         return this;
       }
 
@@ -2059,6 +2109,10 @@ public final class BSVCoprocessorProtos {
           to_bitField0_ |= 0x00000004;
         }
         result.joinTable_ = joinTable_;
+        if (((from_bitField0_ & 0x00000040) == 0x00000040)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.isMaterialize_ = isMaterialize_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2145,6 +2199,9 @@ public final class BSVCoprocessorProtos {
         }
         if (other.hasJoinTable()) {
           setJoinTable(other.getJoinTable());
+        }
+        if (other.hasIsMaterialize()) {
+          setIsMaterialize(other.getIsMaterialize());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2841,6 +2898,39 @@ public final class BSVCoprocessorProtos {
       public Builder clearJoinTable() {
         bitField0_ = (bitField0_ & ~0x00000020);
         joinTable_ = getDefaultInstance().getJoinTable();
+        onChanged();
+        return this;
+      }
+
+      // optional bool isMaterialize = 7;
+      private boolean isMaterialize_ ;
+      /**
+       * <code>optional bool isMaterialize = 7;</code>
+       */
+      public boolean hasIsMaterialize() {
+        return ((bitField0_ & 0x00000040) == 0x00000040);
+      }
+      /**
+       * <code>optional bool isMaterialize = 7;</code>
+       */
+      public boolean getIsMaterialize() {
+        return isMaterialize_;
+      }
+      /**
+       * <code>optional bool isMaterialize = 7;</code>
+       */
+      public Builder setIsMaterialize(boolean value) {
+        bitField0_ |= 0x00000040;
+        isMaterialize_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool isMaterialize = 7;</code>
+       */
+      public Builder clearIsMaterialize() {
+        bitField0_ = (bitField0_ & ~0x00000040);
+        isMaterialize_ = false;
         onChanged();
         return this;
       }
@@ -5312,18 +5402,18 @@ public final class BSVCoprocessorProtos {
       "\n\024BSVCoprocessor.proto\"+\n\tBSVColumn\022\016\n\006f" +
       "amily\030\001 \002(\014\022\016\n\006column\030\002 \002(\014\"H\n\tCondition" +
       "\022\032\n\006column\030\001 \002(\0132\n.BSVColumn\022\020\n\010operator" +
-      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\236\001\n\020ParameterMessa" +
+      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\265\001\n\020ParameterMessa" +
       "ge\022\032\n\006column\030\001 \003(\0132\n.BSVColumn\022\035\n\tcondit" +
       "ion\030\002 \003(\0132\n.Condition\022\023\n\013aggregation\030\003 \003" +
       "(\014\022\017\n\007joinKey\030\004 \001(\014\022\026\n\016aggregationKey\030\005 " +
-      "\001(\014\022\021\n\tjoinTable\030\006 \001(\014\"6\n\010KeyValue\022\016\n\006ro" +
-      "wKey\030\001 \002(\014\022\013\n\003key\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"%" +
-      "\n\006BSVRow\022\033\n\010keyValue\030\002 \003(\0132\t.KeyValue\"6\n",
-      "\rResultMessage\022\024\n\003row\030\001 \003(\0132\007.BSVRow\022\017\n\004" +
-      "size\030\002 \001(\003:\001025\n\007Execute\022*\n\005batch\022\021.Para" +
-      "meterMessage\032\016.ResultMessageB=\n\035com.lin." +
-      "coprocessor.generatedB\024BSVCoprocessorPro" +
-      "tosH\001\210\001\001\240\001\001"
+      "\001(\014\022\021\n\tjoinTable\030\006 \001(\014\022\025\n\risMaterialize\030" +
+      "\007 \001(\010\"6\n\010KeyValue\022\016\n\006rowKey\030\001 \002(\014\022\013\n\003key" +
+      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010keyVa",
+      "lue\030\002 \003(\0132\t.KeyValue\"6\n\rResultMessage\022\024\n" +
+      "\003row\030\001 \003(\0132\007.BSVRow\022\017\n\004size\030\002 \001(\003:\001025\n\007" +
+      "Execute\022*\n\005batch\022\021.ParameterMessage\032\016.Re" +
+      "sultMessageB=\n\035com.lin.coprocessor.gener" +
+      "atedB\024BSVCoprocessorProtosH\001\210\001\001\240\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5347,7 +5437,7 @@ public final class BSVCoprocessorProtos {
           internal_static_ParameterMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ParameterMessage_descriptor,
-              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", });
+              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", "IsMaterialize", });
           internal_static_KeyValue_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_KeyValue_fieldAccessorTable = new

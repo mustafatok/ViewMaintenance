@@ -133,7 +133,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			// scan a row of results every time and add this row to 
 			// the result arraylist
 			List<Cell> curVals = new ArrayList<Cell>();
-//			List<List<Cell>> results = new ArrayList<List<Cell>>();
 			boolean finish = false;
 			long count = 0;
 			Date begin = new Date();
@@ -196,20 +195,9 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				/*
 				 * End of handling result
 				 */
-				
-//				results.add(row);
 			} while (finish);
 			Date end = new Date();
 			System.out.println(end+" Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
-//			System.out.println("Scann result are: " + results.toString());
-
-			// these code are abandoned because we don't want to store the whole
-			// result in memory
-//			System.out.println((new Date())+"Begin to build response message");
-			// handle results
-//			for (List<Cell> row : results) {
-//				
-//			}
 			
 			System.out.println((new Date())+"Finish building response message");
 			response.setSize(count);

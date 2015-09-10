@@ -110,6 +110,7 @@ public class JsqlParser {
 							// the third plan will just scan the results from it.
 							// Assert the third plan have the name of "joinTableAWithTableB"
 							LogicalElement elementResult = new LogicalElement();
+							elementResult.setJoin(join);
 							elementResult.setTableName(joinTableName);
 							logicalPlan.add(elementResult);
 						}
@@ -125,6 +126,9 @@ public class JsqlParser {
 	public static void handleJoinTable(PlainSelect plainSelect,
 			String tableName, LogicalElement element) {
 		element.setTableName(tableName); // set table name
+		
+		// set materialize
+		element.setMaterialize(true);
 
 		// get select items (columns to be select)
 		List<SelectExpressionItem> columnList = plainSelect.getSelectItems();

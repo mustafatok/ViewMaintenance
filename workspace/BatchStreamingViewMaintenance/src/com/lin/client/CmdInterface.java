@@ -58,10 +58,20 @@ public class CmdInterface {
 		
 		System.out.println(simpleLogicalPlan);
 		
-		LogicalElement logicalElement = simpleLogicalPlan.getHead();
-		do{
-			logicalElement.execute();
-		}while((logicalElement = logicalElement.getNext()) != null);
+		// these code are for linear execution of plan
+		// they are abandon because now we have block and non-block executions
+		// now only need to execute the first element
+		// then the next element will be run 
+		// if they are non-blocking elements
+		// different threads will be raise to run for each non-blocking element
+		// if it is blocking element
+		// it will wait until the non-blocking threads are all finish
+//		LogicalElement logicalElement = simpleLogicalPlan.getHead();
+//		do{
+//			logicalElement.execute();
+//		}while((logicalElement = logicalElement.getNext()) != null);
+		simpleLogicalPlan.getHead().execute();
+		
 	}
 
 	/**
