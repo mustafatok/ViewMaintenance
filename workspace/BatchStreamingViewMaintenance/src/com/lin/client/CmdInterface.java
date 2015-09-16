@@ -54,35 +54,58 @@ public class CmdInterface {
 
 	private static void test(String[] args) {
 		// create Options object
-				Options options = new Options();
+		Options options = new Options();
+		
+		// test systematically
+		options.addOption(OptionBuilder.withLongOpt("sys")
+				.withDescription("test systematically").create());
+		
+		// test a single case
+		options.addOption(OptionBuilder.withLongOpt("case").hasArg()
+				.withArgName("CASE")
+				.withDescription("test systematically").create());
+		
+		String[] testCase={
+				/*
+				 * Selection test cases
+				 */
+				// test simple selection
+				"select colfam1.qual1 from testtable1", 
+				// test simple selection with condition
+				"select colfam1.qual1 from testtable2 where colfam1.qual1>20",
 				
-				options.addOption(OptionBuilder.withLongOpt("sys")
-						.withDescription("test systematically").create());
+				/*
+				 * Aggregation test cases
+				 */
+				// test aggregation without aggregation key
+				"select max(colfam1.qual1), min(colfam1.qual1), sum(colfam1.qual1), avg(colfam1.qual1), count(colfam1.qual1) from testtable2",
+				// test aggregation with aggregation key
+				"select max(colfam.value), min(colfam.value), sum(colfam.value), avg(colfam.value), count(colfam.value) from testtable5 group by colfam.aggKey",
 				
-				String[] testCase={
-						// test simple selection
-						"select colfam1.qual1 from testtable1", 
-						// test aggregation without aggregation key
-						"select max(colfam1.qual1), min(colfam1.qual1), sum(colfam1.qual1), avg(colfam1.qual1), count(colfam1.qual1) from testtable2",
-						// test  simple join
-						"select testtable3.colfam.qualifier_testtable3, testtable4.colfam.qualifier_testtable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey",
-						// test aggregation with aggregation key(group by)
-						"select max(colfam.value), min(colfam.value), sum(colfam.value), avg(colfam.value), count(colfam.value) from testtable5 group by colfam.aggKey",
-				};
+				/*
+				 * Join test cases
+				 */
+				// test  simple join
+				"select testtable3.colfam.qualifier_testtable3, testtable4.colfam.qualifier_testtable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey"
+		};
 
-				CommandLineParser parser = new BasicParser();
-				try {
-					CommandLine cmd = parser.parse(options, args);
-					
-					if(cmd.hasOption("sys")){
-						for(int i = 0; i < testCase.length; i++){
-							System.out.println(testCase[i]);
-							handleSQL(testCase[i]);
-						}
-					}
-				} catch (ParseException e) {
-					e.printStackTrace();
+		CommandLineParser parser = new BasicParser();
+		try {
+			CommandLine cmd = parser.parse(options, args);
+			
+			if(cmd.hasOption("sys")){
+				for(int i = 0; i < testCase.length; i++){
+					System.out.println(testCase[i]);
+					handleSQL(testCase[i]);
 				}
+			}else if(cmd.hasOption("case")){
+				String caseName = cmd.getOptionValue("case");
+				System.out.println("Testing case " + caseName);
+				handleSQL(testCase[Integer.parseInt(caseName)]);
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -94,18 +117,6 @@ public class CmdInterface {
 		
 		System.out.println(simpleLogicalPlan);
 		
-		// these code are for linear execution of plan
-		// they are abandon because now we have block and non-block executions
-		// now only need to execute the first element
-		// then the next element will be run 
-		// if they are non-blocking elements
-		// different threads will be raise to run for each non-blocking element
-		// if it is blocking element
-		// it will wait until the non-blocking threads are all finish
-//		LogicalElement logicalElement = simpleLogicalPlan.getHead();
-//		do{
-//			logicalElement.execute();
-//		}while((logicalElement = logicalElement.getNext()) != null);
 		simpleLogicalPlan.getHead().execute();
 		
 	}
