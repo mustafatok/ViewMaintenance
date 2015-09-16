@@ -23,6 +23,7 @@ message ParameterMessage{
 	optional bytes aggregationKey=5;
 	optional bytes joinTable=6;
 	optional bool isMaterialize=7;
+	optional bool isReturningResults=8;
 }
 
 message KeyValue{

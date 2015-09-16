@@ -33,6 +33,7 @@ public class LogicalElement implements Runnable{
 	private String joinTable = "";
 	private Join join = null;
 	private boolean isMaterialize = false;
+	private boolean isReturningResults = false;
 	/**
 	 * The following fields are for separating block and non-block operations
 	 */
@@ -181,6 +182,14 @@ public class LogicalElement implements Runnable{
 		this.finishBlock = finishBlock;
 	}
 
+	public boolean isReturningResults() {
+		return isReturningResults;
+	}
+
+	public void setReturningResults(boolean isReturningResults) {
+		this.isReturningResults = isReturningResults;
+	}
+
 	@Override
 	public String toString() {
 		return "LogicalElement ["
@@ -190,7 +199,8 @@ public class LogicalElement implements Runnable{
 				+ ", conditions=" + conditions 
 				+ ", aggregationKey=" + aggregationKey 
 				+ ", joinKey=" + joinKey 
-				+ ", joinTable=" + joinTable + "]";
+				+ ", joinTable=" + joinTable 
+				+ ", isReturningResults=" + isReturningResults + "]";
 	}
 
 	@Override
@@ -224,6 +234,9 @@ public class LogicalElement implements Runnable{
 				request.setJoinKey(ByteString.copyFrom(joinKey.getBytes()));
 				request.setJoinTable(ByteString.copyFrom(joinTable.getBytes()));
 			}
+			
+			// set if the coprocessor should return the results
+			request.setIsReturningResults(isReturningResults);
 			
 			// set materialize
 			request.setIsMaterialize(isMaterialize);

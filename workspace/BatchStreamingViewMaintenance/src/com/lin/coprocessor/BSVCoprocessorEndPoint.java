@@ -87,7 +87,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			try {
 				joinTable = new HTable(configuration, request.getJoinTable().toByteArray());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -222,8 +221,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				}
 			}
 			response.addRow(bsvRow.build());
-
-			done.run(response.build());
+			
+			// Depending on the plan, return the results or nothing
+			if(request.getIsReturningResults()){
+				done.run(response.build());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
