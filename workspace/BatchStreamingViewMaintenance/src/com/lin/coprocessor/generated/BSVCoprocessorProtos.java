@@ -1433,6 +1433,16 @@ public final class BSVCoprocessorProtos {
      * <code>optional bool isReturningResults = 8;</code>
      */
     boolean getIsReturningResults();
+
+    // optional bytes SQL = 9;
+    /**
+     * <code>optional bytes SQL = 9;</code>
+     */
+    boolean hasSQL();
+    /**
+     * <code>optional bytes SQL = 9;</code>
+     */
+    com.google.protobuf.ByteString getSQL();
   }
   /**
    * Protobuf type {@code ParameterMessage}
@@ -1532,6 +1542,11 @@ public final class BSVCoprocessorProtos {
             case 64: {
               bitField0_ |= 0x00000010;
               isReturningResults_ = input.readBool();
+              break;
+            }
+            case 74: {
+              bitField0_ |= 0x00000020;
+              sQL_ = input.readBytes();
               break;
             }
           }
@@ -1758,6 +1773,22 @@ public final class BSVCoprocessorProtos {
       return isReturningResults_;
     }
 
+    // optional bytes SQL = 9;
+    public static final int SQL_FIELD_NUMBER = 9;
+    private com.google.protobuf.ByteString sQL_;
+    /**
+     * <code>optional bytes SQL = 9;</code>
+     */
+    public boolean hasSQL() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional bytes SQL = 9;</code>
+     */
+    public com.google.protobuf.ByteString getSQL() {
+      return sQL_;
+    }
+
     private void initFields() {
       column_ = java.util.Collections.emptyList();
       condition_ = java.util.Collections.emptyList();
@@ -1767,6 +1798,7 @@ public final class BSVCoprocessorProtos {
       joinTable_ = com.google.protobuf.ByteString.EMPTY;
       isMaterialize_ = false;
       isReturningResults_ = false;
+      sQL_ = com.google.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1816,6 +1848,9 @@ public final class BSVCoprocessorProtos {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         output.writeBool(8, isReturningResults_);
       }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(9, sQL_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1861,6 +1896,10 @@ public final class BSVCoprocessorProtos {
       if (((bitField0_ & 0x00000010) == 0x00000010)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(8, isReturningResults_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(9, sQL_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1916,6 +1955,11 @@ public final class BSVCoprocessorProtos {
         result = result && (getIsReturningResults()
             == other.getIsReturningResults());
       }
+      result = result && (hasSQL() == other.hasSQL());
+      if (hasSQL()) {
+        result = result && getSQL()
+            .equals(other.getSQL());
+      }
       result = result &&
           getUnknownFields().equals(other.getUnknownFields());
       return result;
@@ -1960,6 +2004,10 @@ public final class BSVCoprocessorProtos {
       if (hasIsReturningResults()) {
         hash = (37 * hash) + ISRETURNINGRESULTS_FIELD_NUMBER;
         hash = (53 * hash) + hashBoolean(getIsReturningResults());
+      }
+      if (hasSQL()) {
+        hash = (37 * hash) + SQL_FIELD_NUMBER;
+        hash = (53 * hash) + getSQL().hashCode();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -2096,6 +2144,8 @@ public final class BSVCoprocessorProtos {
         bitField0_ = (bitField0_ & ~0x00000040);
         isReturningResults_ = false;
         bitField0_ = (bitField0_ & ~0x00000080);
+        sQL_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000100);
         return this;
       }
 
@@ -2167,6 +2217,10 @@ public final class BSVCoprocessorProtos {
           to_bitField0_ |= 0x00000010;
         }
         result.isReturningResults_ = isReturningResults_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.sQL_ = sQL_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2259,6 +2313,9 @@ public final class BSVCoprocessorProtos {
         }
         if (other.hasIsReturningResults()) {
           setIsReturningResults(other.getIsReturningResults());
+        }
+        if (other.hasSQL()) {
+          setSQL(other.getSQL());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3021,6 +3078,42 @@ public final class BSVCoprocessorProtos {
       public Builder clearIsReturningResults() {
         bitField0_ = (bitField0_ & ~0x00000080);
         isReturningResults_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional bytes SQL = 9;
+      private com.google.protobuf.ByteString sQL_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes SQL = 9;</code>
+       */
+      public boolean hasSQL() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional bytes SQL = 9;</code>
+       */
+      public com.google.protobuf.ByteString getSQL() {
+        return sQL_;
+      }
+      /**
+       * <code>optional bytes SQL = 9;</code>
+       */
+      public Builder setSQL(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        sQL_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes SQL = 9;</code>
+       */
+      public Builder clearSQL() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        sQL_ = getDefaultInstance().getSQL();
         onChanged();
         return this;
       }
@@ -5492,19 +5585,19 @@ public final class BSVCoprocessorProtos {
       "\n\024BSVCoprocessor.proto\"+\n\tBSVColumn\022\016\n\006f" +
       "amily\030\001 \002(\014\022\016\n\006column\030\002 \002(\014\"H\n\tCondition" +
       "\022\032\n\006column\030\001 \002(\0132\n.BSVColumn\022\020\n\010operator" +
-      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\321\001\n\020ParameterMessa" +
+      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\336\001\n\020ParameterMessa" +
       "ge\022\032\n\006column\030\001 \003(\0132\n.BSVColumn\022\035\n\tcondit" +
       "ion\030\002 \003(\0132\n.Condition\022\023\n\013aggregation\030\003 \003" +
       "(\014\022\017\n\007joinKey\030\004 \001(\014\022\026\n\016aggregationKey\030\005 " +
       "\001(\014\022\021\n\tjoinTable\030\006 \001(\014\022\025\n\risMaterialize\030" +
-      "\007 \001(\010\022\032\n\022isReturningResults\030\010 \001(\010\"6\n\010Key" +
-      "Value\022\016\n\006rowKey\030\001 \002(\014\022\013\n\003key\030\002 \002(\014\022\r\n\005va",
-      "lue\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010keyValue\030\002 \003(\0132\t." +
-      "KeyValue\"6\n\rResultMessage\022\024\n\003row\030\001 \003(\0132\007" +
-      ".BSVRow\022\017\n\004size\030\002 \001(\003:\001025\n\007Execute\022*\n\005b" +
-      "atch\022\021.ParameterMessage\032\016.ResultMessageB" +
-      "=\n\035com.lin.coprocessor.generatedB\024BSVCop" +
-      "rocessorProtosH\001\210\001\001\240\001\001"
+      "\007 \001(\010\022\032\n\022isReturningResults\030\010 \001(\010\022\013\n\003SQL" +
+      "\030\t \001(\014\"6\n\010KeyValue\022\016\n\006rowKey\030\001 \002(\014\022\013\n\003ke",
+      "y\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010keyV" +
+      "alue\030\002 \003(\0132\t.KeyValue\"6\n\rResultMessage\022\024" +
+      "\n\003row\030\001 \003(\0132\007.BSVRow\022\017\n\004size\030\002 \001(\003:\001025\n" +
+      "\007Execute\022*\n\005batch\022\021.ParameterMessage\032\016.R" +
+      "esultMessageB=\n\035com.lin.coprocessor.gene" +
+      "ratedB\024BSVCoprocessorProtosH\001\210\001\001\240\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5528,7 +5621,7 @@ public final class BSVCoprocessorProtos {
           internal_static_ParameterMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ParameterMessage_descriptor,
-              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", "IsMaterialize", "IsReturningResults", });
+              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", "IsMaterialize", "IsReturningResults", "SQL", });
           internal_static_KeyValue_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_KeyValue_fieldAccessorTable = new

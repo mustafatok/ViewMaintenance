@@ -34,6 +34,7 @@ public class LogicalElement implements Runnable{
 	private Join join = null;
 	private boolean isMaterialize = false;
 	private boolean isReturningResults = false;
+	private String SQL = "";
 	/**
 	 * The following fields are for separating block and non-block operations
 	 */
@@ -190,6 +191,14 @@ public class LogicalElement implements Runnable{
 		this.isReturningResults = isReturningResults;
 	}
 
+	public String getSQL() {
+		return SQL;
+	}
+
+	public void setSQL(String sQL) {
+		SQL = sQL;
+	}
+
 	@Override
 	public String toString() {
 		return "LogicalElement ["
@@ -240,6 +249,9 @@ public class LogicalElement implements Runnable{
 			
 			// set materialize
 			request.setIsMaterialize(isMaterialize);
+			
+			// set SQL
+			request.setSQL(ByteString.copyFrom(SQL.getBytes()));
 			 
 			System.out.println("=======================================================================");
 			Date begin = new Date();

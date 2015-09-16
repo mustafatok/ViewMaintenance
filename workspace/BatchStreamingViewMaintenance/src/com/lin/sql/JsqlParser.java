@@ -57,6 +57,7 @@ public class JsqlParser {
 						if(plainSelect.getJoins() == null){
 							System.out.println("Handling select with single table");
 							LogicalElement element = new LogicalElement();
+							element.setSQL(input);
 							handleSingleTable(plainSelect, tableName, element);
 							logicalPlan.add(element);
 						}else{
