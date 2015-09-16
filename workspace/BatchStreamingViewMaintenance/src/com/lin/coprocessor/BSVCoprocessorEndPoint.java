@@ -87,7 +87,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			try {
 				joinTable = new HTable(configuration, request.getJoinTable().toByteArray());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
