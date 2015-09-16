@@ -221,8 +221,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				}
 			}
 			response.addRow(bsvRow.build());
-
-			done.run(response.build());
+			
+			// Depending on the plan, return the results or nothing
+			if(request.getIsReturningResults()){
+				done.run(response.build());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
