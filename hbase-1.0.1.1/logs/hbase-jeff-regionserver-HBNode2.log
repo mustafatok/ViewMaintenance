@@ -1,0 +1,865 @@
+Mi 24. Jun 22:32:59 CEST 2015 Starting regionserver on HBNode2
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 3891
+max locked memory       (kbytes, -l) 64
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1024
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 8192
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 3891
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+2015-06-24 22:33:00,927 INFO  [main] util.VersionInfo: HBase 1.0.1.1
+2015-06-24 22:33:00,928 INFO  [main] util.VersionInfo: Source code repository git://aspire/home/apurtell/tmp/hbase-build-2 revision=e1dbf4df30d214fca14908df71d038081577ea46
+2015-06-24 22:33:00,928 INFO  [main] util.VersionInfo: Compiled by apurtell on Sun May 17 12:34:26 PDT 2015
+2015-06-24 22:33:00,928 INFO  [main] util.VersionInfo: From source with checksum 111670655c3a2fe747723232c402f0e2
+2015-06-24 22:33:02,663 INFO  [main] util.ServerCommandLine: env:LC_TELEPHONE=de_DE.UTF-8
+2015-06-24 22:33:02,663 INFO  [main] util.ServerCommandLine: env:JAVA_HOME=/usr
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:SHLVL=3
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:HBASE_LOG_DIR=/home/jeff/Documents/hbase-1.0.1.1/bin/../logs
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:HBASE_HOME=/home/jeff/Documents/hbase-1.0.1.1/bin/..
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:HBASE_OPTS=-XX:+UseConcMarkSweepGC   -Dhbase.log.dir=/home/jeff/Documents/hbase-1.0.1.1/bin/../logs -Dhbase.log.file=hbase-jeff-regionserver-HBNode2.log -Dhbase.home.dir=/home/jeff/Documents/hbase-1.0.1.1/bin/.. -Dhbase.id.str=jeff -Dhbase.root.logger=INFO,RFA -Dhbase.security.logger=INFO,RFAS
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:HBASE_ENV_INIT=true
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:SSH_CLIENT=10.0.2.4 54382 22
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:LC_NUMERIC=de_DE.UTF-8
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:LC_NAME=de_DE.UTF-8
+2015-06-24 22:33:02,664 INFO  [main] util.ServerCommandLine: env:MAIL=/var/mail/jeff
+2015-06-24 22:33:02,665 INFO  [main] util.ServerCommandLine: env:HBASE_ZNODE_FILE=/tmp/hbase-jeff-regionserver.znode
+2015-06-24 22:33:02,665 INFO  [main] util.ServerCommandLine: env:PWD=/home/jeff/Documents/hbase-1.0.1.1
+2015-06-24 22:33:02,665 INFO  [main] util.ServerCommandLine: env:LC_PAPER=de_DE.UTF-8
+2015-06-24 22:33:02,666 INFO  [main] util.ServerCommandLine: env:LOGNAME=jeff
+2015-06-24 22:33:02,666 INFO  [main] util.ServerCommandLine: env:LC_IDENTIFICATION=de_DE.UTF-8
+2015-06-24 22:33:02,666 INFO  [main] util.ServerCommandLine: env:HBASE_MANAGES_ZK=true
+2015-06-24 22:33:02,666 INFO  [main] util.ServerCommandLine: env:HBASE_NICENESS=0
+2015-06-24 22:33:02,666 INFO  [main] util.ServerCommandLine: env:HBASE_REST_OPTS=
+2015-06-24 22:33:02,666 INFO  [main] util.ServerCommandLine: env:MALLOC_ARENA_MAX=4
+2015-06-24 22:33:02,674 INFO  [main] util.ServerCommandLine: env:SSH_CONNECTION=10.0.2.4 54382 10.0.2.15 22
+2015-06-24 22:33:02,674 INFO  [main] util.ServerCommandLine: env:LC_ADDRESS=de_DE.UTF-8
+2015-06-24 22:33:02,674 INFO  [main] util.ServerCommandLine: env:SHELL=/bin/bash
+2015-06-24 22:33:02,674 INFO  [main] util.ServerCommandLine: env:HBASE_ROOT_LOGGER=INFO,RFA
+2015-06-24 22:33:02,687 INFO  [main] util.ServerCommandLine: env:CLASSPATH=/home/jeff/Documents/hbase-1.0.1.1/bin/../conf:/usr/lib/tools.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/..:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/activation-1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/aopalliance-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/apacheds-i18n-2.0.0-M15.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/api-asn1-api-1.0.0-M20.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/api-util-1.0.0-M20.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/asm-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/avro-1.7.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/BSVM.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-beanutils-1.7.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-beanutils-core-1.8.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-cli-1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-codec-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-collections-3.2.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-compress-1.4.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-configuration-1.6.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-daemon-1.0.13.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-digester-1.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-el-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-httpclient-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-io-2.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-lang-2.6.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-logging-1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-math-2.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-math3-3.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-net-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/disruptor-3.3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/findbugs-annotations-1.3.9-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guava-12.0.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guice-3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guice-servlet-3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-annotations-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-auth-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-client-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-hdfs-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-app-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-core-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-jobclient-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-shuffle-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-api-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-client-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-server-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-server-nodemanager-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-annotations-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-annotations-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-checkstyle-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-client-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-common-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-common-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-examples-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-hadoop2-compat-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-hadoop-compat-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-it-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-it-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-prefix-tree-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-protocol-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-rest-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-server-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-server-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-shell-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-testing-util-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-thrift-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/htrace-core-3.1.0-incubating.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/httpclient-4.2.5.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/httpcore-4.1.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-core-asl-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-jaxrs-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-mapper-asl-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-xc-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jamon-runtime-2.3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jasper-compiler-5.5.23.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jasper-runtime-5.5.23.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/javax.inject-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/java-xmlbuilder-0.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jaxb-api-2.2.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jaxb-impl-2.2.3-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jcodings-1.0.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-client-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-core-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-guice-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-json-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-server-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jets3t-0.9.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jettison-1.3.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-sslengine-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-util-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/joni-2.1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jruby-complete-1.6.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsch-0.1.42.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsp-2.1-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsp-api-2.1-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsr305-1.3.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/junit-4.11.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/leveldbjni-all-1.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/libthrift-0.9.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/log4j-1.2.17.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/metrics-core-2.2.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/netty-3.2.4.Final.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/netty-all-4.0.23.Final.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/paranamer-2.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/protobuf-java-2.5.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/servlet-api-2.5-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/servlet-api-2.5.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/slf4j-api-1.7.7.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/slf4j-log4j12-1.7.7.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/snappy-java-1.0.4.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/xmlenc-0.52.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/xz-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/zookeeper-3.4.6.jar:
+2015-06-24 22:33:02,688 INFO  [main] util.ServerCommandLine: env:HBASE_THRIFT_OPTS=
+2015-06-24 22:33:02,688 INFO  [main] util.ServerCommandLine: env:PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:LC_MONETARY=de_DE.UTF-8
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:USER=jeff
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:HBASE_SECURITY_LOGGER=INFO,RFAS
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:HOME=/home/jeff
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:HBASE_START_FILE=/tmp/hbase-jeff-regionserver.autorestart
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:XDG_SESSION_ID=3
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:LC_MEASUREMENT=de_DE.UTF-8
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:LC_TIME=de_DE.UTF-8
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:HBASE_LOGFILE=hbase-jeff-regionserver-HBNode2.log
+2015-06-24 22:33:02,689 INFO  [main] util.ServerCommandLine: env:XDG_RUNTIME_DIR=/run/user/1001
+2015-06-24 22:33:02,690 INFO  [main] util.ServerCommandLine: env:LANG=en_US.UTF-8
+2015-06-24 22:33:02,690 INFO  [main] util.ServerCommandLine: env:HBASE_LOG_PREFIX=hbase-jeff-regionserver-HBNode2
+2015-06-24 22:33:02,690 INFO  [main] util.ServerCommandLine: env:HBASE_IDENT_STRING=jeff
+2015-06-24 22:33:02,700 INFO  [main] util.ServerCommandLine: vmName=OpenJDK 64-Bit Server VM, vmVendor=Oracle Corporation, vmVersion=24.79-b02
+2015-06-24 22:33:02,700 INFO  [main] util.ServerCommandLine: vmInputArguments=[-Dproc_regionserver, -XX:OnOutOfMemoryError=kill -9 %p, -XX:+UseConcMarkSweepGC, -Dhbase.log.dir=/home/jeff/Documents/hbase-1.0.1.1/bin/../logs, -Dhbase.log.file=hbase-jeff-regionserver-HBNode2.log, -Dhbase.home.dir=/home/jeff/Documents/hbase-1.0.1.1/bin/.., -Dhbase.id.str=jeff, -Dhbase.root.logger=INFO,RFA, -Dhbase.security.logger=INFO,RFAS]
+2015-06-24 22:33:03,631 INFO  [main] regionserver.RSRpcServices: regionserver/HBNode2/10.0.2.15:16020 server-side HConnection retries=350
+2015-06-24 22:33:04,216 INFO  [main] ipc.SimpleRpcScheduler: Using deadline as user call queue, count=3
+2015-06-24 22:33:04,263 INFO  [main] ipc.RpcServer: regionserver/HBNode2/10.0.2.15:16020: started 10 reader(s).
+2015-06-24 22:33:04,642 INFO  [main] impl.MetricsConfig: loaded properties from hadoop-metrics2-hbase.properties
+2015-06-24 22:33:04,947 INFO  [main] impl.MetricsSystemImpl: Scheduled snapshot period at 10 second(s).
+2015-06-24 22:33:04,947 INFO  [main] impl.MetricsSystemImpl: HBase metrics system started
+2015-06-24 22:33:05,899 WARN  [main] util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2015-06-24 22:33:08,891 INFO  [main] fs.HFileSystem: Added intercepting call to namenode#getBlockLocations so can do block reordering using class class org.apache.hadoop.hbase.fs.HFileSystem$ReorderWALBlocks
+2015-06-24 22:33:09,297 INFO  [main] zookeeper.RecoverableZooKeeper: Process identifier=regionserver:16020 connecting to ZooKeeper ensemble=HBNode1:2181,HB:2181,HBNode2:2181
+2015-06-24 22:33:09,311 INFO  [main] zookeeper.ZooKeeper: Client environment:zookeeper.version=3.4.6-1569965, built on 02/20/2014 09:09 GMT
+2015-06-24 22:33:09,311 INFO  [main] zookeeper.ZooKeeper: Client environment:host.name=HBNode2
+2015-06-24 22:33:09,311 INFO  [main] zookeeper.ZooKeeper: Client environment:java.version=1.7.0_79
+2015-06-24 22:33:09,311 INFO  [main] zookeeper.ZooKeeper: Client environment:java.vendor=Oracle Corporation
+2015-06-24 22:33:09,311 INFO  [main] zookeeper.ZooKeeper: Client environment:java.home=/usr/lib/jvm/java-7-openjdk-amd64/jre
+2015-06-24 22:33:09,311 INFO  [main] zookeeper.ZooKeeper: Client environment:java.class.path=/home/jeff/Documents/hbase-1.0.1.1/bin/../conf:/usr/lib/tools.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/..:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/activation-1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/aopalliance-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/apacheds-i18n-2.0.0-M15.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/api-asn1-api-1.0.0-M20.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/api-util-1.0.0-M20.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/asm-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/avro-1.7.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/BSVM.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-beanutils-1.7.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-beanutils-core-1.8.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-cli-1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-codec-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-collections-3.2.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-compress-1.4.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-configuration-1.6.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-daemon-1.0.13.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-digester-1.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-el-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-httpclient-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-io-2.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-lang-2.6.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-logging-1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-math-2.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-math3-3.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-net-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/disruptor-3.3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/findbugs-annotations-1.3.9-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guava-12.0.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guice-3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guice-servlet-3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-annotations-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-auth-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-client-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-hdfs-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-app-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-core-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-jobclient-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-shuffle-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-api-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-client-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-server-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-server-nodemanager-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-annotations-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-annotations-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-checkstyle-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-client-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-common-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-common-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-examples-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-hadoop2-compat-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-hadoop-compat-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-it-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-it-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-prefix-tree-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-protocol-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-rest-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-server-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-server-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-shell-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-testing-util-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-thrift-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/htrace-core-3.1.0-incubating.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/httpclient-4.2.5.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/httpcore-4.1.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-core-asl-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-jaxrs-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-mapper-asl-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-xc-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jamon-runtime-2.3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jasper-compiler-5.5.23.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jasper-runtime-5.5.23.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/javax.inject-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/java-xmlbuilder-0.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jaxb-api-2.2.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jaxb-impl-2.2.3-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jcodings-1.0.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-client-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-core-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-guice-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-json-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-server-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jets3t-0.9.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jettison-1.3.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-sslengine-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-util-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/joni-2.1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jruby-complete-1.6.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsch-0.1.42.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsp-2.1-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsp-api-2.1-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsr305-1.3.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/junit-4.11.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/leveldbjni-all-1.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/libthrift-0.9.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/log4j-1.2.17.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/metrics-core-2.2.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/netty-3.2.4.Final.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/netty-all-4.0.23.Final.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/paranamer-2.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/protobuf-java-2.5.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/servlet-api-2.5-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/servlet-api-2.5.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/slf4j-api-1.7.7.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/slf4j-log4j12-1.7.7.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/snappy-java-1.0.4.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/xmlenc-0.52.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/xz-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/zookeeper-3.4.6.jar:
+2015-06-24 22:33:09,311 INFO  [main] zookeeper.ZooKeeper: Client environment:java.library.path=/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib
+2015-06-24 22:33:09,312 INFO  [main] zookeeper.ZooKeeper: Client environment:java.io.tmpdir=/tmp
+2015-06-24 22:33:09,312 INFO  [main] zookeeper.ZooKeeper: Client environment:java.compiler=<NA>
+2015-06-24 22:33:09,312 INFO  [main] zookeeper.ZooKeeper: Client environment:os.name=Linux
+2015-06-24 22:33:09,312 INFO  [main] zookeeper.ZooKeeper: Client environment:os.arch=amd64
+2015-06-24 22:33:09,312 INFO  [main] zookeeper.ZooKeeper: Client environment:os.version=3.16.0-30-generic
+2015-06-24 22:33:09,312 INFO  [main] zookeeper.ZooKeeper: Client environment:user.name=jeff
+2015-06-24 22:33:09,312 INFO  [main] zookeeper.ZooKeeper: Client environment:user.home=/home/jeff
+2015-06-24 22:33:09,312 INFO  [main] zookeeper.ZooKeeper: Client environment:user.dir=/home/jeff/Documents/hbase-1.0.1.1
+2015-06-24 22:33:09,313 INFO  [main] zookeeper.ZooKeeper: Initiating client connection, connectString=HBNode1:2181,HB:2181,HBNode2:2181 sessionTimeout=90000 watcher=regionserver:160200x0, quorum=HBNode1:2181,HB:2181,HBNode2:2181, baseZNode=/hbase
+2015-06-24 22:33:09,359 INFO  [main-SendThread(HBNode1:2181)] zookeeper.ClientCnxn: Opening socket connection to server HBNode1/10.0.2.5:2181. Will not attempt to authenticate using SASL (unknown error)
+2015-06-24 22:33:09,366 INFO  [main-SendThread(HBNode1:2181)] zookeeper.ClientCnxn: Socket connection established to HBNode1/10.0.2.5:2181, initiating session
+2015-06-24 22:33:09,395 INFO  [main-SendThread(HBNode1:2181)] zookeeper.ClientCnxn: Session establishment complete on server HBNode1/10.0.2.5:2181, sessionid = 0x14e27461bfa0001, negotiated timeout = 90000
+2015-06-24 22:33:09,459 INFO  [RpcServer.responder] ipc.RpcServer: RpcServer.responder: starting
+2015-06-24 22:33:09,479 INFO  [RpcServer.listener,port=16020] ipc.RpcServer: RpcServer.listener,port=16020: starting
+2015-06-24 22:33:09,621 INFO  [main] mortbay.log: Logging to org.slf4j.impl.Log4jLoggerAdapter(org.mortbay.log) via org.mortbay.log.Slf4jLog
+2015-06-24 22:33:09,627 INFO  [main] http.HttpRequestLog: Http request log for http.requests.regionserver is not defined
+2015-06-24 22:33:09,653 INFO  [main] http.HttpServer: Added global filter 'safety' (class=org.apache.hadoop.hbase.http.HttpServer$QuotingInputFilter)
+2015-06-24 22:33:09,663 INFO  [main] http.HttpServer: Added filter static_user_filter (class=org.apache.hadoop.hbase.http.lib.StaticUserWebFilter$StaticUserFilter) to context regionserver
+2015-06-24 22:33:09,663 INFO  [main] http.HttpServer: Added filter static_user_filter (class=org.apache.hadoop.hbase.http.lib.StaticUserWebFilter$StaticUserFilter) to context logs
+2015-06-24 22:33:09,663 INFO  [main] http.HttpServer: Added filter static_user_filter (class=org.apache.hadoop.hbase.http.lib.StaticUserWebFilter$StaticUserFilter) to context static
+2015-06-24 22:33:09,736 INFO  [main] http.HttpServer: Jetty bound to port 16030
+2015-06-24 22:33:09,736 INFO  [main] mortbay.log: jetty-6.1.26
+2015-06-24 22:33:10,732 INFO  [main] mortbay.log: Started SelectChannelConnector@0.0.0.0:16030
+2015-06-24 22:33:11,098 INFO  [regionserver/HBNode2/10.0.2.15:16020] zookeeper.RecoverableZooKeeper: Process identifier=hconnection-0x63ed5b13 connecting to ZooKeeper ensemble=HBNode1:2181,HB:2181,HBNode2:2181
+2015-06-24 22:33:11,103 INFO  [regionserver/HBNode2/10.0.2.15:16020] zookeeper.ZooKeeper: Initiating client connection, connectString=HBNode1:2181,HB:2181,HBNode2:2181 sessionTimeout=90000 watcher=hconnection-0x63ed5b130x0, quorum=HBNode1:2181,HB:2181,HBNode2:2181, baseZNode=/hbase
+2015-06-24 22:33:11,104 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HB:2181)] zookeeper.ClientCnxn: Opening socket connection to server HB/10.0.2.4:2181. Will not attempt to authenticate using SASL (unknown error)
+2015-06-24 22:33:11,115 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HB:2181)] zookeeper.ClientCnxn: Socket connection established to HB/10.0.2.4:2181, initiating session
+2015-06-24 22:33:11,151 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HB:2181)] zookeeper.ClientCnxn: Session establishment complete on server HB/10.0.2.4:2181, sessionid = 0x4e274615bb0000, negotiated timeout = 90000
+2015-06-24 22:33:11,442 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: ClusterId : e9039698-a046-471c-8cc0-453b88167e84
+2015-06-24 22:33:11,666 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.MemStoreFlusher: globalMemStoreLimit=195.9 M, globalMemStoreLimitLowMark=186.1 M, maxHeap=489.7 M
+2015-06-24 22:33:11,682 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: CompactionChecker runs every 10sec
+2015-06-24 22:33:11,762 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.RegionServerCoprocessorHost: System coprocessor loading is enabled
+2015-06-24 22:33:11,762 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.RegionServerCoprocessorHost: Table coprocessor loading is enabled
+2015-06-24 22:33:11,778 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:12,067 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:12,070 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:15,071 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:15,073 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:15,078 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:18,079 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:18,081 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:18,082 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:21,082 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:21,084 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:21,085 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:24,085 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:24,087 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:24,088 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:27,089 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:27,090 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:27,091 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:30,093 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:30,094 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:30,095 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:33,096 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:33,098 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:33,099 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:36,100 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:36,101 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:36,102 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:39,103 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:39,104 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:39,105 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:42,106 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:42,108 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:42,109 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:45,110 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:45,112 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:45,112 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:48,113 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:48,115 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:48,115 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:51,116 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:51,118 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:51,118 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:54,120 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:54,122 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:54,123 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:33:57,123 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:33:57,125 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:33:57,126 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:00,126 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:00,128 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:00,129 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:03,129 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:03,131 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:03,132 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:06,133 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:06,139 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:06,140 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:09,141 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:09,144 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:09,145 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:12,146 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:12,148 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:12,149 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:15,149 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:15,152 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:15,152 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:18,154 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:18,155 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:18,156 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:21,156 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:21,158 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:21,158 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:24,160 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:24,162 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:24,162 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:27,163 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:27,165 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:27,167 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:30,168 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,60000,1435091221526 with port=16020, startcode=1435177985068
+2015-06-24 22:34:30,170 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: java.net.ConnectException: Connection refused
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: java.net.ConnectException: Connection refused
+	at sun.nio.ch.SocketChannelImpl.checkConnect(Native Method)
+	at sun.nio.ch.SocketChannelImpl.finishConnect(SocketChannelImpl.java:739)
+	at org.apache.hadoop.net.SocketIOWithTimeout.connect(SocketIOWithTimeout.java:206)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:529)
+	at org.apache.hadoop.net.NetUtils.connect(NetUtils.java:493)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupConnection(RpcClientImpl.java:403)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.setupIOstreams(RpcClientImpl.java:709)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.writeRequest(RpcClientImpl.java:880)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.tracedWriteRequest(RpcClientImpl.java:849)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1173)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+2015-06-24 22:34:30,171 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:34:33,171 INFO  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty to master=HB,16020,1435177981994 with port=16020, startcode=1435177985068
+2015-06-24 22:34:33,308 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: error telling master we are up
+com.google.protobuf.ServiceException: org.apache.hadoop.hbase.exceptions.ConnectionClosingException: Call to HB/10.0.2.4:16020 failed on local exception: org.apache.hadoop.hbase.exceptions.ConnectionClosingException: Connection to HB/10.0.2.4:16020 is closing. Call id=27, waitTime=136
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:231)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient$BlockingRpcChannelImplementation.callBlockingMethod(AbstractRpcClient.java:300)
+	at org.apache.hadoop.hbase.protobuf.generated.RegionServerStatusProtos$RegionServerStatusService$BlockingStub.regionServerStartup(RegionServerStatusProtos.java:8277)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.reportForDuty(HRegionServer.java:2140)
+	at org.apache.hadoop.hbase.regionserver.HRegionServer.run(HRegionServer.java:826)
+	at java.lang.Thread.run(Thread.java:745)
+Caused by: org.apache.hadoop.hbase.exceptions.ConnectionClosingException: Call to HB/10.0.2.4:16020 failed on local exception: org.apache.hadoop.hbase.exceptions.ConnectionClosingException: Connection to HB/10.0.2.4:16020 is closing. Call id=27, waitTime=136
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.wrapException(RpcClientImpl.java:1232)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl.call(RpcClientImpl.java:1203)
+	at org.apache.hadoop.hbase.ipc.AbstractRpcClient.callBlockingMethod(AbstractRpcClient.java:216)
+	... 5 more
+Caused by: org.apache.hadoop.hbase.exceptions.ConnectionClosingException: Connection to HB/10.0.2.4:16020 is closing. Call id=27, waitTime=136
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.cleanupCalls(RpcClientImpl.java:1032)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.close(RpcClientImpl.java:839)
+	at org.apache.hadoop.hbase.ipc.RpcClientImpl$Connection.run(RpcClientImpl.java:567)
+2015-06-24 22:34:33,308 WARN  [regionserver/HBNode2/10.0.2.15:16020] regionserver.HRegionServer: reportForDuty failed; sleeping and then retrying.
+2015-06-24 22:53:07,178 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HB:2181)] zookeeper.ClientCnxn: Unable to read additional data from server sessionid 0x4e274615bb0000, likely server has closed socket, closing socket connection and attempting reconnect
+2015-06-24 22:53:07,732 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Opening socket connection to server HBNode2/10.0.2.15:2181. Will not attempt to authenticate using SASL (unknown error)
+2015-06-24 22:53:07,733 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Socket connection established to HBNode2/10.0.2.15:2181, initiating session
+2015-06-24 22:53:07,735 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Session establishment complete on server HBNode2/10.0.2.15:2181, sessionid = 0x4e274615bb0000, negotiated timeout = 90000
+2015-06-24 22:53:12,473 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Unable to read additional data from server sessionid 0x4e274615bb0000, likely server has closed socket, closing socket connection and attempting reconnect
+Mi 24. Jun 22:54:54 CEST 2015 Starting regionserver on HBNode2
+core file size          (blocks, -c) 0
+data seg size           (kbytes, -d) unlimited
+scheduling priority             (-e) 0
+file size               (blocks, -f) unlimited
+pending signals                 (-i) 3891
+max locked memory       (kbytes, -l) 64
+max memory size         (kbytes, -m) unlimited
+open files                      (-n) 1024
+pipe size            (512 bytes, -p) 8
+POSIX message queues     (bytes, -q) 819200
+real-time priority              (-r) 0
+stack size              (kbytes, -s) 8192
+cpu time               (seconds, -t) unlimited
+max user processes              (-u) 3891
+virtual memory          (kbytes, -v) unlimited
+file locks                      (-x) unlimited
+2015-06-24 22:54:56,188 INFO  [main] util.VersionInfo: HBase 1.0.1.1
+2015-06-24 22:54:56,189 INFO  [main] util.VersionInfo: Source code repository git://aspire/home/apurtell/tmp/hbase-build-2 revision=e1dbf4df30d214fca14908df71d038081577ea46
+2015-06-24 22:54:56,189 INFO  [main] util.VersionInfo: Compiled by apurtell on Sun May 17 12:34:26 PDT 2015
+2015-06-24 22:54:56,189 INFO  [main] util.VersionInfo: From source with checksum 111670655c3a2fe747723232c402f0e2
+2015-06-24 22:54:58,009 INFO  [main] util.ServerCommandLine: env:LC_TELEPHONE=de_DE.UTF-8
+2015-06-24 22:54:58,009 INFO  [main] util.ServerCommandLine: env:JAVA_HOME=/usr
+2015-06-24 22:54:58,009 INFO  [main] util.ServerCommandLine: env:SHLVL=3
+2015-06-24 22:54:58,009 INFO  [main] util.ServerCommandLine: env:HBASE_LOG_DIR=/home/jeff/Documents/hbase-1.0.1.1/bin/../logs
+2015-06-24 22:54:58,009 INFO  [main] util.ServerCommandLine: env:HBASE_HOME=/home/jeff/Documents/hbase-1.0.1.1/bin/..
+2015-06-24 22:54:58,009 INFO  [main] util.ServerCommandLine: env:HBASE_OPTS=-XX:+UseConcMarkSweepGC   -Dhbase.log.dir=/home/jeff/Documents/hbase-1.0.1.1/bin/../logs -Dhbase.log.file=hbase-jeff-regionserver-HBNode2.log -Dhbase.home.dir=/home/jeff/Documents/hbase-1.0.1.1/bin/.. -Dhbase.id.str=jeff -Dhbase.root.logger=INFO,RFA -Dhbase.security.logger=INFO,RFAS
+2015-06-24 22:54:58,009 INFO  [main] util.ServerCommandLine: env:HBASE_ENV_INIT=true
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:SSH_CLIENT=10.0.2.4 54503 22
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:LC_NUMERIC=de_DE.UTF-8
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:LC_NAME=de_DE.UTF-8
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:MAIL=/var/mail/jeff
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:HBASE_ZNODE_FILE=/tmp/hbase-jeff-regionserver.znode
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:PWD=/home/jeff/Documents/hbase-1.0.1.1
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:LC_PAPER=de_DE.UTF-8
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:LOGNAME=jeff
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:LC_IDENTIFICATION=de_DE.UTF-8
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:HBASE_MANAGES_ZK=true
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:HBASE_NICENESS=0
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:HBASE_REST_OPTS=
+2015-06-24 22:54:58,010 INFO  [main] util.ServerCommandLine: env:MALLOC_ARENA_MAX=4
+2015-06-24 22:54:58,011 INFO  [main] util.ServerCommandLine: env:SSH_CONNECTION=10.0.2.4 54503 10.0.2.15 22
+2015-06-24 22:54:58,011 INFO  [main] util.ServerCommandLine: env:LC_ADDRESS=de_DE.UTF-8
+2015-06-24 22:54:58,011 INFO  [main] util.ServerCommandLine: env:SHELL=/bin/bash
+2015-06-24 22:54:58,011 INFO  [main] util.ServerCommandLine: env:HBASE_ROOT_LOGGER=INFO,RFA
+2015-06-24 22:54:58,032 INFO  [main] util.ServerCommandLine: env:CLASSPATH=/home/jeff/Documents/hbase-1.0.1.1/bin/../conf:/usr/lib/tools.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/..:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/activation-1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/aopalliance-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/apacheds-i18n-2.0.0-M15.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/api-asn1-api-1.0.0-M20.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/api-util-1.0.0-M20.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/asm-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/avro-1.7.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/BSVM.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-beanutils-1.7.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-beanutils-core-1.8.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-cli-1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-codec-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-collections-3.2.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-compress-1.4.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-configuration-1.6.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-daemon-1.0.13.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-digester-1.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-el-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-httpclient-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-io-2.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-lang-2.6.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-logging-1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-math-2.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-math3-3.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-net-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/disruptor-3.3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/findbugs-annotations-1.3.9-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guava-12.0.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guice-3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guice-servlet-3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-annotations-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-auth-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-client-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-hdfs-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-app-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-core-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-jobclient-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-shuffle-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-api-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-client-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-server-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-server-nodemanager-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-annotations-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-annotations-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-checkstyle-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-client-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-common-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-common-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-examples-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-hadoop2-compat-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-hadoop-compat-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-it-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-it-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-prefix-tree-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-protocol-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-rest-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-server-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-server-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-shell-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-testing-util-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-thrift-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/htrace-core-3.1.0-incubating.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/httpclient-4.2.5.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/httpcore-4.1.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-core-asl-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-jaxrs-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-mapper-asl-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-xc-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jamon-runtime-2.3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jasper-compiler-5.5.23.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jasper-runtime-5.5.23.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/javax.inject-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/java-xmlbuilder-0.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jaxb-api-2.2.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jaxb-impl-2.2.3-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jcodings-1.0.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-client-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-core-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-guice-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-json-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-server-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jets3t-0.9.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jettison-1.3.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-sslengine-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-util-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/joni-2.1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jruby-complete-1.6.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsch-0.1.42.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsp-2.1-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsp-api-2.1-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsr305-1.3.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/junit-4.11.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/leveldbjni-all-1.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/libthrift-0.9.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/log4j-1.2.17.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/metrics-core-2.2.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/netty-3.2.4.Final.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/netty-all-4.0.23.Final.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/paranamer-2.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/protobuf-java-2.5.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/servlet-api-2.5-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/servlet-api-2.5.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/slf4j-api-1.7.7.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/slf4j-log4j12-1.7.7.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/snappy-java-1.0.4.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/xmlenc-0.52.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/xz-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/zookeeper-3.4.6.jar:
+2015-06-24 22:54:58,033 INFO  [main] util.ServerCommandLine: env:HBASE_THRIFT_OPTS=
+2015-06-24 22:54:58,033 INFO  [main] util.ServerCommandLine: env:PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games
+2015-06-24 22:54:58,033 INFO  [main] util.ServerCommandLine: env:LC_MONETARY=de_DE.UTF-8
+2015-06-24 22:54:58,033 INFO  [main] util.ServerCommandLine: env:USER=jeff
+2015-06-24 22:54:58,033 INFO  [main] util.ServerCommandLine: env:HBASE_SECURITY_LOGGER=INFO,RFAS
+2015-06-24 22:54:58,033 INFO  [main] util.ServerCommandLine: env:HOME=/home/jeff
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:HBASE_START_FILE=/tmp/hbase-jeff-regionserver.autorestart
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:XDG_SESSION_ID=6
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:LC_MEASUREMENT=de_DE.UTF-8
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:LC_TIME=de_DE.UTF-8
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:HBASE_LOGFILE=hbase-jeff-regionserver-HBNode2.log
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:XDG_RUNTIME_DIR=/run/user/1001
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:LANG=en_US.UTF-8
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:HBASE_LOG_PREFIX=hbase-jeff-regionserver-HBNode2
+2015-06-24 22:54:58,034 INFO  [main] util.ServerCommandLine: env:HBASE_IDENT_STRING=jeff
+2015-06-24 22:54:58,035 INFO  [main] util.ServerCommandLine: vmName=OpenJDK 64-Bit Server VM, vmVendor=Oracle Corporation, vmVersion=24.79-b02
+2015-06-24 22:54:58,035 INFO  [main] util.ServerCommandLine: vmInputArguments=[-Dproc_regionserver, -XX:OnOutOfMemoryError=kill -9 %p, -XX:+UseConcMarkSweepGC, -Dhbase.log.dir=/home/jeff/Documents/hbase-1.0.1.1/bin/../logs, -Dhbase.log.file=hbase-jeff-regionserver-HBNode2.log, -Dhbase.home.dir=/home/jeff/Documents/hbase-1.0.1.1/bin/.., -Dhbase.id.str=jeff, -Dhbase.root.logger=INFO,RFA, -Dhbase.security.logger=INFO,RFAS]
+2015-06-24 22:54:58,872 INFO  [main] regionserver.RSRpcServices: regionserver/HBNode2/10.0.2.15:16020 server-side HConnection retries=350
+2015-06-24 22:54:59,497 INFO  [main] ipc.SimpleRpcScheduler: Using deadline as user call queue, count=3
+2015-06-24 22:54:59,537 INFO  [main] ipc.RpcServer: regionserver/HBNode2/10.0.2.15:16020: started 10 reader(s).
+2015-06-24 22:54:59,810 INFO  [main] impl.MetricsConfig: loaded properties from hadoop-metrics2-hbase.properties
+2015-06-24 22:55:00,072 INFO  [main] impl.MetricsSystemImpl: Scheduled snapshot period at 10 second(s).
+2015-06-24 22:55:00,072 INFO  [main] impl.MetricsSystemImpl: HBase metrics system started
+2015-06-24 22:55:00,790 WARN  [main] util.NativeCodeLoader: Unable to load native-hadoop library for your platform... using builtin-java classes where applicable
+2015-06-24 22:55:03,401 INFO  [main] fs.HFileSystem: Added intercepting call to namenode#getBlockLocations so can do block reordering using class class org.apache.hadoop.hbase.fs.HFileSystem$ReorderWALBlocks
+2015-06-24 22:55:03,771 INFO  [main] zookeeper.RecoverableZooKeeper: Process identifier=regionserver:16020 connecting to ZooKeeper ensemble=HBNode1:2181,HB:2181,HBNode2:2181
+2015-06-24 22:55:03,781 INFO  [main] zookeeper.ZooKeeper: Client environment:zookeeper.version=3.4.6-1569965, built on 02/20/2014 09:09 GMT
+2015-06-24 22:55:03,781 INFO  [main] zookeeper.ZooKeeper: Client environment:host.name=HBNode2
+2015-06-24 22:55:03,781 INFO  [main] zookeeper.ZooKeeper: Client environment:java.version=1.7.0_79
+2015-06-24 22:55:03,781 INFO  [main] zookeeper.ZooKeeper: Client environment:java.vendor=Oracle Corporation
+2015-06-24 22:55:03,781 INFO  [main] zookeeper.ZooKeeper: Client environment:java.home=/usr/lib/jvm/java-7-openjdk-amd64/jre
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:java.class.path=/home/jeff/Documents/hbase-1.0.1.1/bin/../conf:/usr/lib/tools.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/..:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/activation-1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/aopalliance-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/apacheds-i18n-2.0.0-M15.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/apacheds-kerberos-codec-2.0.0-M15.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/api-asn1-api-1.0.0-M20.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/api-util-1.0.0-M20.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/asm-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/avro-1.7.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/BSVM.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-beanutils-1.7.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-beanutils-core-1.8.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-cli-1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-codec-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-collections-3.2.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-compress-1.4.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-configuration-1.6.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-daemon-1.0.13.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-digester-1.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-el-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-httpclient-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-io-2.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-lang-2.6.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-logging-1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-math-2.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-math3-3.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/commons-net-3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/disruptor-3.3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/findbugs-annotations-1.3.9-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guava-12.0.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guice-3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/guice-servlet-3.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-annotations-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-auth-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-client-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-hdfs-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-app-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-core-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-jobclient-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-mapreduce-client-shuffle-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-api-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-client-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-server-common-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hadoop-yarn-server-nodemanager-2.5.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-annotations-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-annotations-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-checkstyle-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-client-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-common-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-common-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-examples-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-hadoop2-compat-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-hadoop-compat-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-it-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-it-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-prefix-tree-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-protocol-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-rest-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-server-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-server-1.0.1.1-tests.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-shell-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-testing-util-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/hbase-thrift-1.0.1.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/htrace-core-3.1.0-incubating.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/httpclient-4.2.5.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/httpcore-4.1.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-core-asl-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-jaxrs-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-mapper-asl-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jackson-xc-1.8.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jamon-runtime-2.3.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jasper-compiler-5.5.23.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jasper-runtime-5.5.23.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/javax.inject-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/java-xmlbuilder-0.4.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jaxb-api-2.2.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jaxb-impl-2.2.3-1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jcodings-1.0.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-client-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-core-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-guice-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-json-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jersey-server-1.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jets3t-0.9.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jettison-1.3.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-sslengine-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jetty-util-6.1.26.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/joni-2.1.2.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jruby-complete-1.6.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsch-0.1.42.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsp-2.1-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsp-api-2.1-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/jsr305-1.3.9.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/junit-4.11.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/leveldbjni-all-1.8.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/libthrift-0.9.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/log4j-1.2.17.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/metrics-core-2.2.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/netty-3.2.4.Final.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/netty-all-4.0.23.Final.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/paranamer-2.3.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/protobuf-java-2.5.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/servlet-api-2.5-6.1.14.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/servlet-api-2.5.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/slf4j-api-1.7.7.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/slf4j-log4j12-1.7.7.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/snappy-java-1.0.4.1.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/xmlenc-0.52.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/xz-1.0.jar:/home/jeff/Documents/hbase-1.0.1.1/bin/../lib/zookeeper-3.4.6.jar:
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:java.library.path=/usr/java/packages/lib/amd64:/usr/lib/x86_64-linux-gnu/jni:/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu:/usr/lib/jni:/lib:/usr/lib
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:java.io.tmpdir=/tmp
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:java.compiler=<NA>
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:os.name=Linux
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:os.arch=amd64
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:os.version=3.16.0-30-generic
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:user.name=jeff
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:user.home=/home/jeff
+2015-06-24 22:55:03,782 INFO  [main] zookeeper.ZooKeeper: Client environment:user.dir=/home/jeff/Documents/hbase-1.0.1.1
+2015-06-24 22:55:03,783 INFO  [main] zookeeper.ZooKeeper: Initiating client connection, connectString=HBNode1:2181,HB:2181,HBNode2:2181 sessionTimeout=90000 watcher=regionserver:160200x0, quorum=HBNode1:2181,HB:2181,HBNode2:2181, baseZNode=/hbase
+2015-06-24 22:55:03,819 INFO  [main-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Opening socket connection to server HBNode2/10.0.2.15:2181. Will not attempt to authenticate using SASL (unknown error)
+2015-06-24 22:55:03,830 INFO  [main-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Socket connection established to HBNode2/10.0.2.15:2181, initiating session
+2015-06-24 22:55:03,854 INFO  [main-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Session establishment complete on server HBNode2/10.0.2.15:2181, sessionid = 0x24e275a26ac0001, negotiated timeout = 90000
+2015-06-24 22:55:03,936 INFO  [RpcServer.responder] ipc.RpcServer: RpcServer.responder: starting
+2015-06-24 22:55:03,937 INFO  [RpcServer.listener,port=16020] ipc.RpcServer: RpcServer.listener,port=16020: starting
+2015-06-24 22:55:04,056 INFO  [main] mortbay.log: Logging to org.slf4j.impl.Log4jLoggerAdapter(org.mortbay.log) via org.mortbay.log.Slf4jLog
+2015-06-24 22:55:04,063 INFO  [main] http.HttpRequestLog: Http request log for http.requests.regionserver is not defined
+2015-06-24 22:55:04,103 INFO  [main] http.HttpServer: Added global filter 'safety' (class=org.apache.hadoop.hbase.http.HttpServer$QuotingInputFilter)
+2015-06-24 22:55:04,108 INFO  [main] http.HttpServer: Added filter static_user_filter (class=org.apache.hadoop.hbase.http.lib.StaticUserWebFilter$StaticUserFilter) to context regionserver
+2015-06-24 22:55:04,108 INFO  [main] http.HttpServer: Added filter static_user_filter (class=org.apache.hadoop.hbase.http.lib.StaticUserWebFilter$StaticUserFilter) to context logs
+2015-06-24 22:55:04,108 INFO  [main] http.HttpServer: Added filter static_user_filter (class=org.apache.hadoop.hbase.http.lib.StaticUserWebFilter$StaticUserFilter) to context static
+2015-06-24 22:55:04,157 INFO  [main] http.HttpServer: Jetty bound to port 16030
+2015-06-24 22:55:04,157 INFO  [main] mortbay.log: jetty-6.1.26
+2015-06-24 22:55:05,745 INFO  [main] mortbay.log: Started SelectChannelConnector@0.0.0.0:16030
+2015-06-24 22:55:06,465 INFO  [regionserver/HBNode2/10.0.2.15:16020] zookeeper.RecoverableZooKeeper: Process identifier=hconnection-0x43e7d0fe connecting to ZooKeeper ensemble=HBNode1:2181,HB:2181,HBNode2:2181
+2015-06-24 22:55:06,465 INFO  [regionserver/HBNode2/10.0.2.15:16020] zookeeper.ZooKeeper: Initiating client connection, connectString=HBNode1:2181,HB:2181,HBNode2:2181 sessionTimeout=90000 watcher=hconnection-0x43e7d0fe0x0, quorum=HBNode1:2181,HB:2181,HBNode2:2181, baseZNode=/hbase
+2015-06-24 22:55:06,471 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Opening socket connection to server HBNode2/10.0.2.15:2181. Will not attempt to authenticate using SASL (unknown error)
+2015-06-24 22:55:06,476 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Socket connection established to HBNode2/10.0.2.15:2181, initiating session
+2015-06-24 22:55:06,497 INFO  [regionserver/HBNode2/10.0.2.15:16020-SendThread(HBNode2:2181)] zookeeper.ClientCnxn: Session establishment complete on server HBNode2/10.0.2.15:2181, sessionid = 0x24e275a26ac0002, negotiated timeout = 90000
+2015-06-24 22:55:06,501 INFO  [regionserver/HBNode2/10.0.2.15:16020] client.ZooKeeperRegistry: ClusterId read in ZooKeeper is null

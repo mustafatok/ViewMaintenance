@@ -56,19 +56,29 @@ public class CmdInterface {
 		// create Options object
 				Options options = new Options();
 				
-				options.addOption(OptionBuilder.withLongOpt("system")
-						.withDescription("test all the case").hasArg()
-						.withArgName("SYSTEM").create());
+				options.addOption(OptionBuilder.withLongOpt("sys")
+						.withDescription("test systematically").create());
 				
-				String testCase1="select colfam1.qual1 from testtable1";
+				String[] testCase={
+						// test simple selection
+						"select colfam1.qual1 from testtable1", 
+						// test aggregation without aggregation key
+						"select max(colfam1.qual1), min(colfam1.qual1), sum(colfam1.qual1), avg(colfam1.qual1), count(colfam1.qual1) from testtable2",
+						// test  simple join
+						"select testtable3.colfam.qualifier_testtable3, testtable4.colfam.qualifier_testtable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey",
+						// test aggregation with aggregation key(group by)
+						"select max(colfam.value), min(colfam.value), sum(colfam.value), avg(colfam.value), count(colfam.value) from testtable5 group by colfam.aggKey",
+				};
 
 				CommandLineParser parser = new BasicParser();
 				try {
 					CommandLine cmd = parser.parse(options, args);
 					
-					if(cmd.hasOption("system")){
-						System.out.println(testCase1);
-						handleSQL(testCase1);
+					if(cmd.hasOption("sys")){
+						for(int i = 0; i < testCase.length; i++){
+							System.out.println(testCase[i]);
+							handleSQL(testCase[i]);
+						}
 					}
 				} catch (ParseException e) {
 					e.printStackTrace();

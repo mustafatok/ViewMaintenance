@@ -65,12 +65,14 @@ public class JsqlParser {
 							// build plan for the first table of from
 							LogicalElement element = new LogicalElement();
 							handleJoinTable(plainSelect, tableName, element);
+							element.setNonBlock(true);
 							
 							// build plan for join table
 							// Assert only one join
 							Join join = (Join)plainSelect.getJoins().get(0);
 							LogicalElement elementJoin = new LogicalElement();
 							handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
+							elementJoin.setNonBlock(true);
 							
 							// For each of the plan, the join key field should be filled
 							// Assert the join key of the left table is on the left and 
@@ -110,6 +112,7 @@ public class JsqlParser {
 							// the third plan will just scan the results from it.
 							// Assert the third plan have the name of "joinTableAWithTableB"
 							LogicalElement elementResult = new LogicalElement();
+							elementResult.setWaitForBlock(2);
 							elementResult.setJoin(join);
 							elementResult.setTableName(joinTableName);
 							logicalPlan.add(elementResult);
@@ -356,7 +359,7 @@ public class JsqlParser {
 		}
 		
 		// handle group by
-		if(!plainSelect.getGroupByColumnReferences().isEmpty()){
+		if(plainSelect.getGroupByColumnReferences() != null && !plainSelect.getGroupByColumnReferences().isEmpty()){
 			String groupBy = ((Column) plainSelect.getGroupByColumnReferences().get(0)).getWholeColumnName();
 			element.setAggregationKey(groupBy);
 		}
