@@ -211,6 +211,36 @@ public class LogicalElement implements Runnable{
 				+ ", joinTable=" + joinTable 
 				+ ", isReturningResults=" + isReturningResults + "]";
 	}
+	
+	/**
+	 * Construct the SQL using the existing fields
+	 * @return
+	 */
+	public String constructSQLByField(){
+		String result = "";
+		result += "select ";
+		for(int i = 0; i < columns.size(); i++){
+			if(i != 0 && i != (columns.size() - 1)){
+				result += ", ";
+			}
+			result += columns.get(i).getFamily().toStringUtf8() + ".";
+			result += columns.get(i).getColumn().toStringUtf8();
+		}
+		result += " from " + tableName;
+		if(!conditions.isEmpty()){
+			result += " where ";
+			for(int i = 0; i < conditions.size(); i++){
+				if(i != 0 && i != (conditions.size() - 1)){
+					result += " ";
+				}
+				result += conditions.get(i).getColumn().getFamily().toStringUtf8() + ".";
+				result += conditions.get(i).getColumn().getColumn().toStringUtf8();
+				result += conditions.get(i).getOperator().toStringUtf8();
+				result += conditions.get(i).getValue().toStringUtf8();
+			}
+		}
+		return result;
+	}
 
 	@Override
 	public void run() {

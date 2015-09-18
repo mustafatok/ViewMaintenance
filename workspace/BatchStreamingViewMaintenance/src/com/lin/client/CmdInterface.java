@@ -86,7 +86,9 @@ public class CmdInterface {
 				 * Join test cases
 				 */
 				// test  simple join
-				"select testtable3.colfam.qualifier_testtable3, testtable4.colfam.qualifier_testtable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey"
+				"select testtable3.colfam.qualifier_testtable3, testtable4.colfam.qualifier_testtable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey",
+				// Join with conditions
+				"select testtable3.colfam.qualifier_testtable3, testtable4.colfam.qualifier_testtable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey where testtable3.colfam.qualifier_testtable3>10",
 		};
 
 		CommandLineParser parser = new BasicParser();

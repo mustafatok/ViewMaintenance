@@ -342,6 +342,15 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		// test value for every condition
 		boolean checkCell = true;
 		for(Condition condition:request.getConditionList()){
+			// first check if this cell is the left operator
+			// if not skip this
+			String leftColumn = condition.getColumn().getFamily().toStringUtf8() + "." + condition.getColumn().getColumn().toStringUtf8();
+			String cellColumn = (new String(CellUtil.cloneFamily(cell))) + "." + (new String(CellUtil.cloneQualifier(cell)));
+			System.out.println("comparing " + leftColumn + " with " + cellColumn);
+			if(!leftColumn.equals(cellColumn)){
+				break;
+			}
+			
 			// get left expression and right expression
 			String value = new String(CellUtil.cloneValue(cell));
 			String compare = "";
@@ -825,5 +834,4 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			}
 		}
 	}
-
 }
