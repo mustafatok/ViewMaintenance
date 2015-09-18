@@ -113,10 +113,8 @@ public class CmdInterface {
 	 * @param input
 	 */
 	public static void handleSQL(String input) {
-		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input);
-		
+		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input, true);
 		System.out.println(simpleLogicalPlan);
-		
 		simpleLogicalPlan.getHead().execute();
 		
 	}

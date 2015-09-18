@@ -1,10 +1,12 @@
 package com.lin.coprocessor;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -17,8 +19,10 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
@@ -36,16 +40,18 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.Execute;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
+import com.lin.test.HBaseHelper;
 import com.lin.utils.Common;
 
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		CoprocessorService{
 	private RegionCoprocessorEnvironment env;
 	private AggregationManager aggregationManager = null;
-	private boolean isMaterialize = false;
+	private MaterializeManager materialize = null;
 	private String joinFamily = null;
 	private String joinQualifier = null;
 	private HTable joinTable = null;
+	private ParameterMessage request = null;
 
 	@Override
 	public Service getService() {
@@ -68,6 +74,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		System.out.println("============================================================");
 		System.out.println((new Date())+"Begin to execute");
 		
+		// store in local variable for later use
+		this.request = request;
+		
+		// initialize materialize manager
+		materialize = new MaterializeManager(request);
 		
 		// initialize aggregation manager
 		aggregationManager = new AggregationManager(request);
@@ -80,8 +91,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		// If join, set is-materialize to be true.
 		// Fill joinKey and joinTable for later use
 		if(!request.getJoinKey().toStringUtf8().equals("")){
-			isMaterialize = true;
-			
 			// Connect to the join table using the join table name from request
 			Configuration configuration = HBaseConfiguration.create();;
 			try {
@@ -159,6 +168,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
 				System.out.println((new Date())+"Building row no." + count);
 				
+				// If is-materialize flag is true build the delta view for every row
+				if(request.getIsMaterialize()){
+					materialize.putToDeltaView(row);
+				}
+				
 				boolean meetCondition = handleRow(request, row, bsvRow, aggKey);
 				
 				// discard the whole row if the cell fails to meet the condition
@@ -166,29 +180,17 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					response.addRow(bsvRow);
 					count++;
 					
-					// if is materialize put it to join table
-					if(isMaterialize){
-						// find join key
-						for(Cell cell:row){
-							String cellFamilyClone = new String(CellUtil.cloneFamily(cell));
-							String cellQualifierClone = new String(CellUtil.cloneQualifier(cell));
-							String cellString = cellFamilyClone + "." + cellQualifierClone;
-
-							// use join key to put a row in reverse join table, use join key 
-							// value as the row key
-							if(cellString.equals(joinFamily + "." + joinQualifier)){
-								Put put = new Put(CellUtil.cloneValue(cell));
-								
-								for(Cell cellForAdd:row){
-									put.add(CellUtil.cloneFamily(cellForAdd), CellUtil.cloneQualifier(cellForAdd), CellUtil.cloneValue(cellForAdd));
-								}
-								
-								joinTable.put(put);
-								
-								break;
-							}
+					// build the select view
+					if(request.getIsMaterialize()){
+						// selection view
+						if(request.getAggregationKey().toStringUtf8().equals("")){
+							materialize.putToSelectView(row);
 						}
-						
+					}
+					
+					// if is one of the join table put it to reverse join table
+					if(!request.getJoinKey().toStringUtf8().equals("")){
+						putToReverseJoinTable(row);
 					}
 				}
 				/*
@@ -220,9 +222,16 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					bsvRow.addKeyValue(keyValue.build());
 				}
 			}
-			response.addRow(bsvRow.build());
+			BSVRow aggregationRow = bsvRow.build();
+			response.addRow(aggregationRow);
+			
+			// handle aggregation view materialization
+			if(!aggregationManager.getAggregations().isEmpty() || request.getIsMaterialize()){
+				materialize.putToAggregationView(aggregationRow);
+			}
 			
 			// Depending on the plan, return the results or nothing
+			System.out.println("Client wants the results: " + request.getIsReturningResults());
 			if(request.getIsReturningResults()){
 				done.run(response.build());
 			}
@@ -236,6 +245,30 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+	}
+
+	private void putToReverseJoinTable(List<Cell> row)
+			throws InterruptedIOException, RetriesExhaustedWithDetailsException {
+		// find join key
+		for(Cell cell:row){
+			String cellFamilyClone = new String(CellUtil.cloneFamily(cell));
+			String cellQualifierClone = new String(CellUtil.cloneQualifier(cell));
+			String cellString = cellFamilyClone + "." + cellQualifierClone;
+
+			// use join key to put a row in reverse join table, use join key 
+			// value as the row key
+			if(cellString.equals(joinFamily + "." + joinQualifier)){
+				Put put = new Put(CellUtil.cloneValue(cell));
+				
+				for(Cell cellForAdd:row){
+					put.add(CellUtil.cloneFamily(cellForAdd), CellUtil.cloneQualifier(cellForAdd), CellUtil.cloneValue(cellForAdd));
+				}
+				
+				joinTable.put(put);
+				
+				break;
 			}
 		}
 	}
@@ -675,6 +708,122 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			return countObj;
 		}
 		
+	}
+	
+	/**
+	 * Use this manager for materializing results
+	 * @author jeff
+	 *
+	 */
+	public class MaterializeManager{
+		private String SQL = "";
+		private HTable deltaView = null;
+		private HTable selectView = null;
+		private HTable aggregationView = null;
+		
+		public MaterializeManager(ParameterMessage request) {
+			SQL = request.getSQL().toStringUtf8();
+		}
+
+		/**
+		 * Build the aggregation view
+		 * @param aggregationRow
+		 */
+		public void putToAggregationView(BSVRow aggregationRow) {
+			if(aggregationView == null){
+				Configuration conf = HBaseConfiguration.create();
+				try {
+					aggregationView = new HTable(conf, Common.senitiseSQL(SQL) + "_aggregation");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			putToAgggationTable(aggregationView, aggregationRow);
+		}
+
+		/**
+		 * Put one row to aggregation view
+		 * @param aggregationView2
+		 * @param aggregationRow
+		 */
+		private void putToAgggationTable(HTable table, BSVRow aggregationRow) {
+			// put to table
+			for(int i = 0; i < aggregationRow.getKeyValueCount(); i++){
+				// put one row 
+				KeyValue keyValue = aggregationRow.getKeyValue(i);
+				Put put = new Put(keyValue.getKey().toByteArray());
+				put.add("colfam".getBytes(),(keyValue.getRowKey().toStringUtf8() + "_old").getBytes(), null);
+				put.add("colfam".getBytes(), (keyValue.getRowKey().toStringUtf8() +  "_new").getBytes(), keyValue.getValue().toByteArray());
+				try {
+					table.put(put);
+				} catch (RetriesExhaustedWithDetailsException e) {
+					e.printStackTrace();
+				} catch (InterruptedIOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		/**
+		 * Build the select view and put a row to it
+		 * @param row
+		 */
+		public void putToSelectView(List<Cell> row) {
+			if(selectView == null){
+				Configuration conf = HBaseConfiguration.create();
+				try {
+					selectView = new HTable(conf, Common.senitiseSQL(SQL) + "_select");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			putToTable(selectView, row);
+		}
+
+		/**
+		 * Handling of a row. Build the delta view. And put a row to it
+		 * @param tableName
+		 * @param row
+		 */
+		public void putToDeltaView(List<Cell> row){
+			// Connect to the delta table that is created in the client
+			// The table name would be the SQL statement with all the space replaced by '_'
+			// To separate the delta view from the select view, a 'delta' is put the end of table name
+			if(deltaView == null){
+				Configuration conf = HBaseConfiguration.create();
+				try {
+					deltaView = new HTable(conf, Common.senitiseSQL(SQL) + "_delta");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			putToTable(deltaView, row);
+		}
+
+		/**
+		 * Put one row to table
+		 * @param table
+		 * @param row
+		 */
+		private void putToTable(HTable table, List<Cell> row) {
+			// put to table
+			for(Cell cell:row){
+				// put one row 
+				Put put = new Put(CellUtil.cloneRow(cell));
+				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_old").getBytes(), null);
+				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_new").getBytes(), CellUtil.cloneValue(cell));
+				try {
+					table.put(put);
+				} catch (RetriesExhaustedWithDetailsException e) {
+					e.printStackTrace();
+				} catch (InterruptedIOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
 	}
 
 }

@@ -274,13 +274,10 @@ public class LogicalElement implements Runnable{
 			}
 			System.out.println("Total Count: " + total);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -294,6 +291,4 @@ public class LogicalElement implements Runnable{
 			element.setFinishBlock(element.getFinishBlock() + 1);
 		}
 	}
-
-
 }

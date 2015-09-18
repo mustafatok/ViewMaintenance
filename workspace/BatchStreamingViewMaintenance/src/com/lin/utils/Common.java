@@ -22,4 +22,17 @@ public class Common {
 //		}
 //		return null;
 //	}
+	
+	public static String senitiseSQL(String input){
+		String result = null;
+		result = input.replace(' ', '_')
+				.replace('.', '_')
+				.replace('>', 'g')
+				.replace('<', 'l')
+				.replace('=', 'e')
+				.replace('(', '_')
+				.replace(')','_')
+				.replace(',', '_');
+		return result;
+	}
 }

@@ -26,15 +26,15 @@ import com.google.protobuf.ByteString;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
 import com.lin.test.HBaseHelper;
+import com.lin.utils.Common;
 
 public class JsqlParser {
-
 	/**
 	 * Use Jsql parser to parse
 	 * @param input
 	 * @return
 	 */
-	public static SimpleLogicalPlan parse(String input) {
+	public static SimpleLogicalPlan parse(String input, boolean isMaterialize) {
 		SimpleLogicalPlan logicalPlan = new SimpleLogicalPlan(); // logical plan to be return
 		CCJSqlParserManager pm = new CCJSqlParserManager(); 
 		try {
@@ -58,8 +58,63 @@ public class JsqlParser {
 							System.out.println("Handling select with single table");
 							LogicalElement element = new LogicalElement();
 							element.setSQL(input);
+							element.setMaterialize(isMaterialize);
 							handleSingleTable(plainSelect, tableName, element);
 							logicalPlan.add(element);
+							
+							if(isMaterialize){
+								// build an empty delta table with the following properties:
+								//   =================================================
+								//     table name: SQL(replace space with '_')_delta
+								//   =================================================
+								//                family:qualifier1_old
+								//                family:qualifier1_new
+								//                family:qualifier2_old
+								//                family:qualifier2_new
+								//                         .
+								//                         .
+								//                         .
+								//                family:qualifiern_old
+								//                family:qualifiern_new
+								// 
+								// The actual qualifier will be determined in every coprocessor and being put
+								// into the table in the coprocessor
+								Configuration conf = HBaseConfiguration.create();
+								HBaseHelper helper;
+								try {
+									helper = HBaseHelper.getHelper(conf);
+									helper.dropTable(Common.senitiseSQL(input) + "_delta");
+									helper.createTable(Common.senitiseSQL(input) + "_delta", "colfam");
+									
+								} catch(IOException e){
+									e.printStackTrace();
+								}
+								
+								// If aggregation key is empty, this query is not a
+								// aggregation key query, we build a selection view
+								if(element.getAggregationKey().equals("")){
+									// build an empty table for select view
+									try {
+										helper = HBaseHelper.getHelper(conf);
+										helper.dropTable(Common.senitiseSQL(input) + "_select");
+										helper.createTable(Common.senitiseSQL(input) + "_select", "colfam");
+										
+									} catch(IOException e){
+										e.printStackTrace();
+									}
+								}
+								// otherwise we build an aggregation view
+								else{
+									try {
+										helper = HBaseHelper.getHelper(conf);
+										helper.dropTable(Common.senitiseSQL(input) + "_aggregation");
+										helper.createTable(Common.senitiseSQL(input) + "_aggregation", "colfam");
+										
+									} catch(IOException e){
+										e.printStackTrace();
+									}
+								}
+							}
 						}else{
 							System.out.println("Handling select with Join");
 							
@@ -382,5 +437,5 @@ public class JsqlParser {
 		// add condition to logical element
 		element.getConditions().add(condition);
 	}
-	
+
 }
