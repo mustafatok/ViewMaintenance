@@ -25,6 +25,7 @@ message ParameterMessage{
 	optional bool isMaterialize=7;
 	optional bool isReturningResults=8;
 	optional bytes SQL=9;
+	optional bool isBuildJoinView=10;
 }
 
 message KeyValue{
