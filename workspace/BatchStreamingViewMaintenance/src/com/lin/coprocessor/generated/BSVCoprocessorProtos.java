@@ -1423,6 +1423,36 @@ public final class BSVCoprocessorProtos {
      * <code>optional bool isMaterialize = 7;</code>
      */
     boolean getIsMaterialize();
+
+    // optional bool isReturningResults = 8;
+    /**
+     * <code>optional bool isReturningResults = 8;</code>
+     */
+    boolean hasIsReturningResults();
+    /**
+     * <code>optional bool isReturningResults = 8;</code>
+     */
+    boolean getIsReturningResults();
+
+    // optional bytes SQL = 9;
+    /**
+     * <code>optional bytes SQL = 9;</code>
+     */
+    boolean hasSQL();
+    /**
+     * <code>optional bytes SQL = 9;</code>
+     */
+    com.google.protobuf.ByteString getSQL();
+
+    // optional bool isBuildJoinView = 10;
+    /**
+     * <code>optional bool isBuildJoinView = 10;</code>
+     */
+    boolean hasIsBuildJoinView();
+    /**
+     * <code>optional bool isBuildJoinView = 10;</code>
+     */
+    boolean getIsBuildJoinView();
   }
   /**
    * Protobuf type {@code ParameterMessage}
@@ -1517,6 +1547,21 @@ public final class BSVCoprocessorProtos {
             case 56: {
               bitField0_ |= 0x00000008;
               isMaterialize_ = input.readBool();
+              break;
+            }
+            case 64: {
+              bitField0_ |= 0x00000010;
+              isReturningResults_ = input.readBool();
+              break;
+            }
+            case 74: {
+              bitField0_ |= 0x00000020;
+              sQL_ = input.readBytes();
+              break;
+            }
+            case 80: {
+              bitField0_ |= 0x00000040;
+              isBuildJoinView_ = input.readBool();
               break;
             }
           }
@@ -1727,6 +1772,54 @@ public final class BSVCoprocessorProtos {
       return isMaterialize_;
     }
 
+    // optional bool isReturningResults = 8;
+    public static final int ISRETURNINGRESULTS_FIELD_NUMBER = 8;
+    private boolean isReturningResults_;
+    /**
+     * <code>optional bool isReturningResults = 8;</code>
+     */
+    public boolean hasIsReturningResults() {
+      return ((bitField0_ & 0x00000010) == 0x00000010);
+    }
+    /**
+     * <code>optional bool isReturningResults = 8;</code>
+     */
+    public boolean getIsReturningResults() {
+      return isReturningResults_;
+    }
+
+    // optional bytes SQL = 9;
+    public static final int SQL_FIELD_NUMBER = 9;
+    private com.google.protobuf.ByteString sQL_;
+    /**
+     * <code>optional bytes SQL = 9;</code>
+     */
+    public boolean hasSQL() {
+      return ((bitField0_ & 0x00000020) == 0x00000020);
+    }
+    /**
+     * <code>optional bytes SQL = 9;</code>
+     */
+    public com.google.protobuf.ByteString getSQL() {
+      return sQL_;
+    }
+
+    // optional bool isBuildJoinView = 10;
+    public static final int ISBUILDJOINVIEW_FIELD_NUMBER = 10;
+    private boolean isBuildJoinView_;
+    /**
+     * <code>optional bool isBuildJoinView = 10;</code>
+     */
+    public boolean hasIsBuildJoinView() {
+      return ((bitField0_ & 0x00000040) == 0x00000040);
+    }
+    /**
+     * <code>optional bool isBuildJoinView = 10;</code>
+     */
+    public boolean getIsBuildJoinView() {
+      return isBuildJoinView_;
+    }
+
     private void initFields() {
       column_ = java.util.Collections.emptyList();
       condition_ = java.util.Collections.emptyList();
@@ -1735,6 +1828,9 @@ public final class BSVCoprocessorProtos {
       aggregationKey_ = com.google.protobuf.ByteString.EMPTY;
       joinTable_ = com.google.protobuf.ByteString.EMPTY;
       isMaterialize_ = false;
+      isReturningResults_ = false;
+      sQL_ = com.google.protobuf.ByteString.EMPTY;
+      isBuildJoinView_ = false;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1781,6 +1877,15 @@ public final class BSVCoprocessorProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         output.writeBool(7, isMaterialize_);
       }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        output.writeBool(8, isReturningResults_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        output.writeBytes(9, sQL_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        output.writeBool(10, isBuildJoinView_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1822,6 +1927,18 @@ public final class BSVCoprocessorProtos {
       if (((bitField0_ & 0x00000008) == 0x00000008)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(7, isMaterialize_);
+      }
+      if (((bitField0_ & 0x00000010) == 0x00000010)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(8, isReturningResults_);
+      }
+      if (((bitField0_ & 0x00000020) == 0x00000020)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(9, sQL_);
+      }
+      if (((bitField0_ & 0x00000040) == 0x00000040)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBoolSize(10, isBuildJoinView_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -1872,6 +1989,21 @@ public final class BSVCoprocessorProtos {
         result = result && (getIsMaterialize()
             == other.getIsMaterialize());
       }
+      result = result && (hasIsReturningResults() == other.hasIsReturningResults());
+      if (hasIsReturningResults()) {
+        result = result && (getIsReturningResults()
+            == other.getIsReturningResults());
+      }
+      result = result && (hasSQL() == other.hasSQL());
+      if (hasSQL()) {
+        result = result && getSQL()
+            .equals(other.getSQL());
+      }
+      result = result && (hasIsBuildJoinView() == other.hasIsBuildJoinView());
+      if (hasIsBuildJoinView()) {
+        result = result && (getIsBuildJoinView()
+            == other.getIsBuildJoinView());
+      }
       result = result &&
           getUnknownFields().equals(other.getUnknownFields());
       return result;
@@ -1912,6 +2044,18 @@ public final class BSVCoprocessorProtos {
       if (hasIsMaterialize()) {
         hash = (37 * hash) + ISMATERIALIZE_FIELD_NUMBER;
         hash = (53 * hash) + hashBoolean(getIsMaterialize());
+      }
+      if (hasIsReturningResults()) {
+        hash = (37 * hash) + ISRETURNINGRESULTS_FIELD_NUMBER;
+        hash = (53 * hash) + hashBoolean(getIsReturningResults());
+      }
+      if (hasSQL()) {
+        hash = (37 * hash) + SQL_FIELD_NUMBER;
+        hash = (53 * hash) + getSQL().hashCode();
+      }
+      if (hasIsBuildJoinView()) {
+        hash = (37 * hash) + ISBUILDJOINVIEW_FIELD_NUMBER;
+        hash = (53 * hash) + hashBoolean(getIsBuildJoinView());
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -2046,6 +2190,12 @@ public final class BSVCoprocessorProtos {
         bitField0_ = (bitField0_ & ~0x00000020);
         isMaterialize_ = false;
         bitField0_ = (bitField0_ & ~0x00000040);
+        isReturningResults_ = false;
+        bitField0_ = (bitField0_ & ~0x00000080);
+        sQL_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000100);
+        isBuildJoinView_ = false;
+        bitField0_ = (bitField0_ & ~0x00000200);
         return this;
       }
 
@@ -2113,6 +2263,18 @@ public final class BSVCoprocessorProtos {
           to_bitField0_ |= 0x00000008;
         }
         result.isMaterialize_ = isMaterialize_;
+        if (((from_bitField0_ & 0x00000080) == 0x00000080)) {
+          to_bitField0_ |= 0x00000010;
+        }
+        result.isReturningResults_ = isReturningResults_;
+        if (((from_bitField0_ & 0x00000100) == 0x00000100)) {
+          to_bitField0_ |= 0x00000020;
+        }
+        result.sQL_ = sQL_;
+        if (((from_bitField0_ & 0x00000200) == 0x00000200)) {
+          to_bitField0_ |= 0x00000040;
+        }
+        result.isBuildJoinView_ = isBuildJoinView_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2202,6 +2364,15 @@ public final class BSVCoprocessorProtos {
         }
         if (other.hasIsMaterialize()) {
           setIsMaterialize(other.getIsMaterialize());
+        }
+        if (other.hasIsReturningResults()) {
+          setIsReturningResults(other.getIsReturningResults());
+        }
+        if (other.hasSQL()) {
+          setSQL(other.getSQL());
+        }
+        if (other.hasIsBuildJoinView()) {
+          setIsBuildJoinView(other.getIsBuildJoinView());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -2931,6 +3102,108 @@ public final class BSVCoprocessorProtos {
       public Builder clearIsMaterialize() {
         bitField0_ = (bitField0_ & ~0x00000040);
         isMaterialize_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional bool isReturningResults = 8;
+      private boolean isReturningResults_ ;
+      /**
+       * <code>optional bool isReturningResults = 8;</code>
+       */
+      public boolean hasIsReturningResults() {
+        return ((bitField0_ & 0x00000080) == 0x00000080);
+      }
+      /**
+       * <code>optional bool isReturningResults = 8;</code>
+       */
+      public boolean getIsReturningResults() {
+        return isReturningResults_;
+      }
+      /**
+       * <code>optional bool isReturningResults = 8;</code>
+       */
+      public Builder setIsReturningResults(boolean value) {
+        bitField0_ |= 0x00000080;
+        isReturningResults_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool isReturningResults = 8;</code>
+       */
+      public Builder clearIsReturningResults() {
+        bitField0_ = (bitField0_ & ~0x00000080);
+        isReturningResults_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional bytes SQL = 9;
+      private com.google.protobuf.ByteString sQL_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes SQL = 9;</code>
+       */
+      public boolean hasSQL() {
+        return ((bitField0_ & 0x00000100) == 0x00000100);
+      }
+      /**
+       * <code>optional bytes SQL = 9;</code>
+       */
+      public com.google.protobuf.ByteString getSQL() {
+        return sQL_;
+      }
+      /**
+       * <code>optional bytes SQL = 9;</code>
+       */
+      public Builder setSQL(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000100;
+        sQL_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes SQL = 9;</code>
+       */
+      public Builder clearSQL() {
+        bitField0_ = (bitField0_ & ~0x00000100);
+        sQL_ = getDefaultInstance().getSQL();
+        onChanged();
+        return this;
+      }
+
+      // optional bool isBuildJoinView = 10;
+      private boolean isBuildJoinView_ ;
+      /**
+       * <code>optional bool isBuildJoinView = 10;</code>
+       */
+      public boolean hasIsBuildJoinView() {
+        return ((bitField0_ & 0x00000200) == 0x00000200);
+      }
+      /**
+       * <code>optional bool isBuildJoinView = 10;</code>
+       */
+      public boolean getIsBuildJoinView() {
+        return isBuildJoinView_;
+      }
+      /**
+       * <code>optional bool isBuildJoinView = 10;</code>
+       */
+      public Builder setIsBuildJoinView(boolean value) {
+        bitField0_ |= 0x00000200;
+        isBuildJoinView_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bool isBuildJoinView = 10;</code>
+       */
+      public Builder clearIsBuildJoinView() {
+        bitField0_ = (bitField0_ & ~0x00000200);
+        isBuildJoinView_ = false;
         onChanged();
         return this;
       }
@@ -5402,18 +5675,20 @@ public final class BSVCoprocessorProtos {
       "\n\024BSVCoprocessor.proto\"+\n\tBSVColumn\022\016\n\006f" +
       "amily\030\001 \002(\014\022\016\n\006column\030\002 \002(\014\"H\n\tCondition" +
       "\022\032\n\006column\030\001 \002(\0132\n.BSVColumn\022\020\n\010operator" +
-      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\265\001\n\020ParameterMessa" +
+      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\367\001\n\020ParameterMessa" +
       "ge\022\032\n\006column\030\001 \003(\0132\n.BSVColumn\022\035\n\tcondit" +
       "ion\030\002 \003(\0132\n.Condition\022\023\n\013aggregation\030\003 \003" +
       "(\014\022\017\n\007joinKey\030\004 \001(\014\022\026\n\016aggregationKey\030\005 " +
       "\001(\014\022\021\n\tjoinTable\030\006 \001(\014\022\025\n\risMaterialize\030" +
-      "\007 \001(\010\"6\n\010KeyValue\022\016\n\006rowKey\030\001 \002(\014\022\013\n\003key" +
-      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010keyVa",
-      "lue\030\002 \003(\0132\t.KeyValue\"6\n\rResultMessage\022\024\n" +
-      "\003row\030\001 \003(\0132\007.BSVRow\022\017\n\004size\030\002 \001(\003:\001025\n\007" +
-      "Execute\022*\n\005batch\022\021.ParameterMessage\032\016.Re" +
-      "sultMessageB=\n\035com.lin.coprocessor.gener" +
-      "atedB\024BSVCoprocessorProtosH\001\210\001\001\240\001\001"
+      "\007 \001(\010\022\032\n\022isReturningResults\030\010 \001(\010\022\013\n\003SQL" +
+      "\030\t \001(\014\022\027\n\017isBuildJoinView\030\n \001(\010\"6\n\010KeyVa",
+      "lue\022\016\n\006rowKey\030\001 \002(\014\022\013\n\003key\030\002 \002(\014\022\r\n\005valu" +
+      "e\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010keyValue\030\002 \003(\0132\t.Ke" +
+      "yValue\"6\n\rResultMessage\022\024\n\003row\030\001 \003(\0132\007.B" +
+      "SVRow\022\017\n\004size\030\002 \001(\003:\001025\n\007Execute\022*\n\005bat" +
+      "ch\022\021.ParameterMessage\032\016.ResultMessageB=\n" +
+      "\035com.lin.coprocessor.generatedB\024BSVCopro" +
+      "cessorProtosH\001\210\001\001\240\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5437,7 +5712,7 @@ public final class BSVCoprocessorProtos {
           internal_static_ParameterMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ParameterMessage_descriptor,
-              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", "IsMaterialize", });
+              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", "IsMaterialize", "IsReturningResults", "SQL", "IsBuildJoinView", });
           internal_static_KeyValue_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_KeyValue_fieldAccessorTable = new

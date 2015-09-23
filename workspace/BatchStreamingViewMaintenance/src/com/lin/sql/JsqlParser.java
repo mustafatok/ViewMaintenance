@@ -26,15 +26,15 @@ import com.google.protobuf.ByteString;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
 import com.lin.test.HBaseHelper;
+import com.lin.utils.Common;
 
 public class JsqlParser {
-
 	/**
 	 * Use Jsql parser to parse
 	 * @param input
 	 * @return
 	 */
-	public static SimpleLogicalPlan parse(String input) {
+	public static SimpleLogicalPlan parse(String input, boolean isMaterialize, boolean isReturningResults) {
 		SimpleLogicalPlan logicalPlan = new SimpleLogicalPlan(); // logical plan to be return
 		CCJSqlParserManager pm = new CCJSqlParserManager(); 
 		try {
@@ -57,22 +57,49 @@ public class JsqlParser {
 						if(plainSelect.getJoins() == null){
 							System.out.println("Handling select with single table");
 							LogicalElement element = new LogicalElement();
+							element.setSQL(input);
+							element.setMaterialize(isMaterialize);
+							element.setReturningResults(isReturningResults);
 							handleSingleTable(plainSelect, tableName, element);
 							logicalPlan.add(element);
+							
+							if(isMaterialize){
+								handleMaterialize(input, element);
+							}
 						}else{
 							System.out.println("Handling select with Join");
 							
 							// build plan for the first table of from
 							LogicalElement element = new LogicalElement();
 							handleJoinTable(plainSelect, tableName, element);
-							element.setNonBlock(true);
+							element.setReturningResults(isReturningResults);
+							String SQL = element.constructSQLByField();
+							element.setSQL(SQL);
+							element.setNonBlock(false);
+							
+							if(isMaterialize){
+								System.out.println(
+										"+++++ Construct separate query for first join table +++++\n"
+										+ SQL);
+								handleMaterialize(SQL, element);
+							}
 							
 							// build plan for join table
 							// Assert only one join
 							Join join = (Join)plainSelect.getJoins().get(0);
 							LogicalElement elementJoin = new LogicalElement();
+							elementJoin.setReturningResults(isReturningResults);
 							handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
+							String joinElementSQL = elementJoin.constructSQLByField();
+							elementJoin.setSQL(joinElementSQL);
 							elementJoin.setNonBlock(true);
+							
+							if(isMaterialize){
+								System.out.println(
+										"+++++ Construct separate query for second join table +++++\n"
+										+joinElementSQL);
+								handleMaterialize(joinElementSQL, element);
+							}
 							
 							// For each of the plan, the join key field should be filled
 							// Assert the join key of the left table is on the left and 
@@ -98,7 +125,11 @@ public class JsqlParser {
 							try {
 								helper = HBaseHelper.getHelper(conf);
 								helper.dropTable(joinTableName);
-								helper.createTable(joinTableName, "colfam");
+								// This is the reverse join table + join table
+								// it has three families:
+								// the first two family is represented as the SQL of each join table
+								// the third family is "joinFamily"
+								helper.createTable(joinTableName, Common.senitiseSQL(SQL), Common.senitiseSQL(joinElementSQL), "joinFamily");
 							} catch(IOException e){
 								e.printStackTrace();
 							}
@@ -114,7 +145,10 @@ public class JsqlParser {
 							LogicalElement elementResult = new LogicalElement();
 							elementResult.setWaitForBlock(2);
 							elementResult.setJoin(join);
+							elementResult.setJoinTable(joinTableName);
 							elementResult.setTableName(joinTableName);
+							elementResult.setReturningResults(isReturningResults);
+							elementResult.setBuildJoinView(true);
 							logicalPlan.add(elementResult);
 						}
 					} // if(tableName != null)
@@ -124,6 +158,60 @@ public class JsqlParser {
 			e.printStackTrace();
 		}
 		return logicalPlan;
+	}
+
+	private static void handleMaterialize(String input, LogicalElement element) {
+		// build an empty delta table with the following properties:
+		//   =================================================
+		//     table name: SQL(replace space with '_')_delta
+		//   =================================================
+		//                family:qualifier1_old
+		//                family:qualifier1_new
+		//                family:qualifier2_old
+		//                family:qualifier2_new
+		//                         .
+		//                         .
+		//                         .
+		//                family:qualifiern_old
+		//                family:qualifiern_new
+		// 
+		// The actual qualifier will be determined in every coprocessor and being put
+		// into the table in the coprocessor
+		Configuration conf = HBaseConfiguration.create();
+		HBaseHelper helper;
+		try {
+			helper = HBaseHelper.getHelper(conf);
+			helper.dropTable(Common.senitiseSQL(input) + "_delta");
+			helper.createTable(Common.senitiseSQL(input) + "_delta", "colfam");
+			
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+		
+		// If aggregation key is empty, this query is not a
+		// aggregation key query, we build a selection view
+		if(element.getAggregationKey().equals("")){
+			// build an empty table for select view
+			try {
+				helper = HBaseHelper.getHelper(conf);
+				helper.dropTable(Common.senitiseSQL(input) + "_select");
+				helper.createTable(Common.senitiseSQL(input) + "_select", "colfam");
+				
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+		}
+		// otherwise we build an aggregation view
+		else{
+			try {
+				helper = HBaseHelper.getHelper(conf);
+				helper.dropTable(Common.senitiseSQL(input) + "_aggregation");
+				helper.createTable(Common.senitiseSQL(input) + "_aggregation", "colfam");
+				
+			} catch(IOException e){
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public static void handleJoinTable(PlainSelect plainSelect,
@@ -381,5 +469,5 @@ public class JsqlParser {
 		// add condition to logical element
 		element.getConditions().add(condition);
 	}
-	
+
 }

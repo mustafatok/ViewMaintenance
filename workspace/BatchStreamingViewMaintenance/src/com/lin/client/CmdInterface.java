@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -14,6 +15,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.HTableDescriptor;
+import org.apache.hadoop.hbase.client.HBaseAdmin;
+import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.util.Bytes;
 
 import com.lin.sql.JsqlParser;
 import com.lin.sql.LogicalElement;
@@ -41,7 +47,7 @@ public class CmdInterface {
 					test(argIn);
 				}
 				else{
-					handleSQL(input);
+					handleSQL(input, true);
 				}
 			}catch (IOException e) {
 				e.printStackTrace();
@@ -54,58 +60,83 @@ public class CmdInterface {
 
 	private static void test(String[] args) {
 		// create Options object
-				Options options = new Options();
+		Options options = new Options();
+		
+		// test systematically
+		options.addOption(OptionBuilder.withLongOpt("sys")
+				.withDescription("test systematically").create());
+		
+		// test a single case
+		options.addOption(OptionBuilder.withLongOpt("case").hasArg()
+				.withArgName("CASE")
+				.withDescription("test systematically").create());
+		
+		// if returning the results or not
+		options.addOption(OptionBuilder.withLongOpt("returningResults")
+				.withDescription("return the results").create());
+		
+		String[] testCase={
+				/*
+				 * Selection test cases
+				 */
+				// 0 test simple selection
+				"select colfam1.qual1 from testtable1", 
+				// 1 test simple selection with condition
+				"select colfam1.qual1 from testtable2 where colfam1.qual1>20",
 				
-				options.addOption(OptionBuilder.withLongOpt("sys")
-						.withDescription("test systematically").create());
+				/*
+				 * Aggregation test cases
+				 */
+				// 2 test aggregation without aggregation key
+				"select max(colfam1.qual1), min(colfam1.qual1), sum(colfam1.qual1), avg(colfam1.qual1), count(colfam1.qual1) from testtable2",
+				// 3 test aggregation with aggregation key
+				"select max(colfam.value), min(colfam.value), sum(colfam.value), avg(colfam.value), count(colfam.value) from testtable5 group by colfam.aggKey",
 				
-				String[] testCase={
-						// test simple selection
-						"select colfam1.qual1 from testtable1", 
-						// test aggregation without aggregation key
-						"select max(colfam1.qual1), min(colfam1.qual1), sum(colfam1.qual1), avg(colfam1.qual1), count(colfam1.qual1) from testtable2",
-						// test  simple join
-						"select testtable3.colfam.qualifier_testtable3, testtable4.colfam.qualifier_testtable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey",
-						// test aggregation with aggregation key(group by)
-						"select max(colfam.value), min(colfam.value), sum(colfam.value), avg(colfam.value), count(colfam.value) from testtable5 group by colfam.aggKey",
-				};
+				/*
+				 * Join test cases
+				 */
+				// 4 test  simple join
+				"select testtable3.colfam.qualifierTesttable3, testtable4.colfam.qualifierTesttable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey",
+				// 5 Join with conditions
+				"select testtable3.colfam.qualifierTesttable3, testtable4.colfam.qualifierTesttable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey where testtable3.colfam.qualifierTesttable3>10",
+				// 6 full join with two row on one join key
+				"select testtable6.colfam.C2, testtable7.colfam.D2 from testtable6 join testtable7 on colfam.C1=colfam.D1",
+		};
 
-				CommandLineParser parser = new BasicParser();
-				try {
-					CommandLine cmd = parser.parse(options, args);
-					
-					if(cmd.hasOption("sys")){
-						for(int i = 0; i < testCase.length; i++){
-							System.out.println(testCase[i]);
-							handleSQL(testCase[i]);
-						}
+		CommandLineParser parser = new BasicParser();
+		try {
+			CommandLine cmd = parser.parse(options, args);
+			
+			if(cmd.hasOption("sys")){
+				for(int i = 0; i < testCase.length; i++){
+					System.out.println(testCase[i]);
+					if(cmd.hasOption("returningResults")){
+						handleSQL(testCase[i], true);
+					}else{
+						handleSQL(testCase[i], false);
 					}
-				} catch (ParseException e) {
-					e.printStackTrace();
 				}
+			}else if(cmd.hasOption("case")){
+				String caseName = cmd.getOptionValue("case");
+				System.out.println("Testing case " + caseName);
+				if(cmd.hasOption("returningResults")){
+					handleSQL(testCase[Integer.parseInt(caseName)], true);
+				}else{
+					handleSQL(testCase[Integer.parseInt(caseName)], true);
+				}
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
 	 * Handle sql
 	 * @param input
 	 */
-	public static void handleSQL(String input) {
-		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input);
-		
+	public static void handleSQL(String input, boolean isReturningResults) {
+		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input, true, isReturningResults);
 		System.out.println(simpleLogicalPlan);
-		
-		// these code are for linear execution of plan
-		// they are abandon because now we have block and non-block executions
-		// now only need to execute the first element
-		// then the next element will be run 
-		// if they are non-blocking elements
-		// different threads will be raise to run for each non-blocking element
-		// if it is blocking element
-		// it will wait until the non-blocking threads are all finish
-//		LogicalElement logicalElement = simpleLogicalPlan.getHead();
-//		do{
-//			logicalElement.execute();
-//		}while((logicalElement = logicalElement.getNext()) != null);
 		simpleLogicalPlan.getHead().execute();
 		
 	}
@@ -186,7 +217,7 @@ public class CmdInterface {
 						for(int i = 1; i <= 100; i++){
 							System.out.println("put row " + i);
 							helper.put(tableName, "row"+i, "colfam", "joinkey", 1, "x" + i);
-							helper.put(tableName, "row"+i, "colfam", "qualifier_testtable3", 1, "" + i);
+							helper.put(tableName, "row"+i, "colfam", "qualifierTesttable3", 1, "" + i);
 						}
 					} catch(IOException e){
 						e.printStackTrace();
@@ -207,7 +238,7 @@ public class CmdInterface {
 						for(int i = 100; i >= 0; i--){
 							System.out.println("put row " + (101 - i));
 							helper.put(tableName, "row"+(101 - i), "colfam", "joinkey", 1, "x" + i);
-							helper.put(tableName, "row"+(101 - i), "colfam", "qualifier_testtable4", 1, "" + (101 - i));
+							helper.put(tableName, "row"+(101 - i), "colfam", "qualifierTesttable4", 1, "" + (101 - i));
 						}
 					} catch(IOException e){
 						e.printStackTrace();
@@ -230,6 +261,141 @@ public class CmdInterface {
 							helper.put(tableName, "row"+(101 - i), "colfam", "aggKey", 1, "x" + i % 20);
 							helper.put(tableName, "row"+(101 - i), "colfam", "value", 1, "" + (101 - i));
 						}
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+				
+				// testtable6
+				if(tableName.equals("testtable6")){
+					Configuration conf = HBaseConfiguration.create();
+					HBaseHelper helper;
+					try {
+						helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						helper.createTable(tableName, "colfam");
+						
+						String[] rows = {};
+						List<String> stringArray = new ArrayList<String>();
+						for(int i = 1; i >= 0; i--){
+							System.out.println("put row " + (1 - i));
+							helper.put(tableName, "K"+(1 - i), "colfam", "C1", 1, "x1");
+							helper.put(tableName, "K"+(1 - i), "colfam", "C2", 1, "" + (1 - i));
+						}
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+				
+				// testtable7
+				if(tableName.equals("testtable7")){
+					Configuration conf = HBaseConfiguration.create();
+					HBaseHelper helper;
+					try {
+						helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						helper.createTable(tableName, "colfam");
+						
+						String[] rows = {};
+						List<String> stringArray = new ArrayList<String>();
+						for(int i = 1; i >= 0; i--){
+							System.out.println("put row " + (1 - i));
+							helper.put(tableName, "L"+(1 - i), "colfam", "D1", 1, "x1");
+							helper.put(tableName, "L"+(1 - i), "colfam", "D2", 1, "" + (1 - i));
+						}
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+				
+				// evaluateTable1
+//				if(tableName.equals("evaluateTable1")){
+//					Configuration conf = HBaseConfiguration.create();
+//					HBaseHelper helper;
+//					try {
+//						helper = HBaseHelper.getHelper(conf);
+//						helper.dropTable(tableName);
+//						helper.createTable(tableName, "colfam");
+//						
+//						HTable table = new HTable(conf, tableName);
+//						
+//						for(int i = 0; i < 1000000; i++){
+//							System.out.println("put row " + i);
+//							Put put = new Put(("row" + i).getBytes());
+//							put.add("colfam".getBytes(), 
+//									"qualifier".getBytes(),
+//									("v" + i).getBytes());
+//							table.put(put);
+//						}
+//						table.close();
+//					} catch(IOException e){
+//						e.printStackTrace();
+//					}
+//				}
+				
+				// evaluateTable2
+				if(tableName.equals("evaluateTable2")){
+					Configuration conf = HBaseConfiguration.create();
+					HBaseHelper helper;
+					try {
+						helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						helper.createTable(tableName, "colfam");
+						
+						HTable table = new HTable(conf, tableName);
+						
+						Random random = new Random();
+						for(int i = 0; i < 10000; i++){
+							System.out.println("put row " + i);
+							Put put = new Put(("row" + i).getBytes());
+							put.add("colfam".getBytes(), 
+									"C1".getBytes(),
+									("" + i).getBytes());
+							System.out.println("put row " + i);
+							table.put(put);
+						}
+						table.close();
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+				
+				// evaluateTable3
+				// 26 regions
+				if(tableName.equals("evaluateTable3")){
+					Configuration conf = HBaseConfiguration.create();
+					try {
+						HBaseHelper helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						byte[][] regioins = new byte[][]{
+							Bytes.toBytes("A"),Bytes.toBytes("B"),Bytes.toBytes("C"),
+							Bytes.toBytes("D"),Bytes.toBytes("E"),Bytes.toBytes("F"),
+							Bytes.toBytes("G"),Bytes.toBytes("H"),Bytes.toBytes("I"),
+							Bytes.toBytes("J"),Bytes.toBytes("K"),Bytes.toBytes("L"),
+							Bytes.toBytes("M"),Bytes.toBytes("N"),Bytes.toBytes("O"),
+							Bytes.toBytes("P"),Bytes.toBytes("Q"),Bytes.toBytes("R"),
+							Bytes.toBytes("S"),Bytes.toBytes("T"),Bytes.toBytes("U"),
+							Bytes.toBytes("V"),Bytes.toBytes("W"),Bytes.toBytes("X"),
+							Bytes.toBytes("Y"),Bytes.toBytes("Z")
+						};
+						helper.createTable(tableName, regioins, "colfam");
+						
+						HTable table = new HTable(conf, tableName);
+						
+						Random random = new Random();
+						for(int i = 0; i < 10000; i++){
+							System.out.println("put row " + i);
+							Put put = new Put((String.valueOf((char)((i % 26) + 65)) + i).getBytes());
+							put.add("colfam".getBytes(), 
+									"C1".getBytes(),
+									("x" + (i % 20)).getBytes());
+							put.add("colfam".getBytes(), 
+									"C2".getBytes(),
+									("" + i).getBytes());
+							System.out.println("put row " + i);
+							table.put(put);
+						}
+						table.close();
 					} catch(IOException e){
 						e.printStackTrace();
 					}
