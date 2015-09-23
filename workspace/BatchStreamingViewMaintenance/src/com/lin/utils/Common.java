@@ -22,4 +22,18 @@ public class Common {
 //		}
 //		return null;
 //	}
+	
+	public static String senitiseSQL(String input){
+		String result = null;
+		char divider = '-';
+		result = input.replace(' ', divider)
+				.replace('.', divider)
+				.replace('>', 'g')
+				.replace('<', 'l')
+				.replace('=', 'e')
+				.replace('(', divider)
+				.replace(')',divider)
+				.replace(',', divider);
+		return result;
+	}
 }

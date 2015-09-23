@@ -1,11 +1,14 @@
 package com.lin.coprocessor;
 
 import java.io.IOException;
+import java.io.InterruptedIOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -17,8 +20,10 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
+import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
 import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
@@ -36,16 +41,18 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.Execute;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
+import com.lin.test.HBaseHelper;
 import com.lin.utils.Common;
 
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		CoprocessorService{
 	private RegionCoprocessorEnvironment env;
 	private AggregationManager aggregationManager = null;
-	private boolean isMaterialize = false;
+	private MaterializeManager materialize = null;
 	private String joinFamily = null;
 	private String joinQualifier = null;
 	private HTable joinTable = null;
+	private ParameterMessage request = null;
 
 	@Override
 	public Service getService() {
@@ -68,6 +75,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		System.out.println("============================================================");
 		System.out.println((new Date())+"Begin to execute");
 		
+		// store in local variable for later use
+		this.request = request;
+		
+		// initialize materialize manager
+		materialize = new MaterializeManager(request);
 		
 		// initialize aggregation manager
 		aggregationManager = new AggregationManager(request);
@@ -80,14 +92,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		// If join, set is-materialize to be true.
 		// Fill joinKey and joinTable for later use
 		if(!request.getJoinKey().toStringUtf8().equals("")){
-			isMaterialize = true;
-			
 			// Connect to the join table using the join table name from request
 			Configuration configuration = HBaseConfiguration.create();;
 			try {
 				joinTable = new HTable(configuration, request.getJoinTable().toByteArray());
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
@@ -142,6 +151,16 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				finish = scanner.next(curVals);
 				List<Cell> row = new ArrayList<Cell>(curVals);
 				
+				// show scan result
+				System.out.println("Scan result:");
+				for(Cell cell:row){
+					System.out.println("*******************************************************");
+					System.out.println("\tRow: " + new String(CellUtil.cloneRow(cell)));
+					System.out.println("\tColumn Family: " + new String(CellUtil.cloneFamily(cell)));
+					System.out.println("\tQualifier: " + new String(CellUtil.cloneQualifier(cell)));
+					System.out.println("\tValue: " + new String(CellUtil.cloneValue(cell)));
+				}
+				
 				// find the aggregation key first
 				String aggKey = "";
 				for(Cell cell:row){
@@ -154,11 +173,134 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					}
 				}
 				
+				// build join table
+				if(request.getIsBuildJoinView()){
+					System.out.println("Join row: " + new String(CellUtil.cloneRow(curVals.get(0))));
+					// Construct join table view 
+					// 1. construct temporary map
+					//              #######################################    
+					// fam1  row1  | K1_C1_o | K1_C1_n | K1_C2_o | K1_C2_n | ...
+					//              #######################################
+					//       row2  | K2_C1_o | K2_C1_n | K2_C2_o | K2_C2_n | ...
+					//              #######################################
+					//         .
+					//         .
+					//         .
+					//
+					//	            #######################################    
+					// fam2  row1  | L1_D1_o | L1_D1_n | L1_D2_o | L1_D2_n | ...
+					//              #######################################
+					//       row2  | L2_D1_o | L2_D1_n | L2_D2_o | L2_D2_n | ...
+					//              #######################################  
+					//         .
+					//         .
+					//         .
+					Map<String, Map<String, Map<String, String>>> tmp = new HashMap<String, Map<String, Map<String, String>>>();
+					List<String> familyList = new ArrayList<String>();
+					String joinKey = null;
+					for(Cell cell:curVals){
+						// save join key for later use
+						if(joinKey == null){
+							joinKey = new String(CellUtil.cloneRow(cell));
+						}
+						System.out.println("Constructing cell " 
+								+ new String(CellUtil.cloneFamily(cell))
+								+ ":" 
+								+ new String(CellUtil.cloneQualifier(cell)) 
+								+ "=" 
+								+ new String(CellUtil.cloneValue(cell)));
+						
+						String family =  new String(CellUtil.cloneFamily(cell));
+						String qualifier = new String(CellUtil.cloneQualifier(cell));
+						String value = new String(CellUtil.cloneValue(cell));
+						
+						String rowKey = qualifier.split("_")[0];
+						
+						if(!tmp.containsKey(family)){
+							Map<String, Map<String, String>> tmpMap = new HashMap<String, Map<String, String>>();
+							tmp.put(family, tmpMap);
+							familyList.add(family);
+						}
+						
+						if(!tmp.get(family).containsKey(rowKey)){
+							tmp.get(family).put(rowKey, new HashMap<String, String>());
+						}
+						
+						tmp.get(family).get(rowKey).put(qualifier, value);
+					}
+					System.out.println(tmp);
+					
+					// 2. construct join row with temporary list
+					//             ###############################################################################################
+					// X1   K1L1  | K1L1_C1_o | K1L1_C1_n | K1L1_C2_o | K1L1_C2_n | K1L1_D1_o | K1L1_D1_n | K1L1_D2_o | K1L1_D2_n |
+					//             ###############################################################################################
+					//      K1L2  | K1L2_C1_o | K1L2_C1_n | K1L2_C2_o | K1L2_C2_n | K1L2_D1_o | K1L2_D1_n | K1L2_D2_o | K1L2_D2_n |
+					//             ###############################################################################################
+					//      K2L1  | K2L1_C1_o | K2L1_C1_n | K2L1_C2_o | K2L1_C2_n | K2L1_D1_o | K2L1_D1_n | K2L1_D2_o | K2L1_D2_n |
+					//             ###############################################################################################
+					//      K2L2  | K2L2_C1_o | K2L2_C1_n | K2L2_C2_o | K2L2_C2_n | K2L2_D1_o | K2L2_D1_n | K2L2_D2_o | K2L2_D2_n |
+					//             ###############################################################################################
+					//        .
+					//        .
+					//        .
+					Map<String, String> fullJoinRow = new HashMap<String, String>();
+					// now we consider only inner join
+					// if familyList has less than 2 element 
+					// we do nothing
+					if(familyList.size() >= 2){
+						Map<String, Map<String, String>> leftJoin = tmp.get(familyList.get(0));	
+						Map<String, Map<String, String>> rightJoin = tmp.get(familyList.get(1));
+						for(Entry<String, Map<String, String>> leftJoinRow:leftJoin.entrySet()){
+							for(Entry<String, Map<String, String>> rightJoinRow:rightJoin.entrySet()){
+								System.out.println("Joining " + leftJoinRow.getKey() + " and " + rightJoinRow.getKey());
+								// add all in left join
+								for(Entry<String, String> leftJoinCell:leftJoinRow.getValue().entrySet()){
+									Map<String, String> cellMap = new HashMap<String, String>();
+									fullJoinRow.put(
+											leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + leftJoinCell.getKey().split("_")[1] + "_" + leftJoinCell.getKey().split("_")[2], 
+											leftJoinCell.getValue());
+								}
+								// add all in right join
+								for(Entry<String, String> rightJoinCell:rightJoinRow.getValue().entrySet()){
+									Map<String, String> cellMap = new HashMap<String, String>();
+									fullJoinRow.put(
+											leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + rightJoinCell.getKey().split("_")[1] + "_" + rightJoinCell.getKey().split("_")[2], 
+											rightJoinCell.getValue());
+								}
+							}
+						}
+						System.out.println("Full join row : \n" + fullJoinRow);
+						
+						// Connect to join table view in order to put
+						String joinTableName = request.getJoinTable().toStringUtf8();
+						System.out.println("Going to connect to table " + joinTableName);
+						Configuration conf = HBaseConfiguration.create();
+						HTable joinTable = null;
+						try {
+							joinTable = new HTable(conf, joinTableName);
+							Put put = new Put(joinKey.getBytes());
+							for(Entry<String, String> tmpMap:fullJoinRow.entrySet()){
+								put.add("joinFamily".getBytes(),
+										tmpMap.getKey().getBytes(),
+										tmpMap.getValue().getBytes());
+							}
+							joinTable.put(put);
+						} catch (IOException e) {
+							e.printStackTrace();
+						} 
+					}
+				}
+				
 				/*
 				 * start of handling result
 				 */
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
 				System.out.println((new Date())+"Building row no." + count);
+				
+				// If is-materialize flag is true build the delta view for every row
+				if(request.getIsMaterialize()){
+					materialize.putToDeltaView(row);
+				}
 				
 				boolean meetCondition = handleRow(request, row, bsvRow, aggKey);
 				
@@ -167,29 +309,17 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					response.addRow(bsvRow);
 					count++;
 					
-					// if is materialize put it to join table
-					if(isMaterialize){
-						// find join key
-						for(Cell cell:row){
-							String cellFamilyClone = new String(CellUtil.cloneFamily(cell));
-							String cellQualifierClone = new String(CellUtil.cloneQualifier(cell));
-							String cellString = cellFamilyClone + "." + cellQualifierClone;
-
-							// use join key to put a row in reverse join table, use join key 
-							// value as the row key
-							if(cellString.equals(joinFamily + "." + joinQualifier)){
-								Put put = new Put(CellUtil.cloneValue(cell));
-								
-								for(Cell cellForAdd:row){
-									put.add(CellUtil.cloneFamily(cellForAdd), CellUtil.cloneQualifier(cellForAdd), CellUtil.cloneValue(cellForAdd));
-								}
-								
-								joinTable.put(put);
-								
-								break;
-							}
+					// build the select view
+					if(request.getIsMaterialize()){
+						// selection view
+						if(request.getAggregationKey().toStringUtf8().equals("")){
+							materialize.putToSelectView(row);
 						}
-						
+					}
+					
+					// if is one of the join table put it to reverse join table
+					if(!request.getJoinKey().toStringUtf8().equals("")){
+						putToReverseJoinTable(row);
 					}
 				}
 				/*
@@ -221,9 +351,21 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					bsvRow.addKeyValue(keyValue.build());
 				}
 			}
-			response.addRow(bsvRow.build());
-
-			done.run(response.build());
+			BSVRow aggregationRow = bsvRow.build();
+			response.addRow(aggregationRow);
+			
+			// handle aggregation view materialization
+			if(!aggregationManager.getAggregations().isEmpty() || request.getIsMaterialize()){
+				materialize.putToAggregationView(aggregationRow);
+			}
+			
+			// closing connections
+			materialize.close();
+			// Depending on the plan, return the results or nothing
+			System.out.println("Client wants the results: " + request.getIsReturningResults());
+			if(request.getIsReturningResults()){
+				done.run(response.build());
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -234,6 +376,32 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
+			}
+		}
+	}
+
+	private void putToReverseJoinTable(List<Cell> row)
+			throws InterruptedIOException, RetriesExhaustedWithDetailsException {
+		// find join key
+		for(Cell cell:row){
+			String cellFamilyClone = new String(CellUtil.cloneFamily(cell));
+			String cellQualifierClone = new String(CellUtil.cloneQualifier(cell));
+			String cellString = cellFamilyClone + "." + cellQualifierClone;
+
+			// use join key to put a row in reverse join table, use join key 
+			// value as the row key
+			if(cellString.equals(joinFamily + "." + joinQualifier)){
+				Put put = new Put(CellUtil.cloneValue(cell));
+				
+				for(Cell cellForAdd:row){
+					System.out.println("Puting cell " + new String(CellUtil.cloneQualifier(cellForAdd)) + " = " + new String(CellUtil.cloneValue(cellForAdd)));
+					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd))) + "_old").getBytes(), null);
+					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd))) + "_new").getBytes(), CellUtil.cloneValue(cellForAdd));
+				}
+				
+				joinTable.put(put);
+				
+				break;
 			}
 		}
 	}
@@ -307,6 +475,15 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		// test value for every condition
 		boolean checkCell = true;
 		for(Condition condition:request.getConditionList()){
+			// first check if this cell is the left operator
+			// if not skip this
+			String leftColumn = condition.getColumn().getFamily().toStringUtf8() + "." + condition.getColumn().getColumn().toStringUtf8();
+			String cellColumn = (new String(CellUtil.cloneFamily(cell))) + "." + (new String(CellUtil.cloneQualifier(cell)));
+			System.out.println("comparing " + leftColumn + " with " + cellColumn);
+			if(!leftColumn.equals(cellColumn)){
+				break;
+			}
+			
 			// get left expression and right expression
 			String value = new String(CellUtil.cloneValue(cell));
 			String compare = "";
@@ -674,5 +851,148 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		}
 		
 	}
+	
+	/**
+	 * Use this manager for materializing results
+	 * @author jeff
+	 *
+	 */
+	public class MaterializeManager{
+		private String SQL = "";
+		private HTable deltaView = null;
+		private HTable selectView = null;
+		private HTable aggregationView = null;
+		
+		/**
+		 * Close table connection
+		 */
+		public void close(){
+			if(deltaView != null){
+				try {
+					deltaView.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(selectView != null){
+				try {
+					selectView.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(aggregationView != null){
+				try {
+					aggregationView.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		
+		public MaterializeManager(ParameterMessage request) {
+			SQL = request.getSQL().toStringUtf8();
+		}
 
+		/**
+		 * Build the aggregation view
+		 * @param aggregationRow
+		 */
+		public void putToAggregationView(BSVRow aggregationRow) {
+			if(aggregationView == null){
+				Configuration conf = HBaseConfiguration.create();
+				try {
+					aggregationView = new HTable(conf, Common.senitiseSQL(SQL) + "_aggregation");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			putToAgggationTable(aggregationView, aggregationRow);
+		}
+
+		/**
+		 * Put one row to aggregation view
+		 * @param aggregationView2
+		 * @param aggregationRow
+		 */
+		private void putToAgggationTable(HTable table, BSVRow aggregationRow) {
+			// put to table
+			for(int i = 0; i < aggregationRow.getKeyValueCount(); i++){
+				// put one row 
+				KeyValue keyValue = aggregationRow.getKeyValue(i);
+				Put put = new Put(keyValue.getKey().toByteArray());
+				put.add("colfam".getBytes(),(keyValue.getRowKey().toStringUtf8() + "_old").getBytes(), null);
+				put.add("colfam".getBytes(), (keyValue.getRowKey().toStringUtf8() +  "_new").getBytes(), keyValue.getValue().toByteArray());
+				try {
+					table.put(put);
+				} catch (RetriesExhaustedWithDetailsException e) {
+					e.printStackTrace();
+				} catch (InterruptedIOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+
+		/**
+		 * Build the select view and put a row to it
+		 * @param row
+		 */
+		public void putToSelectView(List<Cell> row) {
+			if(selectView == null){
+				Configuration conf = HBaseConfiguration.create();
+				try {
+					selectView = new HTable(conf, Common.senitiseSQL(SQL) + "_select");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			putToTable(selectView, row);
+		}
+
+		/**
+		 * Handling of a row. Build the delta view. And put a row to it
+		 * @param tableName
+		 * @param row
+		 */
+		public void putToDeltaView(List<Cell> row){
+			// Connect to the delta table that is created in the client
+			// The table name would be the SQL statement with all the space replaced by '_'
+			// To separate the delta view from the select view, a 'delta' is put the end of table name
+			if(deltaView == null){
+				Configuration conf = HBaseConfiguration.create();
+				try {
+					deltaView = new HTable(conf, Common.senitiseSQL(SQL) + "_delta");
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			putToTable(deltaView, row);
+		}
+
+		/**
+		 * Put one row to table
+		 * @param table
+		 * @param row
+		 */
+		private void putToTable(HTable table, List<Cell> row) {
+			// put to table
+			for(Cell cell:row){
+				// put one row 
+				Put put = new Put(CellUtil.cloneRow(cell));
+				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_old").getBytes(), null);
+				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_new").getBytes(), CellUtil.cloneValue(cell));
+				try {
+					table.put(put);
+				} catch (RetriesExhaustedWithDetailsException e) {
+					e.printStackTrace();
+				} catch (InterruptedIOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

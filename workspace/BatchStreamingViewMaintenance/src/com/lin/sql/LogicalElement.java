@@ -33,6 +33,9 @@ public class LogicalElement implements Runnable{
 	private String joinTable = "";
 	private Join join = null;
 	private boolean isMaterialize = false;
+	private boolean isReturningResults = false;
+	private String SQL = "";
+	private boolean isBuildJoinView = false;
 	/**
 	 * The following fields are for separating block and non-block operations
 	 */
@@ -65,6 +68,8 @@ public class LogicalElement implements Runnable{
 					e.printStackTrace();
 				}
 			}
+			// blocking execution
+			System.out.println("Run blocking execution");
 			run();
 		}
 		
@@ -181,6 +186,30 @@ public class LogicalElement implements Runnable{
 		this.finishBlock = finishBlock;
 	}
 
+	public boolean isReturningResults() {
+		return isReturningResults;
+	}
+
+	public void setReturningResults(boolean isReturningResults) {
+		this.isReturningResults = isReturningResults;
+	}
+
+	public String getSQL() {
+		return SQL;
+	}
+
+	public void setSQL(String sQL) {
+		SQL = sQL;
+	}
+
+	public boolean isBuildJoinView() {
+		return isBuildJoinView;
+	}
+
+	public void setBuildJoinView(boolean isBuildJoinView) {
+		this.isBuildJoinView = isBuildJoinView;
+	}
+
 	@Override
 	public String toString() {
 		return "LogicalElement ["
@@ -190,7 +219,39 @@ public class LogicalElement implements Runnable{
 				+ ", conditions=" + conditions 
 				+ ", aggregationKey=" + aggregationKey 
 				+ ", joinKey=" + joinKey 
-				+ ", joinTable=" + joinTable + "]";
+				+ ", joinTable=" + joinTable 
+				+ ", isReturningResults=" + isReturningResults 
+				+ ", isBuildingJoinView=" + isBuildJoinView + "]";
+	}
+	
+	/**
+	 * Construct the SQL using the existing fields
+	 * @return
+	 */
+	public String constructSQLByField(){
+		String result = "";
+		result += "select ";
+		for(int i = 0; i < columns.size(); i++){
+			if(i != 0 && i != (columns.size() - 1)){
+				result += ", ";
+			}
+			result += columns.get(i).getFamily().toStringUtf8() + ".";
+			result += columns.get(i).getColumn().toStringUtf8();
+		}
+		result += " from " + tableName;
+		if(!conditions.isEmpty()){
+			result += " where ";
+			for(int i = 0; i < conditions.size(); i++){
+				if(i != 0 && i != (conditions.size() - 1)){
+					result += " ";
+				}
+				result += conditions.get(i).getColumn().getFamily().toStringUtf8() + ".";
+				result += conditions.get(i).getColumn().getColumn().toStringUtf8();
+				result += conditions.get(i).getOperator().toStringUtf8();
+				result += conditions.get(i).getValue().toStringUtf8();
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -219,14 +280,27 @@ public class LogicalElement implements Runnable{
 			// set aggregation key
 			request.setAggregationKey(ByteString.copyFrom(aggregationKey.getBytes()));
 			
-			// add join key and join table
+			// add join key 
 			if(!joinKey.trim().equals("")){
-				request.setJoinKey(ByteString.copyFrom(joinKey.getBytes()));
+				request.setJoinKey(ByteString.copyFrom(joinKey.getBytes()));	
+			}
+			
+			// add join table
+			if(!joinTable.trim().equals("")){
 				request.setJoinTable(ByteString.copyFrom(joinTable.getBytes()));
 			}
 			
+			// set if the coprocessor should return the results
+			request.setIsReturningResults(isReturningResults);
+			
 			// set materialize
 			request.setIsMaterialize(isMaterialize);
+			
+			// set SQL
+			request.setSQL(ByteString.copyFrom(SQL.getBytes()));
+			
+			// set is-build-join-view
+			request.setIsBuildJoinView(isBuildJoinView);
 			 
 			System.out.println("=======================================================================");
 			Date begin = new Date();
@@ -249,13 +323,10 @@ public class LogicalElement implements Runnable{
 			}
 			System.out.println("Total Count: " + total);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (Throwable e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -269,6 +340,4 @@ public class LogicalElement implements Runnable{
 			element.setFinishBlock(element.getFinishBlock() + 1);
 		}
 	}
-
-
 }
