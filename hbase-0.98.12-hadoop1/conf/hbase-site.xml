@@ -25,7 +25,8 @@
 <property>
   <name>hbase.rpc.timeout</name>
   <value>3600000</value>
-</preoperty>
+</property>
+
 <property>
   <name>hbase.zookeeper.property.dataDir</name>
   <value>/home/jeff/zookeeper</value>
