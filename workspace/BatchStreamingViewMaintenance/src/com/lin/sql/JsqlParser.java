@@ -34,7 +34,7 @@ public class JsqlParser {
 	 * @param input
 	 * @return
 	 */
-	public static SimpleLogicalPlan parse(String input, boolean isMaterialize) {
+	public static SimpleLogicalPlan parse(String input, boolean isMaterialize, boolean isReturningResults) {
 		SimpleLogicalPlan logicalPlan = new SimpleLogicalPlan(); // logical plan to be return
 		CCJSqlParserManager pm = new CCJSqlParserManager(); 
 		try {
@@ -59,6 +59,7 @@ public class JsqlParser {
 							LogicalElement element = new LogicalElement();
 							element.setSQL(input);
 							element.setMaterialize(isMaterialize);
+							element.setReturningResults(isReturningResults);
 							handleSingleTable(plainSelect, tableName, element);
 							logicalPlan.add(element);
 							
@@ -71,10 +72,10 @@ public class JsqlParser {
 							// build plan for the first table of from
 							LogicalElement element = new LogicalElement();
 							handleJoinTable(plainSelect, tableName, element);
-							element.setReturningResults(true);
+							element.setReturningResults(isReturningResults);
 							String SQL = element.constructSQLByField();
 							element.setSQL(SQL);
-							element.setNonBlock(true);
+							element.setNonBlock(false);
 							
 							if(isMaterialize){
 								System.out.println(
@@ -87,7 +88,7 @@ public class JsqlParser {
 							// Assert only one join
 							Join join = (Join)plainSelect.getJoins().get(0);
 							LogicalElement elementJoin = new LogicalElement();
-							elementJoin.setReturningResults(true);
+							elementJoin.setReturningResults(isReturningResults);
 							handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
 							String joinElementSQL = elementJoin.constructSQLByField();
 							elementJoin.setSQL(joinElementSQL);
@@ -124,7 +125,11 @@ public class JsqlParser {
 							try {
 								helper = HBaseHelper.getHelper(conf);
 								helper.dropTable(joinTableName);
-								helper.createTable(joinTableName, "colfam");
+								// This is the reverse join table + join table
+								// it has three families:
+								// the first two family is represented as the SQL of each join table
+								// the third family is "joinFamily"
+								helper.createTable(joinTableName, Common.senitiseSQL(SQL), Common.senitiseSQL(joinElementSQL), "joinFamily");
 							} catch(IOException e){
 								e.printStackTrace();
 							}
@@ -140,7 +145,10 @@ public class JsqlParser {
 							LogicalElement elementResult = new LogicalElement();
 							elementResult.setWaitForBlock(2);
 							elementResult.setJoin(join);
+							elementResult.setJoinTable(joinTableName);
 							elementResult.setTableName(joinTableName);
+							elementResult.setReturningResults(isReturningResults);
+							elementResult.setBuildJoinView(true);
 							logicalPlan.add(elementResult);
 						}
 					} // if(tableName != null)

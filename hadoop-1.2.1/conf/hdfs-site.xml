@@ -15,5 +15,16 @@
   <property>
     <name>dfs.data.dir</name>
     <value>/home/jeff/dfsDataDir</value>
-  </property> 
+  </property>
+ 
+<property>
+  <name>dfs.datanode.socket.write.timeout</name>
+  <value>3000000</value>
+</property>
+
+<property>
+  <name>dfs.socket.timeout</name>
+  <value>3000000</value>
+</property>
+
 </configuration>

@@ -25,14 +25,15 @@ public class Common {
 	
 	public static String senitiseSQL(String input){
 		String result = null;
-		result = input.replace(' ', '_')
-				.replace('.', '_')
+		char divider = '-';
+		result = input.replace(' ', divider)
+				.replace('.', divider)
 				.replace('>', 'g')
 				.replace('<', 'l')
 				.replace('=', 'e')
-				.replace('(', '_')
-				.replace(')','_')
-				.replace(',', '_');
+				.replace('(', divider)
+				.replace(')',divider)
+				.replace(',', divider);
 		return result;
 	}
 }

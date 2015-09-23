@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -150,6 +151,16 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				finish = scanner.next(curVals);
 				List<Cell> row = new ArrayList<Cell>(curVals);
 				
+				// show scan result
+				System.out.println("Scan result:");
+				for(Cell cell:row){
+					System.out.println("*******************************************************");
+					System.out.println("\tRow: " + new String(CellUtil.cloneRow(cell)));
+					System.out.println("\tColumn Family: " + new String(CellUtil.cloneFamily(cell)));
+					System.out.println("\tQualifier: " + new String(CellUtil.cloneQualifier(cell)));
+					System.out.println("\tValue: " + new String(CellUtil.cloneValue(cell)));
+				}
+				
 				// find the aggregation key first
 				String aggKey = "";
 				for(Cell cell:row){
@@ -159,6 +170,124 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 						aggKey = new String(CellUtil.cloneValue(cell));
 						System.out.println("Found aggregation key: " + aggKey);
 						break;
+					}
+				}
+				
+				// build join table
+				if(request.getIsBuildJoinView()){
+					System.out.println("Join row: " + new String(CellUtil.cloneRow(curVals.get(0))));
+					// Construct join table view 
+					// 1. construct temporary map
+					//              #######################################    
+					// fam1  row1  | K1_C1_o | K1_C1_n | K1_C2_o | K1_C2_n | ...
+					//              #######################################
+					//       row2  | K2_C1_o | K2_C1_n | K2_C2_o | K2_C2_n | ...
+					//              #######################################
+					//         .
+					//         .
+					//         .
+					//
+					//	            #######################################    
+					// fam2  row1  | L1_D1_o | L1_D1_n | L1_D2_o | L1_D2_n | ...
+					//              #######################################
+					//       row2  | L2_D1_o | L2_D1_n | L2_D2_o | L2_D2_n | ...
+					//              #######################################  
+					//         .
+					//         .
+					//         .
+					Map<String, Map<String, Map<String, String>>> tmp = new HashMap<String, Map<String, Map<String, String>>>();
+					List<String> familyList = new ArrayList<String>();
+					String joinKey = null;
+					for(Cell cell:curVals){
+						// save join key for later use
+						if(joinKey == null){
+							joinKey = new String(CellUtil.cloneRow(cell));
+						}
+						System.out.println("Constructing cell " 
+								+ new String(CellUtil.cloneFamily(cell))
+								+ ":" 
+								+ new String(CellUtil.cloneQualifier(cell)) 
+								+ "=" 
+								+ new String(CellUtil.cloneValue(cell)));
+						
+						String family =  new String(CellUtil.cloneFamily(cell));
+						String qualifier = new String(CellUtil.cloneQualifier(cell));
+						String value = new String(CellUtil.cloneValue(cell));
+						
+						String rowKey = qualifier.split("_")[0];
+						
+						if(!tmp.containsKey(family)){
+							Map<String, Map<String, String>> tmpMap = new HashMap<String, Map<String, String>>();
+							tmp.put(family, tmpMap);
+							familyList.add(family);
+						}
+						
+						if(!tmp.get(family).containsKey(rowKey)){
+							tmp.get(family).put(rowKey, new HashMap<String, String>());
+						}
+						
+						tmp.get(family).get(rowKey).put(qualifier, value);
+					}
+					System.out.println(tmp);
+					
+					// 2. construct join row with temporary list
+					//             ###############################################################################################
+					// X1   K1L1  | K1L1_C1_o | K1L1_C1_n | K1L1_C2_o | K1L1_C2_n | K1L1_D1_o | K1L1_D1_n | K1L1_D2_o | K1L1_D2_n |
+					//             ###############################################################################################
+					//      K1L2  | K1L2_C1_o | K1L2_C1_n | K1L2_C2_o | K1L2_C2_n | K1L2_D1_o | K1L2_D1_n | K1L2_D2_o | K1L2_D2_n |
+					//             ###############################################################################################
+					//      K2L1  | K2L1_C1_o | K2L1_C1_n | K2L1_C2_o | K2L1_C2_n | K2L1_D1_o | K2L1_D1_n | K2L1_D2_o | K2L1_D2_n |
+					//             ###############################################################################################
+					//      K2L2  | K2L2_C1_o | K2L2_C1_n | K2L2_C2_o | K2L2_C2_n | K2L2_D1_o | K2L2_D1_n | K2L2_D2_o | K2L2_D2_n |
+					//             ###############################################################################################
+					//        .
+					//        .
+					//        .
+					Map<String, String> fullJoinRow = new HashMap<String, String>();
+					// now we consider only inner join
+					// if familyList has less than 2 element 
+					// we do nothing
+					if(familyList.size() >= 2){
+						Map<String, Map<String, String>> leftJoin = tmp.get(familyList.get(0));	
+						Map<String, Map<String, String>> rightJoin = tmp.get(familyList.get(1));
+						for(Entry<String, Map<String, String>> leftJoinRow:leftJoin.entrySet()){
+							for(Entry<String, Map<String, String>> rightJoinRow:rightJoin.entrySet()){
+								System.out.println("Joining " + leftJoinRow.getKey() + " and " + rightJoinRow.getKey());
+								// add all in left join
+								for(Entry<String, String> leftJoinCell:leftJoinRow.getValue().entrySet()){
+									Map<String, String> cellMap = new HashMap<String, String>();
+									fullJoinRow.put(
+											leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + leftJoinCell.getKey().split("_")[1] + "_" + leftJoinCell.getKey().split("_")[2], 
+											leftJoinCell.getValue());
+								}
+								// add all in right join
+								for(Entry<String, String> rightJoinCell:rightJoinRow.getValue().entrySet()){
+									Map<String, String> cellMap = new HashMap<String, String>();
+									fullJoinRow.put(
+											leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + rightJoinCell.getKey().split("_")[1] + "_" + rightJoinCell.getKey().split("_")[2], 
+											rightJoinCell.getValue());
+								}
+							}
+						}
+						System.out.println("Full join row : \n" + fullJoinRow);
+						
+						// Connect to join table view in order to put
+						String joinTableName = request.getJoinTable().toStringUtf8();
+						System.out.println("Going to connect to table " + joinTableName);
+						Configuration conf = HBaseConfiguration.create();
+						HTable joinTable = null;
+						try {
+							joinTable = new HTable(conf, joinTableName);
+							Put put = new Put(joinKey.getBytes());
+							for(Entry<String, String> tmpMap:fullJoinRow.entrySet()){
+								put.add("joinFamily".getBytes(),
+										tmpMap.getKey().getBytes(),
+										tmpMap.getValue().getBytes());
+							}
+							joinTable.put(put);
+						} catch (IOException e) {
+							e.printStackTrace();
+						} 
 					}
 				}
 				
@@ -230,6 +359,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				materialize.putToAggregationView(aggregationRow);
 			}
 			
+			// closing connections
+			materialize.close();
 			// Depending on the plan, return the results or nothing
 			System.out.println("Client wants the results: " + request.getIsReturningResults());
 			if(request.getIsReturningResults()){
@@ -263,7 +394,9 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				Put put = new Put(CellUtil.cloneValue(cell));
 				
 				for(Cell cellForAdd:row){
-					put.add(CellUtil.cloneFamily(cellForAdd), CellUtil.cloneQualifier(cellForAdd), CellUtil.cloneValue(cellForAdd));
+					System.out.println("Puting cell " + new String(CellUtil.cloneQualifier(cellForAdd)) + " = " + new String(CellUtil.cloneValue(cellForAdd)));
+					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd))) + "_old").getBytes(), null);
+					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd))) + "_new").getBytes(), CellUtil.cloneValue(cellForAdd));
 				}
 				
 				joinTable.put(put);
@@ -729,6 +862,34 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		private HTable deltaView = null;
 		private HTable selectView = null;
 		private HTable aggregationView = null;
+		
+		/**
+		 * Close table connection
+		 */
+		public void close(){
+			if(deltaView != null){
+				try {
+					deltaView.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(selectView != null){
+				try {
+					selectView.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			if(aggregationView != null){
+				try {
+					aggregationView.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
 		
 		public MaterializeManager(ParameterMessage request) {
 			SQL = request.getSQL().toStringUtf8();

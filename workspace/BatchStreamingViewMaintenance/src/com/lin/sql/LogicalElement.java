@@ -35,6 +35,7 @@ public class LogicalElement implements Runnable{
 	private boolean isMaterialize = false;
 	private boolean isReturningResults = false;
 	private String SQL = "";
+	private boolean isBuildJoinView = false;
 	/**
 	 * The following fields are for separating block and non-block operations
 	 */
@@ -67,6 +68,8 @@ public class LogicalElement implements Runnable{
 					e.printStackTrace();
 				}
 			}
+			// blocking execution
+			System.out.println("Run blocking execution");
 			run();
 		}
 		
@@ -199,6 +202,14 @@ public class LogicalElement implements Runnable{
 		SQL = sQL;
 	}
 
+	public boolean isBuildJoinView() {
+		return isBuildJoinView;
+	}
+
+	public void setBuildJoinView(boolean isBuildJoinView) {
+		this.isBuildJoinView = isBuildJoinView;
+	}
+
 	@Override
 	public String toString() {
 		return "LogicalElement ["
@@ -209,7 +220,8 @@ public class LogicalElement implements Runnable{
 				+ ", aggregationKey=" + aggregationKey 
 				+ ", joinKey=" + joinKey 
 				+ ", joinTable=" + joinTable 
-				+ ", isReturningResults=" + isReturningResults + "]";
+				+ ", isReturningResults=" + isReturningResults 
+				+ ", isBuildingJoinView=" + isBuildJoinView + "]";
 	}
 	
 	/**
@@ -268,9 +280,13 @@ public class LogicalElement implements Runnable{
 			// set aggregation key
 			request.setAggregationKey(ByteString.copyFrom(aggregationKey.getBytes()));
 			
-			// add join key and join table
+			// add join key 
 			if(!joinKey.trim().equals("")){
-				request.setJoinKey(ByteString.copyFrom(joinKey.getBytes()));
+				request.setJoinKey(ByteString.copyFrom(joinKey.getBytes()));	
+			}
+			
+			// add join table
+			if(!joinTable.trim().equals("")){
 				request.setJoinTable(ByteString.copyFrom(joinTable.getBytes()));
 			}
 			
@@ -282,6 +298,9 @@ public class LogicalElement implements Runnable{
 			
 			// set SQL
 			request.setSQL(ByteString.copyFrom(SQL.getBytes()));
+			
+			// set is-build-join-view
+			request.setIsBuildJoinView(isBuildJoinView);
 			 
 			System.out.println("=======================================================================");
 			Date begin = new Date();
