@@ -1,6 +1,7 @@
 package com.lin.sql;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -312,6 +313,7 @@ public class LogicalElement implements Runnable{
 					ResultMessage.getDefaultInstance());
 			Date end = new Date();
 			System.out.println(end + " Finish batch job in " + (end.getTime() - begin.getTime()) + " miliseconds");
+			
 			long total = 0;
 			for (Map.Entry<byte[], ResultMessage> entry : results
 					.entrySet()) {

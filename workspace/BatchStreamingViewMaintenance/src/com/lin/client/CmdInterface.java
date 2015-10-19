@@ -1,9 +1,13 @@
 package com.lin.client;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Random;
 
@@ -45,9 +49,8 @@ public class CmdInterface {
 					load(argIn);
 				} else if(argIn[0].equals("test")){
 					test(argIn);
-				}
-				else{
-					handleSQL(input, true);
+				} else{
+					handleSQL(input, true, false);
 				}
 			}catch (IOException e) {
 				e.printStackTrace();
@@ -74,6 +77,10 @@ public class CmdInterface {
 		// if returning the results or not
 		options.addOption(OptionBuilder.withLongOpt("returningResults")
 				.withDescription("return the results").create());
+		
+		// Evaluation will generate plot automatically after finish
+		options.addOption(OptionBuilder.withLongOpt("evaluate")
+				.withDescription("evaluate will generate plot automatically").create());
 		
 		String[] testCase={
 				/*
@@ -102,27 +109,108 @@ public class CmdInterface {
 				// 6 full join with two row on one join key
 				"select testtable6.colfam.C2, testtable7.colfam.D2 from testtable6 join testtable7 on colfam.C1=colfam.D1",
 		};
+		
+		String[] evaluateCases = {
+				// Evaluate "Select"
+				// 1 million table auto splitting
+				// select full table without materialize
+				// select full table with materialize
+				"select colfam.C1 from evaluateTable2",
+		};
 
 		CommandLineParser parser = new BasicParser();
 		try {
 			CommandLine cmd = parser.parse(options, args);
 			
 			if(cmd.hasOption("sys")){
-				for(int i = 0; i < testCase.length; i++){
-					System.out.println(testCase[i]);
+				if(cmd.hasOption("case")){
+					String caseName = cmd.getOptionValue("case");
+					System.out.println("Testing case " + caseName);
 					if(cmd.hasOption("returningResults")){
-						handleSQL(testCase[i], true);
+						if(cmd.hasOption("isMaterialize")){
+							handleSQL(testCase[Integer.parseInt(caseName)], true, true);
+						}else{
+							handleSQL(testCase[Integer.parseInt(caseName)], true, false);
+						}
 					}else{
-						handleSQL(testCase[i], false);
+						if(cmd.hasOption("isMaterialize")){
+							handleSQL(testCase[Integer.parseInt(caseName)], true, true);
+						}else{
+							handleSQL(testCase[Integer.parseInt(caseName)], true, false);
+						}
+					}
+				}else{
+					for(int i = 0; i < testCase.length; i++){
+						System.out.println(testCase[i]);
+						if(cmd.hasOption("returningResults")){
+							handleSQL(testCase[i], true, true);
+						}else{
+							handleSQL(testCase[i], false, true);
+						}
 					}
 				}
-			}else if(cmd.hasOption("case")){
-				String caseName = cmd.getOptionValue("case");
-				System.out.println("Testing case " + caseName);
-				if(cmd.hasOption("returningResults")){
-					handleSQL(testCase[Integer.parseInt(caseName)], true);
+			}
+			
+			// Output plot data while evaluating
+			if(cmd.hasOption("evaluate")){
+				if(cmd.hasOption("case")){
+					String caseName = cmd.getOptionValue("case");
+					System.out.println("Evaluate case " + caseName);
+					int caseNo = Integer.parseInt(caseName);
+					switch(caseNo){
+					// select full table with materialize and without materialize
+					case 0:
+						// Record execution time without materialize
+						long startTime1 = System.nanoTime();
+						handleSQL(evaluateCases[caseNo], false, false);
+						long endTime1 = System.nanoTime();
+						long duration1 = (endTime1 - startTime1);  //divide by 1000000 to get milliseconds
+						
+						// Record execution time with materialize
+						long startTime2 = System.nanoTime();
+						handleSQL(evaluateCases[caseNo], false, true);
+						long endTime2 = System.nanoTime();
+						long duration2 = (endTime2 - startTime2);  //divide by 1000000 to get milliseconds
+						
+						// save time in file and create a gnuplot script
+						String fileName = new Date().toString() + ".dat";
+						try {
+							PrintWriter writer;
+							writer = new PrintWriter(fileName, "UTF-8");
+							writer.println("# Evaluate full scan of evaluate table 1");
+							writer.println("# with and without materialize");
+							writer.println("materialize, " + (duration1 / 1000000));
+							writer.println("non-materialize, " + (duration2 / 1000000));
+							writer.close();
+							
+							PrintWriter writerForScript;
+							writerForScript = new PrintWriter("plotScript.gp", "UTF-8");
+							writerForScript.println("# Evaluate full scan of evaluate table 1");
+							writerForScript.println("# with and without materialize");
+							writerForScript.println("p \"" + fileName + "\" w l");
+							writerForScript.println("pause -1");
+							writerForScript.close();
+						} catch (FileNotFoundException
+								| UnsupportedEncodingException e) {
+							e.printStackTrace();
+						}
+						
+						// plot the data
+						try {
+							Runtime.getRuntime().exec("gnuplot plotScript.gp");
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
+						
+						break;
+					case 1: 
+						break;
+					default:
+						break;
+					}
+					
 				}else{
-					handleSQL(testCase[Integer.parseInt(caseName)], true);
+					
 				}
 			}
 		} catch (ParseException e) {
@@ -134,11 +222,10 @@ public class CmdInterface {
 	 * Handle sql
 	 * @param input
 	 */
-	public static void handleSQL(String input, boolean isReturningResults) {
-		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input, true, isReturningResults);
+	public static void handleSQL(String input, boolean isReturningResults, boolean isMaterialize) {
+		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input, isMaterialize, isReturningResults);
 		System.out.println(simpleLogicalPlan);
 		simpleLogicalPlan.getHead().execute();
-		
 	}
 
 	/**
@@ -386,6 +473,38 @@ public class CmdInterface {
 						for(int i = 0; i < 10000; i++){
 							System.out.println("put row " + i);
 							Put put = new Put((String.valueOf((char)((i % 26) + 65)) + i).getBytes());
+							put.add("colfam".getBytes(), 
+									"C1".getBytes(),
+									("x" + (i % 20)).getBytes());
+							put.add("colfam".getBytes(), 
+									"C2".getBytes(),
+									("" + i).getBytes());
+							System.out.println("put row " + i);
+							table.put(put);
+						}
+						table.close();
+					} catch(IOException e){
+						e.printStackTrace();
+					}					
+				}
+				
+				// evaluateTable4
+				if(tableName.equals("evaluateTable4")){
+					Configuration conf = HBaseConfiguration.create();
+					try {
+						HBaseHelper helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						byte[][] regioins = new byte[][]{
+							Bytes.toBytes("A")
+						};
+						helper.createTable(tableName, regioins, "colfam");
+						
+						HTable table = new HTable(conf, tableName);
+						
+						Random random = new Random();
+						for(int i = 0; i < 1000; i++){
+							System.out.println("put row " + i);
+							Put put = new Put((String.valueOf((char)((i % regioins.length) + 65)) + i).getBytes());
 							put.add("colfam".getBytes(), 
 									"C1".getBytes(),
 									("x" + (i % 20)).getBytes());

@@ -1,0 +1,4 @@
+# Evaluate full scan of evaluate table 1
+# with and without materialize
+0 396500 0.5
+1 2620520 0.5
