@@ -10,11 +10,11 @@
   </property>
   <property>
     <name>dfs.name.dir</name>
-    <value>/home/jeff/dfsNameDir</value>
+    <value>/home/jan/dfsNameDir</value>
   </property>
   <property>
     <name>dfs.data.dir</name>
-    <value>/home/jeff/dfsDataDir</value>
+    <value>/home/jan/dfsDataDir</value>
   </property>
  
 <property>
