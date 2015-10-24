@@ -29,7 +29,7 @@
 
 <property>
   <name>hbase.zookeeper.property.dataDir</name>
-  <value>/home/jeff/zookeeper</value>
+  <value>/home/jan/zookeeper</value>
 </property>
 
 <property>
@@ -39,12 +39,12 @@
 
 <property>
   <name>hbase.rootdir</name>
-  <value>hdfs://HB:54310/hbase</value>
+  <value>hdfs://10.155.208.82:54310/hbase</value>
 </property>
 
 <property>
       <name>hbase.zookeeper.quorum</name>
-      <value>HB,HBNode1,HBNode2</value>
+      <value>10.155.208.82,10.155.208.83,10.155.208.86,10.155.208.77,10.155.208.80,10.155.208.85,10.155.208.89,10.155.208.90,10.155.208.79,10.155.208.81,10.155.208.76,10.155.208.78,10.155.208.71,10.155.208.84,10.155.208.75,10.155.208.39,10.155.208.88,10.155.208.73,10.155.208.87,10.155.208.74</value>
 </property>
 
 <property>
