@@ -6,7 +6,4 @@
 <configuration>
 <property>
   <name>fs.default.name</name>
-  <value>hdfs://10.155.208.28:54310</value>
-</property>
-
-</configuration>
+  <value>hdfs://
