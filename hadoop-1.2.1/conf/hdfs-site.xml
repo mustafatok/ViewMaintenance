@@ -17,14 +17,4 @@
     <value>/home/jan/dfsDataDir</value>
   </property>
  
-<property>
-  <name>dfs.datanode.socket.write.timeout</name>
-  <value>3000000</value>
-</property>
-
-<property>
-  <name>dfs.socket.timeout</name>
-  <value>3000000</value>
-</property>
-
 </configuration>

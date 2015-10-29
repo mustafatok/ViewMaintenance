@@ -1,0 +1,10 @@
+</value>
+</property>
+
+<property>
+  <name>hbase.coprocessor.region.classes</name>
+  <value>com.lin.coprocessor.BSVCoprocessorEndPoint</value>
+</property>
+
+
+</configuration>

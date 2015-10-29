@@ -19,18 +19,4 @@
 
 <property>
   <name>hbase.rootdir</name>
-  <value>hdfs://vm-10-155-208-39.cloud.mwn.de:54310/hbase</value>
-</property>
-
-<property>
-      <name>hbase.zookeeper.quorum</name>
-      <value>vm-10-155-208-39.cloud.mwn.de,vm-10-155-208-28.cloud.mwn.de,vm-10-155-208-73.cloud.mwn.de</value>
-</property>
-
-<property>
-  <name>hbase.coprocessor.region.classes</name>
-  <value>com.lin.coprocessor.BSVCoprocessorEndPoint</value>
-</property>
-
-
-</configuration>
+  <value>hdfs://
