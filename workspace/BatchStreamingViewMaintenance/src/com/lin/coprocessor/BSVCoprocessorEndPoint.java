@@ -21,7 +21,9 @@ import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HColumnDescriptor;
+import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.HTable;
+import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
 import org.apache.hadoop.hbase.client.Scan;
@@ -51,7 +53,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	private MaterializeManager materialize = null;
 	private String joinFamily = null;
 	private String joinQualifier = null;
-	private HTable joinTable = null;
+	private HTableInterface joinTable = null;
 	private ParameterMessage request = null;
 
 	@Override
@@ -95,7 +97,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			// Connect to the join table using the join table name from request
 			Configuration configuration = HBaseConfiguration.create();;
 			try {
-				joinTable = new HTable(configuration, request.getJoinTable().toByteArray());
+//				joinTable = new HTable(configuration, request.getJoinTable().toByteArray());
+				joinTable = env.getTable(TableName.valueOf(request.getJoinTable().toByteArray()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -275,9 +278,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 						String joinTableName = request.getJoinTable().toStringUtf8();
 						System.out.println("Going to connect to table " + joinTableName);
 						Configuration conf = HBaseConfiguration.create();
-						HTable joinTable = null;
+						HTableInterface joinTable = null;
 						try {
-							joinTable = new HTable(conf, joinTableName);
+//							joinTable = new HTable(conf, joinTableName);
+							joinTable = env.getTable(TableName.valueOf(joinTableName));
 							Put put = new Put(joinKey.getBytes());
 							for(Entry<String, String> tmpMap:fullJoinRow.entrySet()){
 								put.add("joinFamily".getBytes(),
@@ -399,7 +403,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd))) + "_new").getBytes(), CellUtil.cloneValue(cellForAdd));
 				}
 				
-				joinTable.put(put);
+				try {
+					joinTable.put(put);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 				
 				break;
 			}
@@ -859,9 +867,9 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 */
 	public class MaterializeManager{
 		private String SQL = "";
-		private HTable deltaView = null;
-		private HTable selectView = null;
-		private HTable aggregationView = null;
+		private HTableInterface deltaView = null;
+		private HTableInterface selectView = null;
+		private HTableInterface aggregationView = null;
 		
 		/**
 		 * Close table connection
@@ -903,7 +911,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			if(aggregationView == null){
 				Configuration conf = HBaseConfiguration.create();
 				try {
-					aggregationView = new HTable(conf, Common.senitiseSQL(SQL) + "_aggregation");
+//					aggregationView = new HTable(conf, Common.senitiseSQL(SQL) + "_aggregation");
+					aggregationView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_aggregation"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -917,7 +926,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 * @param aggregationView2
 		 * @param aggregationRow
 		 */
-		private void putToAgggationTable(HTable table, BSVRow aggregationRow) {
+		private void putToAgggationTable(HTableInterface aggregationView2, BSVRow aggregationRow) {
 			// put to table
 			for(int i = 0; i < aggregationRow.getKeyValueCount(); i++){
 				// put one row 
@@ -926,10 +935,12 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				put.add("colfam".getBytes(),(keyValue.getRowKey().toStringUtf8() + "_old").getBytes(), null);
 				put.add("colfam".getBytes(), (keyValue.getRowKey().toStringUtf8() +  "_new").getBytes(), keyValue.getValue().toByteArray());
 				try {
-					table.put(put);
+					aggregationView2.put(put);
 				} catch (RetriesExhaustedWithDetailsException e) {
 					e.printStackTrace();
 				} catch (InterruptedIOException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
@@ -943,7 +954,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			if(selectView == null){
 				Configuration conf = HBaseConfiguration.create();
 				try {
-					selectView = new HTable(conf, Common.senitiseSQL(SQL) + "_select");
+//					selectView = new HTable(conf, Common.senitiseSQL(SQL) + "_select");
+					selectView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_select"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -964,7 +976,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			if(deltaView == null){
 				Configuration conf = HBaseConfiguration.create();
 				try {
-					deltaView = new HTable(conf, Common.senitiseSQL(SQL) + "_delta");
+//					deltaView = new HTable(conf, Common.senitiseSQL(SQL) + "_delta");
+					deltaView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_delta"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -975,10 +988,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 		/**
 		 * Put one row to table
-		 * @param table
+		 * @param selectView2
 		 * @param row
 		 */
-		private void putToTable(HTable table, List<Cell> row) {
+		private void putToTable(HTableInterface selectView2, List<Cell> row) {
 			// put to table
 			for(Cell cell:row){
 				// put one row 
@@ -986,10 +999,13 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_old").getBytes(), null);
 				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_new").getBytes(), CellUtil.cloneValue(cell));
 				try {
-					table.put(put);
+					selectView2.put(put);
 				} catch (RetriesExhaustedWithDetailsException e) {
 					e.printStackTrace();
 				} catch (InterruptedIOException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}

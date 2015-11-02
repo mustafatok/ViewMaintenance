@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
@@ -19,14 +20,11 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.HTableDescriptor;
-import org.apache.hadoop.hbase.client.HBaseAdmin;
 import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.lin.sql.JsqlParser;
-import com.lin.sql.LogicalElement;
 import com.lin.sql.SimpleLogicalPlan;
 import com.lin.test.HBaseHelper;
 
@@ -82,6 +80,11 @@ public class CmdInterface {
 		options.addOption(OptionBuilder.withLongOpt("evaluate")
 				.withDescription("evaluate will generate plot automatically").create());
 		
+		// multiple threads
+		options.addOption(OptionBuilder.withLongOpt("client").hasArg()
+				.withArgName("CLIENT")
+				.withDescription("define the clients that connects at the same time").create());
+		
 		String[] testCase={
 				/*
 				 * Selection test cases
@@ -100,7 +103,7 @@ public class CmdInterface {
 				"select max(colfam.value), min(colfam.value), sum(colfam.value), avg(colfam.value), count(colfam.value) from testtable5 group by colfam.aggKey",
 				
 				/*
-				 * Join test cases
+				 * Join test casestes
 				 */
 				// 4 test  simple join
 				"select testtable3.colfam.qualifierTesttable3, testtable4.colfam.qualifierTesttable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey",
@@ -116,6 +119,12 @@ public class CmdInterface {
 				// select full table without materialize
 				// select full table with materialize
 				"select colfam.C1 from evaluateTable2",
+				
+				/*
+				 *  Experiment 1
+				 *  1000 rows splitted into three region
+				 */
+				"select colfam.C1, colfam.C2 from evaluateTable5"
 		};
 
 		CommandLineParser parser = new BasicParser();
@@ -157,24 +166,25 @@ public class CmdInterface {
 					String caseName = cmd.getOptionValue("case");
 					System.out.println("Evaluate case " + caseName);
 					int caseNo = Integer.parseInt(caseName);
+					
 					switch(caseNo){
 					// select full table with materialize and without materialize
 					case 0:
-						// Record execution time without materialize
-						long startTime1 = System.nanoTime();
-						handleSQL(evaluateCases[caseNo], false, false);
-						long endTime1 = System.nanoTime();
-						long duration1 = (endTime1 - startTime1);  //divide by 1000000 to get milliseconds
-						
-						// Record execution time with materialize
-						long startTime2 = System.nanoTime();
-						handleSQL(evaluateCases[caseNo], false, true);
-						long endTime2 = System.nanoTime();
-						long duration2 = (endTime2 - startTime2);  //divide by 1000000 to get milliseconds
-						
-						// save time in file and create a gnuplot script
-						String fileName = new Date().toString() + ".dat";
 						try {
+							// Record execution time without materialize
+							long startTime1 = System.nanoTime();
+							handleSQL(evaluateCases[caseNo], false, false);
+							long endTime1 = System.nanoTime();
+							long duration1 = (endTime1 - startTime1);  //divide by 1000000 to get milliseconds
+							
+							// Record execution time with materialize
+							long startTime2 = System.nanoTime();
+							handleSQL(evaluateCases[caseNo], false, true);
+							long endTime2 = System.nanoTime();
+							long duration2 = (endTime2 - startTime2);  //divide by 1000000 to get milliseconds
+							// save time in file and create a gnuplot script
+							String fileName = new Date().toString() + ".dat";
+							
 							PrintWriter writer;
 							writer = new PrintWriter(fileName, "UTF-8");
 							writer.println("# Evaluate full scan of evaluate table 1");
@@ -203,7 +213,77 @@ public class CmdInterface {
 						}
 						
 						break;
-					case 1: 
+					case 1:
+						try {
+							// save time in file
+							String fileName = (new Date()).toString().replace(" ", "-")+"Experiment1.dat";
+							PrintWriter writer;
+							writer = new PrintWriter(fileName, "UTF-8");
+							writer.println("====================================");
+							writer.println(new Date().toString());
+							
+							if(cmd.hasOption("client")){
+								int clients = Integer.parseInt(cmd.getOptionValue("client"));
+							    
+							    for(int n = 1; n <= 10; n++){
+							    	// load table with 1000 * n rows
+							    	rows = 1000 * n;
+							    	// load table with specific rows
+									writer.println("# load evaluateTable 5 with " + rows + " rows");
+									CmdInterface.load(("load -name evaluateTable5 -rows " + rows).split(" "));
+							    	
+							    	final long[][] value = new long[clients][2];
+							    	
+							    	// start m clients
+							    	final CountDownLatch latch = new CountDownLatch(clients);
+							    	for(int m = 0; m < clients; m++){
+								    	
+									    Thread uiThread = new Experiment1(evaluateCases,caseNo,writer, rows, m){
+									        @Override
+									        public void run(){
+									        	// Record execution time without materialize
+												long startTime1 = System.nanoTime();
+												CmdInterface.handleSQL(evaluateCases[caseNo], false, false);
+												long endTime1 = System.nanoTime();
+												long duration1 = (endTime1 - startTime1);  //divide by 1000000 to get milliseconds
+												
+												// Record execution time with materialize
+												long startTime2 = System.nanoTime();
+												CmdInterface.handleSQL(evaluateCases[caseNo], false, true);
+												long endTime2 = System.nanoTime();
+												long duration2 = (endTime2 - startTime2);  //divide by 1000000 to get milliseconds
+									            
+												value[m][0] = duration1 / 1000000;
+												value[m][1] = duration2 / 1000000;
+												latch.countDown(); // Release await() in the test thread.
+									        }
+									    };
+									    uiThread.start();
+							    	}
+							    	
+							    	// Wait for countDown() in the UI thread. Or could uiThread.join();
+							    	try {
+										latch.await();
+									} catch (InterruptedException e) {
+										e.printStackTrace();
+									} 
+								    // value[][] holds results at this point.
+								    writer.println("# Evaluate full scan of evaluatetable5 with " + rows + " rows with query:");
+									writer.println("# " + evaluateCases[caseNo]);
+									writer.println("# with and without materialize");
+									writer.println(value);
+									
+							    }
+							    
+								
+							}
+							
+							writer.close();
+							
+						} catch (FileNotFoundException
+								| UnsupportedEncodingException e) {
+							e.printStackTrace();
+						}
 						break;
 					default:
 						break;
@@ -240,6 +320,10 @@ public class CmdInterface {
 		options.addOption(OptionBuilder.withLongOpt("name")
 				.withDescription("the name of table").hasArg()
 				.withArgName("NAME").create());
+		
+		options.addOption(OptionBuilder.withLongOpt("rows")
+				.withDescription("the name of table").hasArg()
+				.withArgName("ROWS").create());
 
 		CommandLineParser parser = new BasicParser();
 		try {
@@ -519,6 +603,76 @@ public class CmdInterface {
 						e.printStackTrace();
 					}
 				}
+				
+				// evaluateTable5
+				// 3 split
+				if(tableName.equals("evaluateTable5")){
+					Configuration conf = HBaseConfiguration.create();
+					try {
+						HBaseHelper helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						byte[][] regioins = new byte[][]{
+							Bytes.toBytes("I"),Bytes.toBytes("R")
+						};
+						helper.createTable(tableName, regioins, "colfam");
+						
+						HTable table = new HTable(conf, tableName);
+						
+						Random random = new Random();
+						rows = 3000;
+						if (cmd.hasOption("rows")) {
+							rows = Integer.parseInt(cmd.getOptionValue("rows")); 
+						}
+						for(int i = 0; i < rows; i++){
+							System.out.println("put row " + i);
+							Put put = new Put((String.valueOf((char)((i % 26) + 65)) + i).getBytes());
+							put.add("colfam".getBytes(), 
+									"C1".getBytes(),
+									("x" + (i % 20)).getBytes());
+							put.add("colfam".getBytes(), 
+									"C2".getBytes(),
+									("" + i).getBytes());
+							System.out.println("put row " + i);
+							table.put(put);
+						}
+						table.close();
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
+				
+				// evaluateTable6
+				// 3 split
+				if(tableName.equals("evaluateTable6")){
+					Configuration conf = HBaseConfiguration.create();
+					try {
+						HBaseHelper helper = HBaseHelper.getHelper(conf);
+						helper.dropTable(tableName);
+						byte[][] regioins = new byte[][]{
+							Bytes.toBytes("I"),Bytes.toBytes("R")
+						};
+						helper.createTable(tableName, regioins, "colfam");
+						
+						HTable table = new HTable(conf, tableName);
+						
+						Random random = new Random();
+						for(int i = 0; i < 1000; i++){
+							System.out.println("put row " + i);
+							Put put = new Put((String.valueOf((char)((i % 26) + 65)) + i).getBytes());
+							put.add("colfam".getBytes(), 
+									"C1".getBytes(),
+									("x" + (i % 20)).getBytes());
+							put.add("colfam".getBytes(), 
+									"C2".getBytes(),
+									("" + i).getBytes());
+							System.out.println("put row " + i);
+							table.put(put);
+						}
+						table.close();
+					} catch(IOException e){
+						e.printStackTrace();
+					}
+				}
 			} else {
 				System.out.println("Must specify the table name");
 			}
@@ -526,4 +680,5 @@ public class CmdInterface {
 			e.printStackTrace();
 		}
 	}
+	static int rows;
 }
