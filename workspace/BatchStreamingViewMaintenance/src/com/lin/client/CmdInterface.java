@@ -247,14 +247,14 @@ public class CmdInterface {
 												long endTime1 = System.nanoTime();
 												long duration1 = (endTime1 - startTime1);  //divide by 1000000 to get milliseconds
 												
-												// Record execution time with materialize
-												long startTime2 = System.nanoTime();
-												CmdInterface.handleSQL(evaluateCases[caseNo], false, true);
-												long endTime2 = System.nanoTime();
-												long duration2 = (endTime2 - startTime2);  //divide by 1000000 to get milliseconds
+//												// Record execution time with materialize
+//												long startTime2 = System.nanoTime();
+//												CmdInterface.handleSQL(evaluateCases[caseNo], false, true);
+//												long endTime2 = System.nanoTime();
+//												long duration2 = (endTime2 - startTime2);  //divide by 1000000 to get milliseconds
 									            
 												value[m][0] = duration1 / 1000000;
-												value[m][1] = duration2 / 1000000;
+//												value[m][1] = duration2 / 1000000;
 												latch.countDown(); // Release await() in the test thread.
 									        }
 									    };
@@ -271,7 +271,9 @@ public class CmdInterface {
 								    writer.println("# Evaluate full scan of evaluatetable5 with " + rows + " rows with query:");
 									writer.println("# " + evaluateCases[caseNo]);
 									writer.println("# with and without materialize");
-									writer.println(value);
+									for(int t = 0; t < value.length; t++){
+										writer.println(value[t][0]);
+									}
 									
 							    }
 							    
