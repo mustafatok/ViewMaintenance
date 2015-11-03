@@ -1,0 +1,132 @@
+====================================
+Tue Nov 03 13:01:07 CET 2015
+# load evaluateTable 5 with 1000 rows
+# Evaluate full scan of evaluatetable5 with 1000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+773
+779
+639
+778
+776
+757
+737
+597
+557
+# load evaluateTable 5 with 2000 rows
+# Evaluate full scan of evaluatetable5 with 2000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+633
+666
+644
+624
+654
+647
+608
+502
+555
+# load evaluateTable 5 with 3000 rows
+# Evaluate full scan of evaluatetable5 with 3000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+824
+940
+915
+873
+971
+928
+979
+943
+958
+# load evaluateTable 5 with 4000 rows
+# Evaluate full scan of evaluatetable5 with 4000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+822
+895
+942
+909
+887
+941
+858
+949
+947
+# load evaluateTable 5 with 5000 rows
+# Evaluate full scan of evaluatetable5 with 5000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+1011
+1057
+998
+1076
+1081
+1040
+1063
+1045
+1070
+# load evaluateTable 5 with 6000 rows
+# Evaluate full scan of evaluatetable5 with 6000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+4366
+4006
+4439
+4424
+4537
+4308
+4502
+4508
+4437
+# load evaluateTable 5 with 7000 rows
+# Evaluate full scan of evaluatetable5 with 7000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+1575
+1594
+1546
+1443
+1533
+1542
+1527
+1599
+1619
+# load evaluateTable 5 with 8000 rows
+# Evaluate full scan of evaluatetable5 with 8000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+2270
+2275
+2288
+2203
+2163
+2176
+2236
+2192
+2245
+# load evaluateTable 5 with 9000 rows
+# Evaluate full scan of evaluatetable5 with 9000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+2261
+2362
+2265
+2349
+2211
+2303
+2335
+2354
+2316
+# load evaluateTable 5 with 10000 rows
+# Evaluate full scan of evaluatetable5 with 10000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+1844
+1851
+1851
+1854
+1830
+1788
+1750
+1785
+1816

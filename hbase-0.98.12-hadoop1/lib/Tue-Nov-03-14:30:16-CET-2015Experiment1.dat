@@ -1,0 +1,72 @@
+====================================
+Tue Nov 03 14:30:16 CET 2015
+# load evaluateTable 5 with 1000 rows
+# Evaluate full scan of evaluatetable5 with 1000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+453
+425
+441
+# load evaluateTable 5 with 2000 rows
+# Evaluate full scan of evaluatetable5 with 2000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+416
+418
+415
+# load evaluateTable 5 with 3000 rows
+# Evaluate full scan of evaluatetable5 with 3000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+687
+681
+676
+# load evaluateTable 5 with 4000 rows
+# Evaluate full scan of evaluatetable5 with 4000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+768
+760
+746
+# load evaluateTable 5 with 5000 rows
+# Evaluate full scan of evaluatetable5 with 5000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+813
+857
+865
+# load evaluateTable 5 with 6000 rows
+# Evaluate full scan of evaluatetable5 with 6000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+1116
+1104
+1023
+# load evaluateTable 5 with 7000 rows
+# Evaluate full scan of evaluatetable5 with 7000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+805
+805
+751
+# load evaluateTable 5 with 8000 rows
+# Evaluate full scan of evaluatetable5 with 8000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+927
+913
+892
+# load evaluateTable 5 with 9000 rows
+# Evaluate full scan of evaluatetable5 with 9000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+1061
+1048
+1035
+# load evaluateTable 5 with 10000 rows
+# Evaluate full scan of evaluatetable5 with 10000 rows with query:
+# select colfam.C1, colfam.C2 from evaluateTable5
+# with and without materialize
+971
+971
+962
