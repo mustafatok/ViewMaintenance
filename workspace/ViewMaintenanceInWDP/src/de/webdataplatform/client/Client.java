@@ -530,12 +530,12 @@ public class Client {
 		
 		baseTable.close();
 		
-//		HTable markerTable = new HTable(conf, "finish_markers");
-//		log.info(Client.class, "queueing finish marker: "+name);
-//		Put put = new Put(Bytes.toBytes(name));
-//		put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("client"), Bytes.toBytes(name));	
-//		markerTable.put(put);
-//		markerTable.close();
+		HTable markerTable = new HTable(conf, "finish_markers");
+		log.info(Client.class, "queueing finish marker: "+name);
+		Put put = new Put(Bytes.toBytes(name));
+		put.add(Bytes.toBytes("colfam1"), Bytes.toBytes("client"), Bytes.toBytes(name));	
+		markerTable.put(put);
+		markerTable.close();
 		
 //		setFlag(true);
 	

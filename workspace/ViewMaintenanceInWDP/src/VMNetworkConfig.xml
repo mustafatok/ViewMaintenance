@@ -2,46 +2,39 @@
 <setup>
     
   <networkconfig>  
-	  
-      <zookeeper>
-		  		<quorum>HB</quorum>
-<!-- 		  		<clientPort>2222</clientPort>     -->
+
+         <zookeeper>
+		  <quorum>deltaserver1</quorum>
+	<!--	  <clientPort>2222</clientPort>   --> 
 	  </zookeeper>
-	  
-      <master>
-          <address>HB</address>
-<!-- 		  <hbasePort>60100</hbasePort> -->
-		  <vmPort>60010</vmPort>
+         <master>
+                <address>deltaserver1</address>
+ 		<!--  <hbasePort>60000</hbasePort>--> 
+		  <vmPort>4004</vmPort>
 	  </master>
-	  
-	  <hdfs>hdfs://HB:54310</hdfs>
-	  	  
+	  <hdfs>hdfs://deltaserver1</hdfs>
 	  <client>
 	      	<nodes>
-				<node>deltaserver1</node>
-				<node>storageserver1</node>
-			</nodes>	      
+			<node>deltaserver1</node>
+		</nodes>	      
 	  </client>
-	  
-
 	  
 	  <regionServer>
 	      <nodes>
-				<node>deltaserver1</node>
-				<node>storageserver1</node> 
-		  </nodes>	
-		  <messagePort>4133</messagePort>   
-	 </regionServer>
-	  
+			<node>deltaserver1</node>
+			<node>storageserver1</node>   
+	      </nodes>	
+	      <messagePort>4533</messagePort>   
+	  </regionServer>
 	  
 	  <viewManager>
-	      	<numOfInstances>3</numOfInstances>
+	      	<numOfInstances>2</numOfInstances>
 	      	<messagePort>4130</messagePort>
 	        <updatePort>4230</updatePort>
 	      	<nodes>
-				<node>deltaserver1</node>
-				<node>storageserver1</node>
-			</nodes>	
+			<node>deltaserver1</node>
+                        <node>storageserver1</node>   
+		</nodes>	
 	  </viewManager>
 	  
   </networkconfig> 
