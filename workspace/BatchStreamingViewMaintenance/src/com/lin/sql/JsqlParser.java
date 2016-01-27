@@ -2,6 +2,7 @@ package com.lin.sql;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jsqlparser.JSQLParserException;
@@ -14,6 +15,7 @@ import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.statement.create.table.CreateTable;
 import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
@@ -154,6 +156,7 @@ public class JsqlParser {
 					} // if(tableName != null)
 				} // if(selectStatement.getSelectBody() instanceof PlainSelect)
 			}// if (statement instanceof Select)
+	
 		} catch (JSQLParserException e) {
 			e.printStackTrace();
 		}

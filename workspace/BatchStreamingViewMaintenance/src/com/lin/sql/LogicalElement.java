@@ -315,8 +315,7 @@ public class LogicalElement implements Runnable{
 			System.out.println(end + " Finish batch job in " + (end.getTime() - begin.getTime()) + " miliseconds");
 			
 			long total = 0;
-			for (Map.Entry<byte[], ResultMessage> entry : results
-					.entrySet()) {
+			for (Map.Entry<byte[], ResultMessage> entry : results.entrySet()) {
 				ResultMessage response = entry.getValue();
 				total += response.getSize();
 				System.out.println("Region: " + Bytes.toString(entry.getKey())

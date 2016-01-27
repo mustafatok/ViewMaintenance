@@ -34,6 +34,9 @@ public class SimpleLogicalPlan{
 	public String toString() {
 		String str = "";
 		LogicalElement le = head;
+		if(le == null){
+			return "";
+		}
 		do{
 			str += "[ " + le.toString() + " ] ";
 		}while((le = le.getNext()) != null);
