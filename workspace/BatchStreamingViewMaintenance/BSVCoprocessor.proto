@@ -26,6 +26,7 @@ message ParameterMessage{
 	optional bool isReturningResults=8;
 	optional bytes SQL=9;
 	optional bool isBuildJoinView=10;
+	optional bytes viewName=11;
 }
 
 message KeyValue{

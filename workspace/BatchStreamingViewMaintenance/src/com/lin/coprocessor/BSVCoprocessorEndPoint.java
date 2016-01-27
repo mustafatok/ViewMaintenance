@@ -867,6 +867,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 */
 	public class MaterializeManager{
 		private String SQL = "";
+		private String viewName = "";
 		private HTableInterface deltaView = null;
 		private HTableInterface selectView = null;
 		private HTableInterface aggregationView = null;
@@ -901,6 +902,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		
 		public MaterializeManager(ParameterMessage request) {
 			SQL = request.getSQL().toStringUtf8();
+			viewName = request.getViewName().toStringUtf8();
 		}
 
 		/**
@@ -912,7 +914,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				Configuration conf = HBaseConfiguration.create();
 				try {
 //					aggregationView = new HTable(conf, Common.senitiseSQL(SQL) + "_aggregation");
-					aggregationView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_aggregation"));
+//					aggregationView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_aggregation"));
+					aggregationView = env.getTable(TableName.valueOf(viewName + "_aggregation"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -955,7 +958,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				Configuration conf = HBaseConfiguration.create();
 				try {
 //					selectView = new HTable(conf, Common.senitiseSQL(SQL) + "_select");
-					selectView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_select"));
+//					selectView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_select"));
+					selectView = env.getTable(TableName.valueOf(viewName + "_select"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -977,7 +981,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				Configuration conf = HBaseConfiguration.create();
 				try {
 //					deltaView = new HTable(conf, Common.senitiseSQL(SQL) + "_delta");
-					deltaView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_delta"));
+//					deltaView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_delta"));
+					deltaView = env.getTable(TableName.valueOf(viewName + "_delta"));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

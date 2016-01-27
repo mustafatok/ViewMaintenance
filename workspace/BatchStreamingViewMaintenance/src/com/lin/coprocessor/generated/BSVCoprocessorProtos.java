@@ -1453,6 +1453,16 @@ public final class BSVCoprocessorProtos {
      * <code>optional bool isBuildJoinView = 10;</code>
      */
     boolean getIsBuildJoinView();
+
+    // optional bytes viewName = 11;
+    /**
+     * <code>optional bytes viewName = 11;</code>
+     */
+    boolean hasViewName();
+    /**
+     * <code>optional bytes viewName = 11;</code>
+     */
+    com.google.protobuf.ByteString getViewName();
   }
   /**
    * Protobuf type {@code ParameterMessage}
@@ -1562,6 +1572,11 @@ public final class BSVCoprocessorProtos {
             case 80: {
               bitField0_ |= 0x00000040;
               isBuildJoinView_ = input.readBool();
+              break;
+            }
+            case 90: {
+              bitField0_ |= 0x00000080;
+              viewName_ = input.readBytes();
               break;
             }
           }
@@ -1820,6 +1835,22 @@ public final class BSVCoprocessorProtos {
       return isBuildJoinView_;
     }
 
+    // optional bytes viewName = 11;
+    public static final int VIEWNAME_FIELD_NUMBER = 11;
+    private com.google.protobuf.ByteString viewName_;
+    /**
+     * <code>optional bytes viewName = 11;</code>
+     */
+    public boolean hasViewName() {
+      return ((bitField0_ & 0x00000080) == 0x00000080);
+    }
+    /**
+     * <code>optional bytes viewName = 11;</code>
+     */
+    public com.google.protobuf.ByteString getViewName() {
+      return viewName_;
+    }
+
     private void initFields() {
       column_ = java.util.Collections.emptyList();
       condition_ = java.util.Collections.emptyList();
@@ -1831,6 +1862,7 @@ public final class BSVCoprocessorProtos {
       isReturningResults_ = false;
       sQL_ = com.google.protobuf.ByteString.EMPTY;
       isBuildJoinView_ = false;
+      viewName_ = com.google.protobuf.ByteString.EMPTY;
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -1886,6 +1918,9 @@ public final class BSVCoprocessorProtos {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         output.writeBool(10, isBuildJoinView_);
       }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        output.writeBytes(11, viewName_);
+      }
       getUnknownFields().writeTo(output);
     }
 
@@ -1939,6 +1974,10 @@ public final class BSVCoprocessorProtos {
       if (((bitField0_ & 0x00000040) == 0x00000040)) {
         size += com.google.protobuf.CodedOutputStream
           .computeBoolSize(10, isBuildJoinView_);
+      }
+      if (((bitField0_ & 0x00000080) == 0x00000080)) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeBytesSize(11, viewName_);
       }
       size += getUnknownFields().getSerializedSize();
       memoizedSerializedSize = size;
@@ -2004,6 +2043,11 @@ public final class BSVCoprocessorProtos {
         result = result && (getIsBuildJoinView()
             == other.getIsBuildJoinView());
       }
+      result = result && (hasViewName() == other.hasViewName());
+      if (hasViewName()) {
+        result = result && getViewName()
+            .equals(other.getViewName());
+      }
       result = result &&
           getUnknownFields().equals(other.getUnknownFields());
       return result;
@@ -2056,6 +2100,10 @@ public final class BSVCoprocessorProtos {
       if (hasIsBuildJoinView()) {
         hash = (37 * hash) + ISBUILDJOINVIEW_FIELD_NUMBER;
         hash = (53 * hash) + hashBoolean(getIsBuildJoinView());
+      }
+      if (hasViewName()) {
+        hash = (37 * hash) + VIEWNAME_FIELD_NUMBER;
+        hash = (53 * hash) + getViewName().hashCode();
       }
       hash = (29 * hash) + getUnknownFields().hashCode();
       memoizedHashCode = hash;
@@ -2196,6 +2244,8 @@ public final class BSVCoprocessorProtos {
         bitField0_ = (bitField0_ & ~0x00000100);
         isBuildJoinView_ = false;
         bitField0_ = (bitField0_ & ~0x00000200);
+        viewName_ = com.google.protobuf.ByteString.EMPTY;
+        bitField0_ = (bitField0_ & ~0x00000400);
         return this;
       }
 
@@ -2275,6 +2325,10 @@ public final class BSVCoprocessorProtos {
           to_bitField0_ |= 0x00000040;
         }
         result.isBuildJoinView_ = isBuildJoinView_;
+        if (((from_bitField0_ & 0x00000400) == 0x00000400)) {
+          to_bitField0_ |= 0x00000080;
+        }
+        result.viewName_ = viewName_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -2373,6 +2427,9 @@ public final class BSVCoprocessorProtos {
         }
         if (other.hasIsBuildJoinView()) {
           setIsBuildJoinView(other.getIsBuildJoinView());
+        }
+        if (other.hasViewName()) {
+          setViewName(other.getViewName());
         }
         this.mergeUnknownFields(other.getUnknownFields());
         return this;
@@ -3204,6 +3261,42 @@ public final class BSVCoprocessorProtos {
       public Builder clearIsBuildJoinView() {
         bitField0_ = (bitField0_ & ~0x00000200);
         isBuildJoinView_ = false;
+        onChanged();
+        return this;
+      }
+
+      // optional bytes viewName = 11;
+      private com.google.protobuf.ByteString viewName_ = com.google.protobuf.ByteString.EMPTY;
+      /**
+       * <code>optional bytes viewName = 11;</code>
+       */
+      public boolean hasViewName() {
+        return ((bitField0_ & 0x00000400) == 0x00000400);
+      }
+      /**
+       * <code>optional bytes viewName = 11;</code>
+       */
+      public com.google.protobuf.ByteString getViewName() {
+        return viewName_;
+      }
+      /**
+       * <code>optional bytes viewName = 11;</code>
+       */
+      public Builder setViewName(com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000400;
+        viewName_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional bytes viewName = 11;</code>
+       */
+      public Builder clearViewName() {
+        bitField0_ = (bitField0_ & ~0x00000400);
+        viewName_ = getDefaultInstance().getViewName();
         onChanged();
         return this;
       }
@@ -5675,20 +5768,20 @@ public final class BSVCoprocessorProtos {
       "\n\024BSVCoprocessor.proto\"+\n\tBSVColumn\022\016\n\006f" +
       "amily\030\001 \002(\014\022\016\n\006column\030\002 \002(\014\"H\n\tCondition" +
       "\022\032\n\006column\030\001 \002(\0132\n.BSVColumn\022\020\n\010operator" +
-      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\367\001\n\020ParameterMessa" +
+      "\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"\211\002\n\020ParameterMessa" +
       "ge\022\032\n\006column\030\001 \003(\0132\n.BSVColumn\022\035\n\tcondit" +
       "ion\030\002 \003(\0132\n.Condition\022\023\n\013aggregation\030\003 \003" +
       "(\014\022\017\n\007joinKey\030\004 \001(\014\022\026\n\016aggregationKey\030\005 " +
       "\001(\014\022\021\n\tjoinTable\030\006 \001(\014\022\025\n\risMaterialize\030" +
       "\007 \001(\010\022\032\n\022isReturningResults\030\010 \001(\010\022\013\n\003SQL" +
-      "\030\t \001(\014\022\027\n\017isBuildJoinView\030\n \001(\010\"6\n\010KeyVa",
-      "lue\022\016\n\006rowKey\030\001 \002(\014\022\013\n\003key\030\002 \002(\014\022\r\n\005valu" +
-      "e\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010keyValue\030\002 \003(\0132\t.Ke" +
-      "yValue\"6\n\rResultMessage\022\024\n\003row\030\001 \003(\0132\007.B" +
-      "SVRow\022\017\n\004size\030\002 \001(\003:\001025\n\007Execute\022*\n\005bat" +
-      "ch\022\021.ParameterMessage\032\016.ResultMessageB=\n" +
-      "\035com.lin.coprocessor.generatedB\024BSVCopro" +
-      "cessorProtosH\001\210\001\001\240\001\001"
+      "\030\t \001(\014\022\027\n\017isBuildJoinView\030\n \001(\010\022\020\n\010viewN",
+      "ame\030\013 \001(\014\"6\n\010KeyValue\022\016\n\006rowKey\030\001 \002(\014\022\013\n" +
+      "\003key\030\002 \002(\014\022\r\n\005value\030\003 \002(\014\"%\n\006BSVRow\022\033\n\010k" +
+      "eyValue\030\002 \003(\0132\t.KeyValue\"6\n\rResultMessag" +
+      "e\022\024\n\003row\030\001 \003(\0132\007.BSVRow\022\017\n\004size\030\002 \001(\003:\0010" +
+      "25\n\007Execute\022*\n\005batch\022\021.ParameterMessage\032" +
+      "\016.ResultMessageB=\n\035com.lin.coprocessor.g" +
+      "eneratedB\024BSVCoprocessorProtosH\001\210\001\001\240\001\001"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -5712,7 +5805,7 @@ public final class BSVCoprocessorProtos {
           internal_static_ParameterMessage_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_ParameterMessage_descriptor,
-              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", "IsMaterialize", "IsReturningResults", "SQL", "IsBuildJoinView", });
+              new java.lang.String[] { "Column", "Condition", "Aggregation", "JoinKey", "AggregationKey", "JoinTable", "IsMaterialize", "IsReturningResults", "SQL", "IsBuildJoinView", "ViewName", });
           internal_static_KeyValue_descriptor =
             getDescriptor().getMessageTypes().get(3);
           internal_static_KeyValue_fieldAccessorTable = new

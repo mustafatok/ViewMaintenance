@@ -36,7 +36,7 @@ public class JsqlParser {
 	 * @param input
 	 * @return
 	 */
-	public static SimpleLogicalPlan parse(String input, boolean isMaterialize, boolean isReturningResults) {
+	public static SimpleLogicalPlan parse(String input, boolean isReturningResults, String viewName) {
 		SimpleLogicalPlan logicalPlan = new SimpleLogicalPlan(); // logical plan to be return
 		CCJSqlParserManager pm = new CCJSqlParserManager(); 
 		try {
@@ -60,13 +60,14 @@ public class JsqlParser {
 							System.out.println("Handling select with single table");
 							LogicalElement element = new LogicalElement();
 							element.setSQL(input);
-							element.setMaterialize(isMaterialize);
+							element.setViewName(viewName);
+							element.setMaterialize(!viewName.equals(""));
 							element.setReturningResults(isReturningResults);
 							handleSingleTable(plainSelect, tableName, element);
 							logicalPlan.add(element);
 							
-							if(isMaterialize){
-								handleMaterialize(input, element);
+							if(!viewName.equals("")){
+								handleMaterialize(viewName, element);
 							}
 						}else{
 							System.out.println("Handling select with Join");
@@ -77,13 +78,14 @@ public class JsqlParser {
 							element.setReturningResults(isReturningResults);
 							String SQL = element.constructSQLByField();
 							element.setSQL(SQL);
+							element.setViewName(viewName);
 							element.setNonBlock(false);
 							
-							if(isMaterialize){
+							if(!viewName.equals("")){
 								System.out.println(
 										"+++++ Construct separate query for first join table +++++\n"
 										+ SQL);
-								handleMaterialize(SQL, element);
+								handleMaterialize(viewName, element);
 							}
 							
 							// build plan for join table
@@ -94,13 +96,14 @@ public class JsqlParser {
 							handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
 							String joinElementSQL = elementJoin.constructSQLByField();
 							elementJoin.setSQL(joinElementSQL);
+//							elementJoin.setViewName(viewName);
 							elementJoin.setNonBlock(true);
 							
-							if(isMaterialize){
+							if(!viewName.equals("")){
 								System.out.println(
 										"+++++ Construct separate query for second join table +++++\n"
 										+joinElementSQL);
-								handleMaterialize(joinElementSQL, element);
+								handleMaterialize(viewName, element);
 							}
 							
 							// For each of the plan, the join key field should be filled
@@ -163,7 +166,7 @@ public class JsqlParser {
 		return logicalPlan;
 	}
 
-	private static void handleMaterialize(String input, LogicalElement element) {
+	private static void handleMaterialize(String viewName, LogicalElement element) {
 		// build an empty delta table with the following properties:
 		//   =================================================
 		//     table name: SQL(replace space with '_')_delta
@@ -184,8 +187,8 @@ public class JsqlParser {
 		HBaseHelper helper;
 		try {
 			helper = HBaseHelper.getHelper(conf);
-			helper.dropTable(Common.senitiseSQL(input) + "_delta");
-			helper.createTable(Common.senitiseSQL(input) + "_delta", "colfam");
+			helper.dropTable(viewName + "_delta");
+			helper.createTable(viewName + "_delta", "colfam");
 			
 		} catch(IOException e){
 			e.printStackTrace();
@@ -197,8 +200,8 @@ public class JsqlParser {
 			// build an empty table for select view
 			try {
 				helper = HBaseHelper.getHelper(conf);
-				helper.dropTable(Common.senitiseSQL(input) + "_select");
-				helper.createTable(Common.senitiseSQL(input) + "_select", "colfam");
+				helper.dropTable(viewName + "_select");
+				helper.createTable(viewName + "_select", "colfam");
 				
 			} catch(IOException e){
 				e.printStackTrace();
@@ -208,8 +211,8 @@ public class JsqlParser {
 		else{
 			try {
 				helper = HBaseHelper.getHelper(conf);
-				helper.dropTable(Common.senitiseSQL(input) + "_aggregation");
-				helper.createTable(Common.senitiseSQL(input) + "_aggregation", "colfam");
+				helper.dropTable(viewName + "_aggregation");
+				helper.createTable(viewName + "_aggregation", "colfam");
 				
 			} catch(IOException e){
 				e.printStackTrace();

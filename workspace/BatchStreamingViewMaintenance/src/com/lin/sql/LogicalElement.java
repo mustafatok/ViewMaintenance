@@ -36,6 +36,7 @@ public class LogicalElement implements Runnable{
 	private boolean isMaterialize = false;
 	private boolean isReturningResults = false;
 	private String SQL = "";
+	private String viewName = "";
 	private boolean isBuildJoinView = false;
 	/**
 	 * The following fields are for separating block and non-block operations
@@ -300,6 +301,9 @@ public class LogicalElement implements Runnable{
 			// set SQL
 			request.setSQL(ByteString.copyFrom(SQL.getBytes()));
 			
+			// set viewName
+			request.setViewName(ByteString.copyFrom(viewName.getBytes()));
+			
 			// set is-build-join-view
 			request.setIsBuildJoinView(isBuildJoinView);
 			 
@@ -340,5 +344,13 @@ public class LogicalElement implements Runnable{
 		if(element != null){
 			element.setFinishBlock(element.getFinishBlock() + 1);
 		}
+	}
+
+	public String getViewName() {
+		return viewName;
+	}
+
+	public void setViewName(String viewName) {
+		this.viewName = viewName;
 	}
 }
