@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
+import com.lin.sql.ViewManager;
 import org.apache.commons.cli.BasicParser;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
@@ -49,20 +50,15 @@ public class CmdInterface {
 					//test(argIn);
 				} else if(argIn[0].equals("create")){
 					if (argIn.length > 3 && argIn[1].equals("view")){
-						createView(argIn[2], input);
+						createMaterializedView(argIn[2], input);
 					} else if (argIn.length > 4 && argIn[1].equals("updatable") && argIn[2].equals("view")){
-						String SQLStatement = "";
-						for (int i = 4; i < argIn.length; i++) {
-							SQLStatement += argIn[i];
-						}
-						createUpdatableView(argIn[3], SQLStatement);
-						
+						createUpdatableView(argIn[3], input);
 					} else if (argIn[1].equals("table")){
 						createTable(input);
 						
 					}
 				} else {
-					handleSQL(input, true, "");
+					handleSQL(input, true);
 				}
 			}catch (IOException e) {
 				e.printStackTrace();
@@ -73,15 +69,19 @@ public class CmdInterface {
 		}
 	}
 	
-	private static void createView(String viewName, String completeSQLStatement){
-		String SQLStatement = completeSQLStatement.substring(("create view " + viewName).length() + 1);;
-		
+	private static void createMaterializedView(String viewName, String completeSQLStatement){
+		String SQLStatement = completeSQLStatement.substring(("create view " + viewName).length() + 1);
 		System.out.println("create view " + viewName + " " + SQLStatement);
-		handleSQL(SQLStatement, true, viewName);
+		ViewManager.createMaterializedView(viewName, SQLStatement);
+
+//		handleSQL(SQLStatement, true, viewName);
 	}
 	
-	private static void createUpdatableView(String name, String SQLStatement){
-		System.out.println("create updatable view " + name + " " + SQLStatement);
+	private static void createUpdatableView(String viewName, String completeSQLStatement){
+		String SQLStatement = completeSQLStatement.substring(("create updatable view " + viewName).length() + 1);;
+
+		System.out.println("create updatable view " + viewName + " " + SQLStatement);
+		handleSQL(SQLStatement, true);
 	}
 	
 	private static void createTable(String SQLStatement){
@@ -118,8 +118,8 @@ public class CmdInterface {
 	 * Handle sql
 	 * @param input
 	 */
-	public static void handleSQL(String input, boolean isReturningResults, String viewName) {
-		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input, isReturningResults, viewName);
+	public static void handleSQL(String input, boolean isReturningResults) {
+		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input, isReturningResults);
 		System.out.println(simpleLogicalPlan);
 		simpleLogicalPlan.getHead().execute();
 	}

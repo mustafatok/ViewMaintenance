@@ -6,7 +6,6 @@ import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,9 +19,7 @@ import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.Coprocessor;
 import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.HColumnDescriptor;
 import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.HTableInterface;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.client.RetriesExhaustedWithDetailsException;
@@ -30,7 +27,6 @@ import org.apache.hadoop.hbase.client.Scan;
 import org.apache.hadoop.hbase.coprocessor.CoprocessorService;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.regionserver.InternalScanner;
-import org.apache.hadoop.hbase.util.Bytes;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
@@ -43,7 +39,6 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.Execute;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
-import com.lin.test.HBaseHelper;
 import com.lin.utils.Common;
 
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
@@ -937,15 +932,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				Put put = new Put(keyValue.getKey().toByteArray());
 				put.add("colfam".getBytes(),(keyValue.getRowKey().toStringUtf8() + "_old").getBytes(), null);
 				put.add("colfam".getBytes(), (keyValue.getRowKey().toStringUtf8() +  "_new").getBytes(), keyValue.getValue().toByteArray());
-				try {
-					aggregationView2.put(put);
-				} catch (RetriesExhaustedWithDetailsException e) {
-					e.printStackTrace();
-				} catch (InterruptedIOException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				putToTable(aggregationView2, put);
 			}
 		}
 
@@ -999,20 +986,24 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		private void putToTable(HTableInterface selectView2, List<Cell> row) {
 			// put to table
 			for(Cell cell:row){
-				// put one row 
+				// put one row
 				Put put = new Put(CellUtil.cloneRow(cell));
 				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_old").getBytes(), null);
 				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_new").getBytes(), CellUtil.cloneValue(cell));
-				try {
-					selectView2.put(put);
-				} catch (RetriesExhaustedWithDetailsException e) {
-					e.printStackTrace();
-				} catch (InterruptedIOException e) {
-					e.printStackTrace();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				putToTable(selectView2, put);
+			}
+		}
+
+		private void putToTable(HTableInterface tableName, Put put){
+			try {
+				tableName.put(put);
+			} catch (RetriesExhaustedWithDetailsException e) {
+				e.printStackTrace();
+			} catch (InterruptedIOException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}

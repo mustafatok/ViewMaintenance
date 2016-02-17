@@ -2,7 +2,6 @@ package com.lin.sql;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.ArrayList;
 import java.util.List;
 
 import net.sf.jsqlparser.JSQLParserException;
@@ -15,11 +14,7 @@ import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
-import net.sf.jsqlparser.statement.create.table.CreateTable;
-import net.sf.jsqlparser.statement.select.Join;
-import net.sf.jsqlparser.statement.select.PlainSelect;
-import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectExpressionItem;
+import net.sf.jsqlparser.statement.select.*;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
@@ -29,6 +24,7 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
 import com.lin.test.HBaseHelper;
 import com.lin.utils.Common;
+import org.apache.hadoop.hbase.HColumnDescriptor;
 
 public class JsqlParser {
 	/**
@@ -36,7 +32,7 @@ public class JsqlParser {
 	 * @param input
 	 * @return
 	 */
-	public static SimpleLogicalPlan parse(String input, boolean isReturningResults, String viewName) {
+	public static SimpleLogicalPlan parse(String input, boolean isReturningResults) {
 		SimpleLogicalPlan logicalPlan = new SimpleLogicalPlan(); // logical plan to be return
 		CCJSqlParserManager pm = new CCJSqlParserManager(); 
 		try {
@@ -60,15 +56,15 @@ public class JsqlParser {
 							System.out.println("Handling select with single table");
 							LogicalElement element = new LogicalElement();
 							element.setSQL(input);
-							element.setViewName(viewName);
-							element.setMaterialize(!viewName.equals(""));
+//							element.setViewName(viewName);
+//							element.setMaterialize(!viewName.equals(""));
 							element.setReturningResults(isReturningResults);
 							handleSingleTable(plainSelect, tableName, element);
 							logicalPlan.add(element);
 							
-							if(!viewName.equals("")){
-								handleMaterialize(viewName, element);
-							}
+//							if(!viewName.equals("")){
+//								handleMaterialize(viewName, element);
+//							}
 						}else{
 							System.out.println("Handling select with Join");
 							
@@ -78,15 +74,15 @@ public class JsqlParser {
 							element.setReturningResults(isReturningResults);
 							String SQL = element.constructSQLByField();
 							element.setSQL(SQL);
-							element.setViewName(viewName);
+//							element.setViewName(viewName);
 							element.setNonBlock(false);
 							
-							if(!viewName.equals("")){
-								System.out.println(
-										"+++++ Construct separate query for first join table +++++\n"
-										+ SQL);
-								handleMaterialize(viewName, element);
-							}
+//							if(!viewName.equals("")){
+//								System.out.println(
+//										"+++++ Construct separate query for first join table +++++\n"
+//										+ SQL);
+//								handleMaterialize(viewName, element);
+//							}
 							
 							// build plan for join table
 							// Assert only one join
@@ -99,12 +95,12 @@ public class JsqlParser {
 //							elementJoin.setViewName(viewName);
 							elementJoin.setNonBlock(true);
 							
-							if(!viewName.equals("")){
-								System.out.println(
-										"+++++ Construct separate query for second join table +++++\n"
-										+joinElementSQL);
-								handleMaterialize(viewName, element);
-							}
+//							if(!viewName.equals("")){
+//								System.out.println(
+//										"+++++ Construct separate query for second join table +++++\n"
+//										+joinElementSQL);
+//								handleMaterialize(joinElementSQL, element);
+//							}
 							
 							// For each of the plan, the join key field should be filled
 							// Assert the join key of the left table is on the left and 
@@ -166,62 +162,8 @@ public class JsqlParser {
 		return logicalPlan;
 	}
 
-	private static void handleMaterialize(String viewName, LogicalElement element) {
-		// build an empty delta table with the following properties:
-		//   =================================================
-		//     table name: SQL(replace space with '_')_delta
-		//   =================================================
-		//                family:qualifier1_old
-		//                family:qualifier1_new
-		//                family:qualifier2_old
-		//                family:qualifier2_new
-		//                         .
-		//                         .
-		//                         .
-		//                family:qualifiern_old
-		//                family:qualifiern_new
-		// 
-		// The actual qualifier will be determined in every coprocessor and being put
-		// into the table in the coprocessor
-		Configuration conf = HBaseConfiguration.create();
-		HBaseHelper helper;
-		try {
-			helper = HBaseHelper.getHelper(conf);
-			helper.dropTable(viewName + "_delta");
-			helper.createTable(viewName + "_delta", "colfam");
-			
-		} catch(IOException e){
-			e.printStackTrace();
-		}
-		
-		// If aggregation key is empty, this query is not a
-		// aggregation key query, we build a selection view
-		if(element.getAggregationKey().equals("")){
-			// build an empty table for select view
-			try {
-				helper = HBaseHelper.getHelper(conf);
-				helper.dropTable(viewName + "_select");
-				helper.createTable(viewName + "_select", "colfam");
-				
-			} catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-		// otherwise we build an aggregation view
-		else{
-			try {
-				helper = HBaseHelper.getHelper(conf);
-				helper.dropTable(viewName + "_aggregation");
-				helper.createTable(viewName + "_aggregation", "colfam");
-				
-			} catch(IOException e){
-				e.printStackTrace();
-			}
-		}
-	}
 
-	public static void handleJoinTable(PlainSelect plainSelect,
-			String tableName, LogicalElement element) {
+	public static void handleJoinTable(PlainSelect plainSelect, String tableName, LogicalElement element) {
 		element.setTableName(tableName); // set table name
 		
 		// set materialize
@@ -351,46 +293,62 @@ public class JsqlParser {
 		}
 	}
 
-	public static void handleSingleTable(PlainSelect plainSelect,
-			String tableName, LogicalElement element) {
+	public static void handleSingleTable(PlainSelect plainSelect, String tableName, LogicalElement element) {
 		element.setTableName(tableName); // set table name
 		
 		// get select items (columns to be select)
-		List<SelectExpressionItem> columnList = plainSelect.getSelectItems();
-		
+		List<SelectItem> columnList = plainSelect.getSelectItems();
+//		List<SelectExpressionItem> columnList = plainSelect.getSelectItems();
+
 		// construct column message(protobuf) and add to logical element
 		for(int j = 0; j < columnList.size(); j++){
-			// find aggregation
-			if(columnList.get(j).getExpression() instanceof Function){
-				System.out.println("detected aggreagation function");
-				Function aggFunction = (Function) columnList.get(j).getExpression();
-				
-				// construct aggregation as following format:
-				// sum:colFam1
-				String aggString = aggFunction.getName() + ":";
-				int n = 0;
-				for(Object expression:aggFunction.getParameters().getExpressions()){
-					if(n != 0){ // if more than one parameter seperate them by comma
-						aggString += ",";
-					}
-					Column column = (Column)expression;
-					String famCol = column.getWholeColumnName();
-					aggString += famCol;
-					n++;
+			if(columnList.get(j) instanceof AllColumns){
+				HColumnDescriptor[] list = new HColumnDescriptor[0];
+				try {
+					list = HBaseHelper.getHelper(HBaseConfiguration.create()).getColumnFamilies(tableName);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
-				element.getAggregations().add(ByteString.copyFrom(aggString.getBytes()));
-			}
-			// find simple columns
-			else{
-				String famCol = columnList.get(j).toString();
-				System.out.println("detected family and column " + famCol);
+				for (HColumnDescriptor col: list) {
+					System.out.println("detected family and column " + col);
+					// TODO: Support * operation for SQL.
 
-				BSVColumn column = BSVColumn.newBuilder()
-						.setFamily(ByteString.copyFrom(famCol.split("\\.")[0].getBytes()))
-						.setColumn(ByteString.copyFrom(famCol.split("\\.")[1].getBytes())).build();
-				
-				// add column to logical element
-				element.getColumns().add(column);
+					// add column to logical element
+				}
+			}else if(columnList.get(j) instanceof SelectExpressionItem) {
+				// find aggregation
+				SelectExpressionItem item = (SelectExpressionItem) columnList.get(j);
+				if (item.getExpression() instanceof Function) {
+					System.out.println("detected aggreagation function");
+					Function aggFunction = (Function) item.getExpression();
+
+					// construct aggregation as following format:
+					// sum:colFam1
+					String aggString = aggFunction.getName() + ":";
+					int n = 0;
+					for (Object expression : aggFunction.getParameters().getExpressions()) {
+						if (n != 0) { // if more than one parameter seperate them by comma
+							aggString += ",";
+						}
+						Column column = (Column) expression;
+						String famCol = column.getWholeColumnName();
+						aggString += famCol;
+						n++;
+					}
+					element.getAggregations().add(ByteString.copyFrom(aggString.getBytes()));
+				}
+				// find simple columns
+				else {
+					String famCol = item.toString();
+					System.out.println("detected family and column " + famCol);
+
+					BSVColumn column = BSVColumn.newBuilder()
+							.setFamily(ByteString.copyFrom(famCol.split("\\.")[0].getBytes()))
+							.setColumn(ByteString.copyFrom(famCol.split("\\.")[1].getBytes())).build();
+
+					// add column to logical element
+					element.getColumns().add(column);
+				}
 			}
 		}
 		
