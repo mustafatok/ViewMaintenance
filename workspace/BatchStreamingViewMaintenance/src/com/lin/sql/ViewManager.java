@@ -3,6 +3,9 @@ package com.lin.sql;
 import com.lin.test.HBaseHelper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
+import org.apache.hadoop.hbase.TableName;
+import org.apache.hadoop.hbase.client.Get;
+import org.apache.hadoop.hbase.client.Result;
 
 import java.io.IOException;
 
@@ -65,7 +68,8 @@ public class ViewManager {
     }
 
     public static void createMaterializedView(String viewName, String query){
-
+        if(query == null)
+            return;
         SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(query, true);
         System.out.println(simpleLogicalPlan);
 
@@ -91,4 +95,16 @@ public class ViewManager {
 
     }
 
+    public static void refreshView(String viewName){
+        Configuration conf = HBaseConfiguration.create();
+        HBaseHelper helper;
+        String query = null;
+        try {
+            helper = HBaseHelper.getHelper(conf);
+            query = helper.getValue("view_meta_data", viewName, "query", "string");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        createMaterializedView(viewName, query);
+    }
 }
