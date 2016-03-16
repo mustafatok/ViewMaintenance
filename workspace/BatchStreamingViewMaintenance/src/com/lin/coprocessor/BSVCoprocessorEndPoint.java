@@ -910,7 +910,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				try {
 //					aggregationView = new HTable(conf, Common.senitiseSQL(SQL) + "_aggregation");
 //					aggregationView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_aggregation"));
-					aggregationView = env.getTable(TableName.valueOf(viewName + "_aggregation"));
+//					aggregationView = env.getTable(TableName.valueOf(viewName + "_aggregation"));
+					aggregationView = env.getTable(TableName.valueOf(viewName));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
@@ -946,7 +947,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				try {
 //					selectView = new HTable(conf, Common.senitiseSQL(SQL) + "_select");
 //					selectView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_select"));
-					selectView = env.getTable(TableName.valueOf(viewName + "_select"));
+//					selectView = env.getTable(TableName.valueOf(viewName + "_select"));
+					selectView = env.getTable(TableName.valueOf(viewName));
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
