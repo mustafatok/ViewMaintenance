@@ -434,4 +434,42 @@ public class JsqlParser {
 		element.getConditions().add(condition);
 	}
 
+	public static String typeOfQuery(String query) {
+		CCJSqlParserManager pm = new CCJSqlParserManager();
+		try {
+			net.sf.jsqlparser.statement.Statement statement = pm.parse(new StringReader(query)); // parse sql statement
+			if (statement instanceof Select) {
+				Select selectStatement = (Select) statement;
+				if(selectStatement.getSelectBody() instanceof PlainSelect){
+					// get table name
+					PlainSelect plainSelect = (PlainSelect)selectStatement.getSelectBody();
+					String tableName = ((Table)plainSelect.getFromItem()).getName();
+					if(tableName != null){
+						List<SelectExpressionItem> columnList = plainSelect.getSelectItems();
+						for(int j = 0; j < columnList.size(); j++) {
+							SelectExpressionItem item = columnList.get(j);
+							if (item.getExpression() instanceof Function) {
+								System.out.println("Detected aggregation function");
+								return "aggregation";
+							}
+						}
+						// check if it is single table or join
+						if(plainSelect.getJoins() == null){
+							System.out.println("Handling select with single table");
+							return "select";
+						}else {
+							System.out.println("Handling select with Join");
+							return "join";
+						}
+					} // if(tableName != null)
+				} // if(selectStatement.getSelectBody() instanceof PlainSelect)
+			}// if (statement instanceof Select)
+
+		} catch (JSQLParserException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+
 }

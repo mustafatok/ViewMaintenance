@@ -43,36 +43,27 @@ public class ViewManager {
             helper.dropTable(tableName);
             helper.createTable(tableName, "colfam");
 
+
         } catch(IOException e) {
             e.printStackTrace();
         }
     }
 
-    public static void putMetaData(String viewName, String updatable, String query, String type){
+
+    public static void putTableView(String tableName, String viewName, String query){
         Configuration conf = HBaseConfiguration.create();
         HBaseHelper helper;
         try {
             helper = HBaseHelper.getHelper(conf);
+            helper.put("table_view", tableName, "views", viewName, query);
             helper.put("view_meta_data", viewName, "settings", "query", query);
-            helper.put("view_meta_data", viewName, "settings", "type", type);
-            helper.put("view_meta_data", viewName, "settings", "updatable", updatable);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-    public static void putTableView(String tableName, String viewName){
-        Configuration conf = HBaseConfiguration.create();
-        HBaseHelper helper;
-        try {
-            helper = HBaseHelper.getHelper(conf);
-            helper.put("table_view", tableName, "views", viewName, "Test"); //TODO: Change Test
             helper.put("view_meta_data", viewName, "tables", tableName, "Test"); //TODO: Change Test
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void createMaterializedView(String viewName, String query, String updatable){
+    public static void createMaterializedView(String viewName, String query){
         if(query == null)
             return;
         SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(query, true);
@@ -80,26 +71,17 @@ public class ViewManager {
 
         createViewTable(viewName + "_delta");
         createViewTable(viewName);
+
         // TODO: Fix this to support joins.
         for(LogicalElement element = simpleLogicalPlan.getHead(); element != null; element = element.getNext() ) {
             element.setViewName(viewName);
             element.setMaterialize(true);
-            if (element.getAggregationKey().equals("")) {
-                putMetaData(viewName, updatable, query, "select");
-            } else {
-                putMetaData(viewName, updatable, query, "aggregation");
-            }
-            putTableView(element.getTableName(), viewName);
+
+            putTableView(element.getTableName(), viewName, query);
         }
         simpleLogicalPlan.getHead().execute();
     }
 
-    public static void createMaterializedView(String viewName, String query) {
-        createMaterializedView(viewName, query, "n"); // Not - Updatable
-    }
-    public static void createUpdatableView(String viewName, String query){
-        createMaterializedView(viewName, query, "u"); // Updatable
-    }
 
     public static void refreshView(String viewName){
         Configuration conf = HBaseConfiguration.create();
@@ -107,10 +89,11 @@ public class ViewManager {
         String query = null;
         try {
             helper = HBaseHelper.getHelper(conf);
-            query = helper.getValue("view_meta_data", viewName, "query", "string");
+            query = helper.getValue("view_meta_data", viewName, "settings", "query");
+            createMaterializedView(viewName, query);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-        createMaterializedView(viewName, query);
     }
 }

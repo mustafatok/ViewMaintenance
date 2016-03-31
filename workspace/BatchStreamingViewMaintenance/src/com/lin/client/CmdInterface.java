@@ -19,6 +19,7 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
+import com.lin.client.ViewManager;
 import com.lin.sql.JsqlParser;
 import com.lin.sql.SimpleLogicalPlan;
 import com.lin.test.HBaseHelper;
@@ -46,7 +47,7 @@ public class CmdInterface {
 					if (argIn.length > 3 && argIn[1].equals("view")){
 						createMaterializedView(argIn[2], input);
 					} else if (argIn.length > 4 && argIn[1].equals("updatable") && argIn[2].equals("view")){
-						createUpdatableView(argIn[3], input);
+//						createUpdatableView(argIn[3], input);
 					} else if (argIn[1].equals("table")){
 						createTable(input);
 						
@@ -71,12 +72,12 @@ public class CmdInterface {
 //		handleSQL(SQLStatement, true, viewName);
 	}
 	
-	private static void createUpdatableView(String viewName, String completeSQLStatement){
-		String SQLStatement = completeSQLStatement.substring(("create updatable view " + viewName).length() + 1);;
-
-		System.out.println("create updatable view " + viewName + " " + SQLStatement);
-		handleSQL(SQLStatement, true);
-	}
+//	private static void createUpdatableView(String viewName, String completeSQLStatement){
+//		String SQLStatement = completeSQLStatement.substring(("create updatable view " + viewName).length() + 1);;
+//
+//		System.out.println("create updatable view " + viewName + " " + SQLStatement);
+//		handleSQL(SQLStatement, true);
+//	}
 	
 	private static void createTable(String SQLStatement){
 		String rest = SQLStatement.substring("create table ".length());
