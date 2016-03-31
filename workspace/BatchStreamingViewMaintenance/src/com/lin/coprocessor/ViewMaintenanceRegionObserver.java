@@ -21,8 +21,7 @@ import java.util.NavigableMap;
 
 public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
-    @Override
-    public void postPut(ObserverContext<RegionCoprocessorEnvironment> observerContext, Put put, WALEdit edit, Durability durability) throws IOException {
+    public void commonOperation(ObserverContext<RegionCoprocessorEnvironment> observerContext, Mutation op) throws IOException{
         TableName table = observerContext.getEnvironment().getRegionInfo().getTable();
         if(!table.isSystemTable()){
 
@@ -40,7 +39,14 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
                     // TODO: Change this!! -- Incremental Processing.
                     HTableInterface viewTable = observerContext.getEnvironment().getTable(TableName.valueOf(viewName));
-                    PutCommand command = (new PutCommand()).addTableName(table.getName()).addViewTable(viewTable).addPut(put).addQuery(new String(query)).execute();
+                    Command command = new Command();
+                    if(op instanceof Put){
+                        Put put = (Put) op;
+                        command.addTableName(table.getName()).addViewTable(viewTable).addViewQuery(new String(query)).execute(put);
+                    }else if(op instanceof Delete){
+                        Delete delete = (Delete) op;
+                        command.addTableName(table.getName()).addViewTable(viewTable).addViewQuery(new String(query)).execute(delete);
+                    }
 
                     if(!command.isSuccessful()){
                         // TODO : LOG HERE
@@ -48,40 +54,44 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
                 }
             }
         }
+
+    }
+    @Override
+    public void postPut(ObserverContext<RegionCoprocessorEnvironment> observerContext, Put put, WALEdit edit, Durability durability) throws IOException {
+        commonOperation(observerContext, put);
     }
 
-    public class PutCommand {
+    @Override
+    public void postDelete(ObserverContext<RegionCoprocessorEnvironment> observerContext, Delete delete, WALEdit edit, Durability durability) throws IOException {
+        commonOperation(observerContext, delete);
+    }
+
+    public class Command {
         byte[] tableName;
-        Put put;
-        String query;
+        String viewQuery;
         boolean successful = false;
         private HTableInterface view = null;
 
-        public PutCommand addTableName(byte[] tableName){
+        public Command addTableName(byte[] tableName){
             this.tableName = tableName;
             return this;
         }
-        public PutCommand addViewTable(HTableInterface view){
+        public Command addViewTable(HTableInterface view){
             this.view = view;
             return this;
         }
-        public PutCommand addPut(Put put){
-            this.put = put;
+        public Command addViewQuery(String query){
+            this.viewQuery = query;
             return this;
         }
-        public PutCommand addQuery(String query){
-            this.query = query;
-            return this;
-        }
-        public PutCommand execute() throws IOException {
+        public Command execute(Put put) throws IOException {
             if(view == null) return this;
 
             boolean errorFlag = false;
-            String viewType = JsqlParser.typeOfQuery(query);
+            String viewType = JsqlParser.typeOfQuery(viewQuery);
 
             if(viewType.equals("select")){
                 Put viewPut = new Put(put.getRow());
-                put.getFamilyCellMap();
                 NavigableMap<byte[], List<Cell>> familyCellMap = put.getFamilyCellMap();
                 for (Map.Entry<byte[], List<Cell>> entry : familyCellMap.entrySet()) {
                     List<Cell> cells = entry.getValue();
@@ -96,6 +106,40 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
 
             }else if (viewType.equals("aggregation")){
+//                Put viewPut = new Put(put.getRow());
+//                List<Cell> viewKey = put.get("colfam".getBytes(), "aggKey".getBytes());
+//                CellUtil.
+            }else{
+                errorFlag = true;
+            }
+            successful = !errorFlag;
+            return this;
+        }
+
+
+        public Command execute(Delete delete) throws IOException {
+            if(view == null) return this;
+
+            boolean errorFlag = false;
+            String viewType = JsqlParser.typeOfQuery(viewQuery);
+
+            if(viewType.equals("select")){
+                Delete viewDelete = new Delete(delete.getRow());
+                NavigableMap<byte[], List<Cell>> familyCellMap = delete.getFamilyCellMap();
+                for (Map.Entry<byte[], List<Cell>> entry : familyCellMap.entrySet()) {
+                    List<Cell> cells = entry.getValue();
+                    for(Cell c: cells){
+                        viewDelete.deleteColumn(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c)) + "_new").getBytes());
+                        viewDelete.deleteColumn(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c)) + "_old").getBytes());
+                    }
+                }
+                view.delete(viewDelete);
+                view.flushCommits();
+
+            }else if(viewType.equals("join")){
+
+
+            }else if (viewType.equals("aggregation")){
 
 
             }else{
@@ -104,6 +148,8 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
             successful = !errorFlag;
             return this;
         }
+
+
         public boolean isSuccessful(){
             return successful;
         }
