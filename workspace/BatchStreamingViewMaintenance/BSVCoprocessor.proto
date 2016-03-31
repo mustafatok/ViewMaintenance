@@ -4,7 +4,7 @@ option java_generic_services = true;
 option java_generate_equals_and_hash = true;
 option optimize_for = SPEED;
 
-message BSVColumn{
+message BSVColumn{java
 	required bytes family=1;
 	required bytes column=2;
 }

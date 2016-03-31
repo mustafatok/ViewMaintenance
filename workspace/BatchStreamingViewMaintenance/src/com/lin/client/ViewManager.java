@@ -48,14 +48,14 @@ public class ViewManager {
         }
     }
 
-    public static void putMetaData(String viewName, String type, String query, String queryType){
+    public static void putMetaData(String viewName, String updatable, String query, String type){
         Configuration conf = HBaseConfiguration.create();
         HBaseHelper helper;
         try {
             helper = HBaseHelper.getHelper(conf);
-            helper.put("view_meta_data", viewName, "query", "string", query);
-            helper.put("view_meta_data", viewName, "query", "type", queryType);
-            helper.put("view_meta_data", viewName, "type", "value", type);
+            helper.put("view_meta_data", viewName, "settings", "query", query);
+            helper.put("view_meta_data", viewName, "settings", "type", type);
+            helper.put("view_meta_data", viewName, "settings", "updatable", updatable);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -65,13 +65,14 @@ public class ViewManager {
         HBaseHelper helper;
         try {
             helper = HBaseHelper.getHelper(conf);
-            helper.put("table_view", tableName, "views", viewName, "Test");
+            helper.put("table_view", tableName, "views", viewName, "Test"); //TODO: Change Test
+            helper.put("view_meta_data", viewName, "tables", tableName, "Test"); //TODO: Change Test
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
-    private static void createMaterializedView(String viewName, String query, String type){
+    private static void createMaterializedView(String viewName, String query, String updatable){
         if(query == null)
             return;
         SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(query, true);
@@ -84,9 +85,9 @@ public class ViewManager {
             element.setViewName(viewName);
             element.setMaterialize(true);
             if (element.getAggregationKey().equals("")) {
-                putMetaData(viewName, type, query, "select");
+                putMetaData(viewName, updatable, query, "select");
             } else {
-                putMetaData(viewName, type, query, "aggregation");
+                putMetaData(viewName, updatable, query, "aggregation");
             }
             putTableView(element.getTableName(), viewName);
         }

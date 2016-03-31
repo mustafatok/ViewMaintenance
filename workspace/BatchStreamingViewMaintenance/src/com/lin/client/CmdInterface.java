@@ -151,13 +151,13 @@ public class CmdInterface {
 					try {
 						helper = HBaseHelper.getHelper(conf);
 						helper.dropTable(tableName);
-						helper.createTable(tableName, "colfam1");
+						helper.createTable(tableName, "colfam");
 						
 						String[] rows = {};
 						List<String> stringArray = new ArrayList<String>();
 						for(int i = 1; i <= 100; i++){
 							System.out.println("put row " + i);
-							helper.put(tableName, "row"+i, "colfam1", "qual1", 1, "val"+i);
+							helper.put(tableName, "row"+i, "colfam", "qual1", 1, "val"+i);
 						}
 					} catch(IOException e){
 						e.printStackTrace();
@@ -171,13 +171,13 @@ public class CmdInterface {
 					try {
 						helper = HBaseHelper.getHelper(conf);
 						helper.dropTable(tableName);
-						helper.createTable(tableName, "colfam1");
+						helper.createTable(tableName, "colfam");
 						
 						String[] rows = {};
 						List<String> stringArray = new ArrayList<String>();
 						for(int i = 1; i <= 100; i++){
 							System.out.println("put row " + i);
-							helper.put(tableName, "row"+i, "colfam1", "qual1", 1, "" + i);
+							helper.put(tableName, "row"+i, "colfam", "qual1", 1, "" + i);
 						}
 					} catch(IOException e){
 						e.printStackTrace();
@@ -522,15 +522,15 @@ public class CmdInterface {
 //				 * Selection test cases
 //				 */
 //				// 0 test simple selection
-//				"select colfam1.qual1 from testtable1", 
+//				"select colfam.qual1 from testtable1", 
 //				// 1 test simple selection with condition
-//				"select colfam1.qual1 from testtable2 where colfam1.qual1>20",
+//				"select colfam.qual1 from testtable2 where colfam.qual1>20",
 //				
 //				/*
 //				 * Aggregation test cases
 //				 */
 //				// 2 test aggregation without aggregation key
-//				"select max(colfam1.qual1), min(colfam1.qual1), sum(colfam1.qual1), avg(colfam1.qual1), count(colfam1.qual1) from testtable2",
+//				"select max(colfam.qual1), min(colfam.qual1), sum(colfam.qual1), avg(colfam.qual1), count(colfam.qual1) from testtable2",
 //				// 3 test aggregation with aggregation key
 //				"select max(colfam.value), min(colfam.value), sum(colfam.value), avg(colfam.value), count(colfam.value) from testtable5 group by colfam.aggKey",
 //				
