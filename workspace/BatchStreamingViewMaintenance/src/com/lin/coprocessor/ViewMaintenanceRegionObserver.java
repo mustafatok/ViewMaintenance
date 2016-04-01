@@ -27,6 +27,7 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
             Get get = new Get(table.getName());
             Result result = observerContext.getEnvironment().getTable(TableName.valueOf("table_view")).get(get);
+
             if(result != null && !result.isEmpty()){ // There exists a view connected to the table.
                 NavigableMap<byte[], byte[]> tableViewMap = result.getFamilyMap("views".getBytes());
 
@@ -39,13 +40,14 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
                     // TODO: Change this!! -- Incremental Processing.
                     HTableInterface viewTable = observerContext.getEnvironment().getTable(TableName.valueOf(viewName));
+                    HTableInterface tableInterface = observerContext.getEnvironment().getTable(table);
                     Command command = new Command();
                     if(op instanceof Put){
                         Put put = (Put) op;
-                        command.addTableName(table.getName()).addViewTable(viewTable).addViewQuery(new String(query)).execute(put);
+                        command.addTable(tableInterface).addViewTable(viewTable).addViewQuery(new String(query)).execute(put);
                     }else if(op instanceof Delete){
                         Delete delete = (Delete) op;
-                        command.addTableName(table.getName()).addViewTable(viewTable).addViewQuery(new String(query)).execute(delete);
+                        command.addTable(tableInterface).addViewTable(viewTable).addViewQuery(new String(query)).execute(delete);
                     }
 
                     if(!command.isSuccessful()){
@@ -67,13 +69,13 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
     }
 
     public class Command {
-        byte[] tableName;
         String viewQuery;
         boolean successful = false;
         private HTableInterface view = null;
+        private HTableInterface table = null;
 
-        public Command addTableName(byte[] tableName){
-            this.tableName = tableName;
+        public Command addTable(HTableInterface table){
+            this.table = table;
             return this;
         }
         public Command addViewTable(HTableInterface view){
@@ -106,9 +108,87 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
 
             }else if (viewType.equals("aggregation")){
-//                Put viewPut = new Put(put.getRow());
-//                List<Cell> viewKey = put.get("colfam".getBytes(), "aggKey".getBytes());
-//                CellUtil.
+
+
+                String aggType = JsqlParser.typeOfAggregation(viewQuery);
+
+                Result result = table.get(new Get(put.getRow()));
+                if(result != null && !result.isEmpty()){
+                    NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long,byte[]>>> tableViewMap = result.getMap();
+//                    Map&family,Map<qualifier,Map<timestamp,value>>>
+
+
+                    long curr_ts = put.getTimeStamp();
+                    long tsdiff = Long.MAX_VALUE;
+                    long prev_val = 0;
+
+                    for (Map.Entry<byte[], NavigableMap<byte[], NavigableMap<Long,byte[]>>> entry1 : tableViewMap.entrySet()) {
+                        for (Map.Entry<byte[], NavigableMap<Long,byte[]>> entry2 : entry1.getValue().entrySet()) {
+                            String qual = new String(entry2.getKey());
+
+                            if(!qual.equals("value")) continue;
+                            for (Map.Entry<Long,byte[]> entry3 : entry2.getValue().entrySet()) {
+                                Long ts = entry3.getKey();
+                                byte[] val = entry3.getValue();
+                                if(curr_ts - ts < tsdiff && curr_ts - ts != 0){
+                                    tsdiff = curr_ts - ts;
+                                    prev_val = Long.valueOf(new String(val)).longValue();
+                                }
+                            }
+                        }
+                    }
+
+                    // TODO : Check previous MAX and MIN for estimations..
+
+                    long curr_val;
+                    curr_val = Long.valueOf(
+                            new String(
+                                    CellUtil.cloneValue(
+                                            put.get("colfam".getBytes(),"value".getBytes()).get(0)
+                                    )
+                            )
+
+                    );
+
+
+                    byte[] viewKey = ("colfam.value." + new String(result.getValue("colfam".getBytes(),"aggKey".getBytes()))).getBytes();
+
+                    result = view.get(new Get((viewKey)));
+                    if(result != null && !result.isEmpty()){
+                        if(aggType.equals("max")){
+                            long viewMax = Long.valueOf(new String(result.getValue("colfam".getBytes(), "MAX_new".getBytes())));
+                            if(viewMax < curr_val){
+                                // Update View
+                                Put viewPut = new Put(viewKey);
+                                viewPut.add("colfam".getBytes(), "MAX_new".getBytes(), Long.toString(curr_val).getBytes());
+                                view.put(viewPut);
+                                view.flushCommits();
+                            }
+
+                        }else if(aggType.equals("min")){
+                            long viewMin = Long.valueOf(new String(result.getValue("colfam".getBytes(), "MIN_NEW".getBytes())));
+                            if(viewMin < curr_val){
+                                // Update View
+                                Put viewPut = new Put(viewKey);
+                                viewPut.add("colfam".getBytes(), "MIN_new".getBytes(), Long.toString(curr_val).getBytes());
+                                view.put(viewPut);
+                                view.flushCommits();
+                            }
+                        }else if(aggType.equals("count")){
+//                            if(tsdiff == Long.MAX_VALUE)
+//                                view.incrementColumnValue(viewKey, "colfam".getBytes(), "COUNT_new".getBytes(), 1);
+                        }else if(aggType.equals("sum")){
+//                            view.incrementColumnValue(viewKey, "colfam".getBytes(), "SUM_new".getBytes(), curr_val - prev_val);
+                        }else if(aggType.equals("avg")){
+//                        Long viewMax = new Long(result.getValue("colfam".getBytes(), "AVG_new".getBytes()).toString());
+
+                        }else{
+
+                        }
+                    }
+
+                }
+
             }else{
                 errorFlag = true;
             }

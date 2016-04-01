@@ -471,5 +471,23 @@ public class JsqlParser {
 		return "";
 	}
 
+	public static String typeOfAggregation(String query) {
+
+		// TODO : Implement proper checker
+
+		if(query.contains("min(")){
+			return "min";
+		}else if(query.contains("max(")){
+			return "max";
+		}else if(query.contains("count(")){
+			return "count";
+		}else if(query.contains("sum(")){
+			return "sum";
+		}else if(query.contains("avg(")){
+			return "avg";
+		}else
+			return "";
+	}
+
 
 }
