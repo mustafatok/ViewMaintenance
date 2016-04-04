@@ -167,6 +167,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		// handle aggregation view materialization
 		if(!aggregationManager.getAggregations().isEmpty() || request.getIsMaterialize()){
 			materialize.putToView(aggregationRow);
+			materialize.putToDeltaView(aggregationRow);
 		}
 
 		// closing connections
@@ -572,6 +573,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			deltaView = request.getViewName().toStringUtf8() + "_delta";
 
 			aggregations = new HashedMap();
+			// TODO: Buraya hepsini ekle olanlar normal view a olmayanlar deltada kalcak
+			
 			for(ByteString aggregation:request.getAggregationList()){
 				// aggregation is in following format
 				// sum:family.qualifier
@@ -943,7 +946,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 * @param aggregationRow
 		 */
 		public void putToView(BSVRow aggregationRow) { // Aggregation View
-			putToAggregationTable(aggregationRow);
+			putToTable(view, aggregationRow);
 		}
 
 		/**
@@ -953,21 +956,21 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		public void putToDeltaView(BSVRow aggregationRow) { // Aggregation Delta View
 			// TODO: Implement correct version..
 
-//			putToAggregationTable(aggregationRow);
+			putToTable(deltaView, aggregationRow);
 		}
 
 		/**
 		 * Put one row to aggregation view
 		 * @param aggregationRow
 		 */
-		private void putToAggregationTable(BSVRow aggregationRow) {
+		private void putToTable(HTableInterface table, BSVRow aggregationRow) {
 			// put to table
 			for(int i = 0; i < aggregationRow.getKeyValueCount(); i++){
 				// put one row 
 				KeyValue keyValue = aggregationRow.getKeyValue(i);
 				Put put = new Put(keyValue.getKey().toByteArray());
 				put.add("colfam".getBytes(), (keyValue.getRowKey().toStringUtf8()).getBytes(), keyValue.getValue().toByteArray());
-				putToTable(view, put);
+				putToTable(table, put);
 			}
 		}
 
