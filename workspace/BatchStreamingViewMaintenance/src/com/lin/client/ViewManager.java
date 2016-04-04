@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class ViewManager {
 
-    private static void createViewTable(String tableName){
+    private static void createViewTable(String tableName, String query){
         // build an empty delta table with the following properties:
         //   =================================================
         //     table name: SQL(replace space with '_')_delta
@@ -38,12 +38,18 @@ public class ViewManager {
         Configuration conf = HBaseConfiguration.create();
         HBaseHelper helper;
 
+        byte qType = JsqlParser.typeOfQuery(query);
         try {
             helper = HBaseHelper.getHelper(conf);
             helper.dropTable(tableName);
             helper.createTable(tableName, "colfam");
 
+            if(qType == JsqlParser.AGGREGATION){
+                helper.dropTable(tableName + "_delta");
+                helper.createTable(tableName + "_delta", "colfam", "MIN", "MAX", "COUNT", "SUM", "AVG");
+            }else if(qType == JsqlParser.JOIN){
 
+            }
         } catch(IOException e) {
             e.printStackTrace();
         }
@@ -69,8 +75,7 @@ public class ViewManager {
         SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(query, true);
         System.out.println(simpleLogicalPlan);
 
-        createViewTable(viewName + "_delta");
-        createViewTable(viewName);
+        createViewTable(viewName, query);
 
         // TODO: Fix this to support joins.
         for(LogicalElement element = simpleLogicalPlan.getHead(); element != null; element = element.getNext() ) {

@@ -2,6 +2,7 @@ package com.lin.sql;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.HashSet;
 import java.util.List;
 
 import net.sf.jsqlparser.JSQLParserException;
@@ -434,7 +435,7 @@ public class JsqlParser {
 		element.getConditions().add(condition);
 	}
 
-	public static String typeOfQuery(String query) {
+	public static byte typeOfQuery(String query) {
 		CCJSqlParserManager pm = new CCJSqlParserManager();
 		try {
 			net.sf.jsqlparser.statement.Statement statement = pm.parse(new StringReader(query)); // parse sql statement
@@ -450,16 +451,16 @@ public class JsqlParser {
 							SelectExpressionItem item = columnList.get(j);
 							if (item.getExpression() instanceof Function) {
 								System.out.println("Detected aggregation function");
-								return "aggregation";
+								return AGGREGATION;
 							}
 						}
 						// check if it is single table or join
 						if(plainSelect.getJoins() == null){
 							System.out.println("Handling select with single table");
-							return "select";
+							return SELECT;
 						}else {
 							System.out.println("Handling select with Join");
-							return "join";
+							return JOIN;
 						}
 					} // if(tableName != null)
 				} // if(selectStatement.getSelectBody() instanceof PlainSelect)
@@ -468,26 +469,46 @@ public class JsqlParser {
 		} catch (JSQLParserException e) {
 			e.printStackTrace();
 		}
-		return "";
+		return NOT_AVAILABLE;
 	}
 
-	public static String typeOfAggregation(String query) {
+	public static HashSet<Byte> typeOfAggregation(String query) {
 
-		// TODO : Implement proper checker
+		HashSet<Byte> set = new HashSet<>();
 
-		if(query.contains("min(")){
-			return "min";
-		}else if(query.contains("max(")){
-			return "max";
-		}else if(query.contains("count(")){
-			return "count";
-		}else if(query.contains("sum(")){
-			return "sum";
-		}else if(query.contains("avg(")){
-			return "avg";
-		}else
-			return "";
+		String lowerQ = query.toLowerCase();
+		if(lowerQ.contains("min(")){
+			set.add(AGGREGATION_MIN);
+		}
+		if(lowerQ.contains("max(")){
+			set.add(AGGREGATION_MAX);
+		}
+		if(lowerQ.contains("count(")){
+			set.add(AGGREGATION_COUNT);
+		}
+		if(lowerQ.contains("sum(")){
+			set.add(AGGREGATION_SUM);
+		}
+		if(lowerQ.contains("avg(")){
+			set.add(AGGREGATION_AVG);
+		}
+		if(set.isEmpty())
+			return null;
+		else
+			return set;
 	}
+
+	public static final byte AGGREGATION_MIN = 1;
+	public static final byte AGGREGATION_MAX = 2;
+	public static final byte AGGREGATION_SUM = 3;
+	public static final byte AGGREGATION_COUNT = 4;
+	public static final byte AGGREGATION_AVG = 5;
+
+	public static final byte AGGREGATION = 6;
+	public static final byte SELECT = 7;
+	public static final byte JOIN = 8;
+
+	public static final byte NOT_AVAILABLE = 0;
 
 
 }
