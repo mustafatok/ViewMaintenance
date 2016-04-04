@@ -50,7 +50,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	private String joinQualifier = null;
 	private HTableInterface joinTable = null;
 	private ParameterMessage request = null;
-
+	private RpcCallback<ResultMessage> doneCallback;
 	@Override
 	public Service getService() {
 		return this;
@@ -74,81 +74,129 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		
 		// store in local variable for later use
 		this.request = request;
-		
+		this.doneCallback = done;
 		// initialize materialize manager
 		materialize = new MaterializeManager(request);
 		
 		// initialize aggregation manager
 		aggregationManager = new AggregationManager(request);
 		
+		Scan scan = prepareScan();
+		doBatchProcessing(scan);
+	}
+
+	private Scan prepareScan(){
 		// initialize scan
 		Scan scan = new Scan();
 		scan.setMaxVersions(1);
-		
+
 		// check if join
 		// If join, set is-materialize to be true.
 		// Fill joinKey and joinTable for later use
 		if(!request.getJoinKey().toStringUtf8().equals("")){
 			// Connect to the join table using the join table name from request
-			Configuration configuration = HBaseConfiguration.create();;
 			try {
-//				joinTable = new HTable(configuration, request.getJoinTable().toByteArray());
 				joinTable = env.getTable(TableName.valueOf(request.getJoinTable().toByteArray()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			
+
 			// fill join family and join qualifier for later use
 			joinFamily = request.getJoinKey().toStringUtf8().split("\\.")[0];
 			joinQualifier = request.getJoinKey().toStringUtf8().split("\\.")[1];
-			
+
 			// add joinkey to the scan filter
 			scan.addColumn(joinFamily.getBytes(), joinQualifier.getBytes());
 		}
-		
+
 		// add column as filter
-		// add all columns in the "column" field 
+		// add all columns in the "column" field
 		for(BSVColumn bsvColumn:request.getColumnList()){
 			System.out.println((new Date())+"Begin to add column: "+bsvColumn);
 			// get parameters
 			byte[] family = bsvColumn.getFamily().toByteArray();
 			byte[] column = bsvColumn.getColumn().toByteArray();
-			
-			scan.addColumn(family, column);			
+
+			scan.addColumn(family, column);
 			System.out.println((new Date())+"Finish adding column: "+bsvColumn);
 		}
-		
+
 		// also add columns in the "condition" field
 		for(Condition condition:request.getConditionList()){
 			System.out.println(new Date() + "Begin to add condition column: " + condition);
 			// get family and qualifier
 			byte[] family = condition.getColumn().getFamily().toByteArray();
 			byte[] column = condition.getColumn().getColumn().toByteArray();
-			
+
 			// add column filter to scan
 			scan.addColumn(family, column);
 		}
+		return scan;
+	}
+	private void doBatchProcessing(Scan scan){
 
 		// response builder
 		ResultMessage.Builder response = ResultMessage.newBuilder();
 
+		response = scanOverTable(scan, response);
+
+
+		// add aggregation result to response
+		// put all the aggregation in one row
+		BSVRow.Builder bsvRow = BSVRow.newBuilder();
+		for (Entry<String, List<Aggregation>> entry : aggregationManager.getAggregations().entrySet())
+		{
+			for(Aggregation aggregation:entry.getValue()){
+				KeyValue.Builder keyValue = KeyValue.newBuilder();
+				// build cell using row-key as:
+				// SUM/MAX/MIN/AVG/COUNT
+				keyValue.setRowKey(ByteString.copyFrom(aggregation.getName().getBytes()));
+				// set key as:
+				// familu.qualifier
+				keyValue.setKey(ByteString.copyFrom(entry.getKey().getBytes()));
+				// set value as result of aggregation
+				keyValue.setValue(ByteString.copyFrom((aggregation.getResult()+"").getBytes()));
+
+				bsvRow.addKeyValue(keyValue.build());
+			}
+		}
+		BSVRow aggregationRow = bsvRow.build();
+		response.addRow(aggregationRow);
+
+		// handle aggregation view materialization
+		if(!aggregationManager.getAggregations().isEmpty() || request.getIsMaterialize()){
+			materialize.putToView(aggregationRow);
+		}
+
+		// closing connections
+		materialize.close();
+		// Depending on the plan, return the results or nothing
+		System.out.println("Client wants the results: " + request.getIsReturningResults());
+		if(request.getIsReturningResults()){
+			doneCallback.run(response.build());
+		}
+
+	}
+
+	private ResultMessage.Builder scanOverTable(Scan scan, ResultMessage.Builder response){
 		// use an internal scanner to perform scanning.
 		InternalScanner scanner = null;
 		try {
 			scanner = env.getRegion().getScanner(scan);
 
-			// scan a row of results every time and add this row to 
+			// scan a row of results every time and add this row to
 			// the result arraylist
 			List<Cell> curVals = new ArrayList<Cell>();
 			boolean finish = false;
 			long count = 0;
 			Date begin = new Date();
 			System.out.println(begin+"Begin to scan");
+
 			do {
 				curVals.clear();
 				finish = scanner.next(curVals);
 				List<Cell> row = new ArrayList<Cell>(curVals);
-				
+
 				// show scan result
 				System.out.println("Scan result:");
 				for(Cell cell:row){
@@ -158,7 +206,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					System.out.println("\tQualifier: " + new String(CellUtil.cloneQualifier(cell)));
 					System.out.println("\tValue: " + new String(CellUtil.cloneValue(cell)));
 				}
-				
+
 				// find the aggregation key first
 				String aggKey = "";
 				for(Cell cell:row){
@@ -170,13 +218,13 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 						break;
 					}
 				}
-				
+
 				// build join table
 				if(request.getIsBuildJoinView()){
 					System.out.println("Join row: " + new String(CellUtil.cloneRow(curVals.get(0))));
-					// Construct join table view 
+					// Construct join table view
 					// 1. construct temporary map
-					//              #######################################    
+					//              #######################################
 					// fam1  row1  | K1_C1_o | K1_C1_n | K1_C2_o | K1_C2_n | ...
 					//              #######################################
 					//       row2  | K2_C1_o | K2_C1_n | K2_C2_o | K2_C2_n | ...
@@ -185,11 +233,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					//         .
 					//         .
 					//
-					//	            #######################################    
+					//	            #######################################
 					// fam2  row1  | L1_D1_o | L1_D1_n | L1_D2_o | L1_D2_n | ...
 					//              #######################################
 					//       row2  | L2_D1_o | L2_D1_n | L2_D2_o | L2_D2_n | ...
-					//              #######################################  
+					//              #######################################
 					//         .
 					//         .
 					//         .
@@ -201,33 +249,33 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 						if(joinKey == null){
 							joinKey = new String(CellUtil.cloneRow(cell));
 						}
-						System.out.println("Constructing cell " 
+						System.out.println("Constructing cell "
 								+ new String(CellUtil.cloneFamily(cell))
-								+ ":" 
-								+ new String(CellUtil.cloneQualifier(cell)) 
-								+ "=" 
+								+ ":"
+								+ new String(CellUtil.cloneQualifier(cell))
+								+ "="
 								+ new String(CellUtil.cloneValue(cell)));
-						
+
 						String family =  new String(CellUtil.cloneFamily(cell));
 						String qualifier = new String(CellUtil.cloneQualifier(cell));
 						String value = new String(CellUtil.cloneValue(cell));
-						
+
 						String rowKey = qualifier.split("_")[0];
-						
+
 						if(!tmp.containsKey(family)){
 							Map<String, Map<String, String>> tmpMap = new HashMap<String, Map<String, String>>();
 							tmp.put(family, tmpMap);
 							familyList.add(family);
 						}
-						
+
 						if(!tmp.get(family).containsKey(rowKey)){
 							tmp.get(family).put(rowKey, new HashMap<String, String>());
 						}
-						
+
 						tmp.get(family).get(rowKey).put(qualifier, value);
 					}
 					System.out.println(tmp);
-					
+
 					// 2. construct join row with temporary list
 					//             ###############################################################################################
 					// X1   K1L1  | K1L1_C1_o | K1L1_C1_n | K1L1_C2_o | K1L1_C2_n | K1L1_D1_o | K1L1_D1_n | K1L1_D2_o | K1L1_D2_n |
@@ -243,10 +291,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					//        .
 					Map<String, String> fullJoinRow = new HashMap<String, String>();
 					// now we consider only inner join
-					// if familyList has less than 2 element 
+					// if familyList has less than 2 element
 					// we do nothing
 					if(familyList.size() >= 2){
-						Map<String, Map<String, String>> leftJoin = tmp.get(familyList.get(0));	
+						Map<String, Map<String, String>> leftJoin = tmp.get(familyList.get(0));
 						Map<String, Map<String, String>> rightJoin = tmp.get(familyList.get(1));
 						for(Entry<String, Map<String, String>> leftJoinRow:leftJoin.entrySet()){
 							for(Entry<String, Map<String, String>> rightJoinRow:rightJoin.entrySet()){
@@ -255,27 +303,27 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 								for(Entry<String, String> leftJoinCell:leftJoinRow.getValue().entrySet()){
 									Map<String, String> cellMap = new HashMap<String, String>();
 									fullJoinRow.put(
-											leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + leftJoinCell.getKey().split("_")[1] + "_" + leftJoinCell.getKey().split("_")[2], 
+											leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + leftJoinCell.getKey().split("_")[1] + "_" + leftJoinCell.getKey().split("_")[2],
 											leftJoinCell.getValue());
 								}
 								// add all in right join
 								for(Entry<String, String> rightJoinCell:rightJoinRow.getValue().entrySet()){
 									Map<String, String> cellMap = new HashMap<String, String>();
 									fullJoinRow.put(
-											leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + rightJoinCell.getKey().split("_")[1] + "_" + rightJoinCell.getKey().split("_")[2], 
+											leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + rightJoinCell.getKey().split("_")[1] + "_" + rightJoinCell.getKey().split("_")[2],
 											rightJoinCell.getValue());
 								}
 							}
 						}
 						System.out.println("Full join row : \n" + fullJoinRow);
-						
+
 						// Connect to join table view in order to put
 						String joinTableName = request.getJoinTable().toStringUtf8();
 						System.out.println("Going to connect to table " + joinTableName);
 						Configuration conf = HBaseConfiguration.create();
 						HTableInterface joinTable = null;
 						try {
-//							joinTable = new HTable(conf, joinTableName);
+	//							joinTable = new HTable(conf, joinTableName);
 							joinTable = env.getTable(TableName.valueOf(joinTableName));
 							Put put = new Put(joinKey.getBytes());
 							for(Entry<String, String> tmpMap:fullJoinRow.entrySet()){
@@ -286,85 +334,56 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 							joinTable.put(put);
 						} catch (IOException e) {
 							e.printStackTrace();
-						} 
+						}
 					}
 				}
-				
-				/*
-				 * start of handling result
-				 */
+
+					/*
+					 * start of handling result
+					 */
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
 				System.out.println((new Date())+"Building row no." + count);
-				
+
 				// If is-materialize flag is true build the delta view for every row
 				if(request.getIsMaterialize()){
 					materialize.putToDeltaView(row);
 				}
-				
+
 				boolean meetCondition = handleRow(request, row, bsvRow, aggKey);
-				
+
 				// discard the whole row if the cell fails to meet the condition
 				if(meetCondition){
 					response.addRow(bsvRow);
+
 					count++;
-					
+
 					// build the select view
 					if(request.getIsMaterialize()){
 						// selection view
 						if(request.getAggregationKey().toStringUtf8().equals("")){
-							materialize.putToSelectView(row);
+							materialize.putToView(row);
+						}else{
+	//							materialize.putToAggregationDeltaView();
+							// TODO : Implement puting the aggregation delta view..
 						}
 					}
-					
+
 					// if is one of the join table put it to reverse join table
 					if(!request.getJoinKey().toStringUtf8().equals("")){
 						putToReverseJoinTable(row);
 					}
 				}
-				/*
-				 * End of handling result
-				 */
+					/*
+					 * End of handling result
+					 */
 			} while (finish);
 			Date end = new Date();
 			System.out.println(end+" Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
-			
+
+
 			System.out.println((new Date())+"Finish building response message");
 			response.setSize(count);
-			
-			// add aggregation result to response
-			// put all the aggregation in one row
-			BSVRow.Builder bsvRow = BSVRow.newBuilder();
-			for (Entry<String, List<Aggregation>> entry : aggregationManager.getAggregations().entrySet())
-			{
-				for(Aggregation aggregation:entry.getValue()){
-					KeyValue.Builder keyValue = KeyValue.newBuilder();
-					// build cell using row-key as:
-					// SUM/MAX/MIN/AVG/COUNT
-					keyValue.setRowKey(ByteString.copyFrom(aggregation.getName().getBytes()));
-					// set key as:
-					// familu.qualifier
-					keyValue.setKey(ByteString.copyFrom(entry.getKey().getBytes()));
-					// set value as result of aggregation
-					keyValue.setValue(ByteString.copyFrom((aggregation.getResult()+"").getBytes()));
-					
-					bsvRow.addKeyValue(keyValue.build());
-				}
-			}
-			BSVRow aggregationRow = bsvRow.build();
-			response.addRow(aggregationRow);
-			
-			// handle aggregation view materialization
-			if(!aggregationManager.getAggregations().isEmpty() || request.getIsMaterialize()){
-				materialize.putToAggregationView(aggregationRow);
-			}
-			
-			// closing connections
-			materialize.close();
-			// Depending on the plan, return the results or nothing
-			System.out.println("Client wants the results: " + request.getIsReturningResults());
-			if(request.getIsReturningResults()){
-				done.run(response.build());
-			}
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -377,8 +396,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				e.printStackTrace();
 			}
 		}
+		return response;
 	}
-
 	private void putToReverseJoinTable(List<Cell> row)
 			throws InterruptedIOException, RetriesExhaustedWithDetailsException {
 		// find join key
@@ -394,8 +413,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				
 				for(Cell cellForAdd:row){
 					System.out.println("Puting cell " + new String(CellUtil.cloneQualifier(cellForAdd)) + " = " + new String(CellUtil.cloneValue(cellForAdd)));
-					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd))) + "_old").getBytes(), null);
-					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd))) + "_new").getBytes(), CellUtil.cloneValue(cellForAdd));
+					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd)))).getBytes(), CellUtil.cloneValue(cellForAdd));
 				}
 				
 				try {
@@ -556,7 +574,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				// max:family.qualifier
 				// min:family.qualifier
 				// avg:family.qualifier
-				// count:familu.qualifier
+				// count:family.qualifier
 				// ...
 				String function = aggregation.toStringUtf8().split(":")[0];
 				String key = aggregation.toStringUtf8().split(":")[1];
@@ -864,8 +882,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		private String SQL = "";
 		private String viewName = "";
 		private HTableInterface deltaView = null;
-		private HTableInterface selectView = null;
-		private HTableInterface aggregationView = null;
+		private HTableInterface view = null;
 		
 		/**
 		 * Close table connection
@@ -878,18 +895,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					e.printStackTrace();
 				}
 			}
-			if(selectView != null){
+			if(view != null){
 				try {
-					selectView.close();
+					view.close();
 				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			if(aggregationView != null){
-				try {
-					aggregationView.close();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
@@ -898,42 +907,49 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		public MaterializeManager(ParameterMessage request) {
 			SQL = request.getSQL().toStringUtf8();
 			viewName = request.getViewName().toStringUtf8();
+			view = getView(viewName);
+			deltaView = getView(viewName + "_delta");
+		}
+
+		private HTableInterface getView(String viewName){
+			HTableInterface view = null;
+			try {
+				view = env.getTable(TableName.valueOf(viewName));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return view;
+		}
+		/**
+		 * Build the aggregation view
+		 * @param aggregationRow
+		 */
+		public void putToView(BSVRow aggregationRow) { // Aggregation View
+			putToAggregationTable(aggregationRow);
 		}
 
 		/**
 		 * Build the aggregation view
 		 * @param aggregationRow
 		 */
-		public void putToAggregationView(BSVRow aggregationRow) {
-			if(aggregationView == null){
-				Configuration conf = HBaseConfiguration.create();
-				try {
-//					aggregationView = new HTable(conf, Common.senitiseSQL(SQL) + "_aggregation");
-//					aggregationView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_aggregation"));
-//					aggregationView = env.getTable(TableName.valueOf(viewName + "_aggregation"));
-					aggregationView = env.getTable(TableName.valueOf(viewName));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			putToAgggationTable(aggregationView, aggregationRow);
+		public void putToDeltaView(BSVRow aggregationRow) { // Aggregation Delta View
+			// TODO: Implement correct version..
+
+			putToAggregationTable(aggregationRow);
 		}
 
 		/**
 		 * Put one row to aggregation view
-		 * @param aggregationView2
 		 * @param aggregationRow
 		 */
-		private void putToAgggationTable(HTableInterface aggregationView2, BSVRow aggregationRow) {
+		private void putToAggregationTable(BSVRow aggregationRow) {
 			// put to table
 			for(int i = 0; i < aggregationRow.getKeyValueCount(); i++){
 				// put one row 
 				KeyValue keyValue = aggregationRow.getKeyValue(i);
 				Put put = new Put(keyValue.getKey().toByteArray());
-				put.add("colfam".getBytes(),(keyValue.getRowKey().toStringUtf8() + "_old").getBytes(), null);
-				put.add("colfam".getBytes(), (keyValue.getRowKey().toStringUtf8() +  "_new").getBytes(), keyValue.getValue().toByteArray());
-				putToTable(aggregationView2, put);
+				put.add("colfam".getBytes(), (keyValue.getRowKey().toStringUtf8()).getBytes(), keyValue.getValue().toByteArray());
+				putToTable(view, put);
 			}
 		}
 
@@ -941,64 +957,36 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 * Build the select view and put a row to it
 		 * @param row
 		 */
-		public void putToSelectView(List<Cell> row) {
-			if(selectView == null){
-				Configuration conf = HBaseConfiguration.create();
-				try {
-//					selectView = new HTable(conf, Common.senitiseSQL(SQL) + "_select");
-//					selectView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_select"));
-//					selectView = env.getTable(TableName.valueOf(viewName + "_select"));
-					selectView = env.getTable(TableName.valueOf(viewName));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			
-			putToTable(selectView, row);
+		public void putToView(List<Cell> row) { // Select View
+			putToTable(view, row);
 		}
 
 		/**
 		 * Handling of a row. Build the delta view. And put a row to it
-		 * @param tableName
 		 * @param row
 		 */
 		public void putToDeltaView(List<Cell> row){
-			// Connect to the delta table that is created in the client
-			// The table name would be the SQL statement with all the space replaced by '_'
-			// To separate the delta view from the select view, a 'delta' is put the end of table name
-			if(deltaView == null){
-				Configuration conf = HBaseConfiguration.create();
-				try {
-//					deltaView = new HTable(conf, Common.senitiseSQL(SQL) + "_delta");
-//					deltaView = env.getTable(TableName.valueOf(Common.senitiseSQL(SQL) + "_delta"));
-					deltaView = env.getTable(TableName.valueOf(viewName + "_delta"));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-			
 			putToTable(deltaView, row);
 		}
 
 		/**
 		 * Put one row to table
-		 * @param selectView2
+		 * @param table
 		 * @param row
 		 */
-		private void putToTable(HTableInterface selectView2, List<Cell> row) {
+		private void putToTable(HTableInterface table, List<Cell> row) {
 			// put to table
 			for(Cell cell:row){
 				// put one row
 				Put put = new Put(CellUtil.cloneRow(cell));
-				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_old").getBytes(), null);
-				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell)) + "_new").getBytes(), CellUtil.cloneValue(cell));
-				putToTable(selectView2, put);
+				put.add("colfam".getBytes(), (new String(CellUtil.cloneQualifier(cell))).getBytes(), CellUtil.cloneValue(cell));
+				putToTable(table, put);
 			}
 		}
 
-		private void putToTable(HTableInterface tableName, Put put){
+		private void putToTable(HTableInterface table, Put put){
 			try {
-				tableName.put(put);
+				table.put(put);
 			} catch (RetriesExhaustedWithDetailsException e) {
 				e.printStackTrace();
 			} catch (InterruptedIOException e) {
