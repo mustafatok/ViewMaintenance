@@ -5,13 +5,10 @@ import java.io.InterruptedIOException;
 import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
+import com.lin.sql.JsqlParser;
 import com.lin.test.HBaseHelper;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.hadoop.conf.Configuration;
@@ -134,41 +131,68 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		}
 		return scan;
 	}
+	private ResultMessage.Builder writeAggregations(ResultMessage.Builder response){
+		// add aggregation result to response
+		// put all the aggregation in one row
+
+		HashSet<Byte> requiredAggFunctions = JsqlParser.typeOfAggregation(materialize.getQuery());
+
+		BSVRow.Builder bsvRow = BSVRow.newBuilder();
+		BSVRow.Builder bsvRowDelta = BSVRow.newBuilder();
+		boolean avgFlag = false;
+		if(requiredAggFunctions.contains(JsqlParser.AGGREGATION_AVG)){
+			avgFlag = true;
+		}
+		for (Entry<String, List<Aggregation>> entry : aggregationManager.getAggregations().entrySet())
+		{
+			ByteString key = ByteString.copyFrom(entry.getKey().getBytes());
+			int sum = 1, count = 1;
+
+			for(Aggregation aggregation:entry.getValue()){
+				KeyValue.Builder keyValue = KeyValue.newBuilder();
+				// build cell using row-key as:
+				// SUM/MAX/MIN/AVG/COUNT
+				String aggType = aggregation.getName();
+				keyValue.setRowKey(ByteString.copyFrom(aggType.getBytes()));
+				// set key as:
+				// family.qualifier
+				keyValue.setKey(key);
+				// set value as result of aggregation
+				keyValue.setValue(ByteString.copyFrom((aggregation.getResult()+"").getBytes()));
+
+				if(requiredAggFunctions.contains(aggregation.getType())){
+					bsvRow.addKeyValue(keyValue.build());
+				}
+				bsvRowDelta.addKeyValue(keyValue.clone());
+
+				if(aggType.equalsIgnoreCase("SUM")) sum = aggregation.getResult();
+				else if(aggType.equalsIgnoreCase("COUNT")) count = aggregation.getResult();
+			}
+
+			if(avgFlag){
+				double value = 1.0 * sum / count;
+				KeyValue.Builder keyValue = KeyValue.newBuilder().setRowKey(ByteString.copyFromUtf8("AVG")).setKey(key).setValue(ByteString.copyFromUtf8(String.valueOf(value)));
+				bsvRow.addKeyValue(keyValue.build());
+			}
+		}
+		BSVRow aggregationRow = bsvRow.build();
+		BSVRow aggregationRowDelta = bsvRowDelta.build();
+		response.addRow(aggregationRow);
+
+		// handle aggregation view materialization
+		if(!aggregationManager.getAggregations().isEmpty() || request.getIsMaterialize()){
+			materialize.putToView(aggregationRow);
+			materialize.putToDeltaView(aggregationRowDelta);
+		}
+		return response;
+	}
 	private void doBatchProcessing(Scan scan){
 
 		// response builder
 		ResultMessage.Builder response = ResultMessage.newBuilder();
 
 		response = scanOverTable(scan, response);
-
-
-		// add aggregation result to response
-		// put all the aggregation in one row
-		BSVRow.Builder bsvRow = BSVRow.newBuilder();
-		for (Entry<String, List<Aggregation>> entry : aggregationManager.getAggregations().entrySet())
-		{
-			for(Aggregation aggregation:entry.getValue()){
-				KeyValue.Builder keyValue = KeyValue.newBuilder();
-				// build cell using row-key as:
-				// SUM/MAX/MIN/AVG/COUNT
-				keyValue.setRowKey(ByteString.copyFrom(aggregation.getName().getBytes()));
-				// set key as:
-				// family.qualifier
-				keyValue.setKey(ByteString.copyFrom(entry.getKey().getBytes()));
-				// set value as result of aggregation
-				keyValue.setValue(ByteString.copyFrom((aggregation.getResult()+"").getBytes()));
-
-				bsvRow.addKeyValue(keyValue.build());
-			}
-		}
-		BSVRow aggregationRow = bsvRow.build();
-		response.addRow(aggregationRow);
-
-		// handle aggregation view materialization
-		if(!aggregationManager.getAggregations().isEmpty() || request.getIsMaterialize()){
-			materialize.putToView(aggregationRow);
-			materialize.putToDeltaView(aggregationRow);
-		}
+		response = writeAggregations(response);
 
 		// closing connections
 		materialize.close();
@@ -574,44 +598,60 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 			aggregations = new HashedMap();
 			// TODO: Buraya hepsini ekle olanlar normal view a olmayanlar deltada kalcak
-			
-			for(ByteString aggregation:request.getAggregationList()){
-				// aggregation is in following format
-				// sum:family.qualifier
-				// max:family.qualifier
-				// min:family.qualifier
-				// avg:family.qualifier
-				// count:family.qualifier
-				// ...
-				String function = aggregation.toStringUtf8().split(":")[0];
-				String key = aggregation.toStringUtf8().split(":")[1];
-				
-				// for every kind of aggregation new a class
-				Aggregation agg = null;
-				if(function.equalsIgnoreCase("sum")){
-					agg = new Sum();
-				}
-				else if(function.equalsIgnoreCase("max")){
-					agg = new Max();
-				}
-				else if(function.equalsIgnoreCase("min")){
-					agg = new Min();
-				}
-				else if(function.equalsIgnoreCase("avg")){
-					agg = new Avg();
-				}
-				else if(function.equalsIgnoreCase("count")){
-					agg = new Count();
-				}
-				
-				// first check if the list is created
-				// for every key build a list
-				if(!aggregations.containsKey(key)){
-					List<Aggregation> aggList = new ArrayList<Aggregation>();
-					aggregations.put(key, aggList);
-				}
-				aggregations.get(key).add(agg);
+
+			String key = request.getAggregationList().get(0).toStringUtf8().split(":")[1];
+
+			if(!aggregations.containsKey(key)){
+				List<Aggregation> aggList = new ArrayList<Aggregation>();
+				aggregations.put(key, aggList);
 			}
+			aggregations.get(key).add(new Min());
+			aggregations.get(key).add(new Max());
+			aggregations.get(key).add(new Count());
+			aggregations.get(key).add(new Sum());
+
+
+//			for(ByteString aggregation:request.getAggregationList()){
+//
+//				// aggregation is in following format
+//				// sum:family.qualifier
+//				// max:family.qualifier
+//				// min:family.qualifier
+//				// avg:family.qualifier
+//				// count:family.qualifier
+//				// ...
+//				String function = aggregation.toStringUtf8().split(":")[0];
+//				String key = aggregation.toStringUtf8().split(":")[1];
+//
+//				// for every kind of aggregation new a class
+//				Aggregation agg = null;
+//				if(function.equalsIgnoreCase("sum")){
+//					agg = new Sum();
+//				}
+//				else if(function.equalsIgnoreCase("max")){
+//					agg = new Max();
+//				}
+//				else if(function.equalsIgnoreCase("min")){
+//					agg = new Min();
+//				}
+//				else if(function.equalsIgnoreCase("avg")){
+//					agg = new Avg();
+//				}
+//				else if(function.equalsIgnoreCase("count")){
+//					agg = new Count();
+//				}
+//
+//				// first check if the list is created
+//				// for every key build a list
+//				if(agg != null){
+//					if(!aggregations.containsKey(key)){
+//						List<Aggregation> aggList = new ArrayList<Aggregation>();
+//						aggregations.put(key, aggList);
+//					}
+//					aggregations.get(key).add(agg);
+//
+//				}
+//			}
 			
 			
 		}
@@ -715,6 +755,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 */
 		public abstract String getName();
 
+		public abstract Byte getType();
+
 		@Override
 		protected Object clone() throws CloneNotSupportedException {
 			return super.clone();
@@ -745,6 +787,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		@Override
 		public String getName() {
 			return "SUM";
+		}
+
+		@Override
+		public Byte getType() {
+			return JsqlParser.AGGREGATION_SUM;
 		}
 
 		@Override
@@ -779,7 +826,12 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		public String getName() {
 			return "MAX";
 		}
-		
+
+		@Override
+		public Byte getType() {
+			return JsqlParser.AGGREGATION_MAX;
+		}
+
 		@Override
 		protected Object clone() throws CloneNotSupportedException {
 			Max maxObj = (Max) super.clone(); 
@@ -811,6 +863,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		@Override
 		public String getName() {
 			return "MIN";
+		}
+
+		@Override
+		public Byte getType() {
+			return JsqlParser.AGGREGATION_MIN;
 		}
 
 		@Override
@@ -853,6 +910,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		}
 
 		@Override
+		public Byte getType() {
+			return JsqlParser.AGGREGATION_AVG;
+		}
+
+		@Override
 		protected Object clone() throws CloneNotSupportedException {
 			Avg avgObj = (Avg)super.clone();
 			avgObj.sum = sum;
@@ -891,6 +953,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			countObj.count = count;
 			return countObj;
 		}
+
+		@Override
+		public Byte getType() {
+			return JsqlParser.AGGREGATION_COUNT;
+		}
 		
 	}
 	
@@ -900,7 +967,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 *
 	 */
 	public class MaterializeManager{
-		private String SQL = "";
+		private String query = "";
 		private String viewName = "";
 		private HTableInterface deltaView = null;
 		private HTableInterface view = null;
@@ -926,7 +993,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		}
 		
 		public MaterializeManager(ParameterMessage request) {
-			SQL = request.getSQL().toStringUtf8();
+			query = request.getSQL().toStringUtf8();
 			viewName = request.getViewName().toStringUtf8();
 			view = getView(viewName);
 			deltaView = getView(viewName + "_delta");
@@ -1016,6 +1083,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+
+		public String getQuery() {
+			return query;
 		}
 	}
 }
