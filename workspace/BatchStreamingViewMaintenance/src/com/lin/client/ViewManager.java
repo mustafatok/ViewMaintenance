@@ -47,6 +47,7 @@ public class ViewManager {
             if(qType == JsqlParser.AGGREGATION){
                 helper.dropTable(tableName + "_delta");
                 helper.createTable(tableName + "_delta", "colfam", "MIN", "MAX", "COUNT", "SUM", "AVG");
+//                helper.createTable(tableName + "_delta", "colfam", "MIN", "MAX", "COUNT", "SUM", "AVG");
             }else if(qType == JsqlParser.JOIN){
 
             }

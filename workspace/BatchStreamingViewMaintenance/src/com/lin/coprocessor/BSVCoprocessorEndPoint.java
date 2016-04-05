@@ -134,12 +134,14 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	private ResultMessage.Builder writeAggregations(ResultMessage.Builder response){
 		// add aggregation result to response
 		// put all the aggregation in one row
+		if(!aggregationManager.isAvailable()) return response;
+
 
 		HashSet<Byte> requiredAggFunctions = JsqlParser.typeOfAggregation(materialize.getQuery());
 
 		BSVRow.Builder bsvRow = BSVRow.newBuilder();
 		BSVRow.Builder bsvRowDelta = BSVRow.newBuilder();
-		boolean avgFlag = false;
+		boolean avgFlag = false, rowFlag = false;
 		if(requiredAggFunctions.contains(JsqlParser.AGGREGATION_AVG)){
 			avgFlag = true;
 		}
@@ -161,7 +163,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				keyValue.setValue(ByteString.copyFrom((aggregation.getResult()+"").getBytes()));
 
 				if(requiredAggFunctions.contains(aggregation.getType())){
+					rowFlag = true;
 					bsvRow.addKeyValue(keyValue.build());
+				}else{
+					rowFlag = false;
 				}
 				bsvRowDelta.addKeyValue(keyValue.clone());
 
@@ -181,7 +186,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 		// handle aggregation view materialization
 		if(!aggregationManager.getAggregations().isEmpty() || request.getIsMaterialize()){
-			materialize.putToView(aggregationRow);
+			if(rowFlag) materialize.putToView(aggregationRow);
 			materialize.putToDeltaView(aggregationRowDelta);
 		}
 		return response;
@@ -389,7 +394,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					// build the select view
 					if(request.getIsMaterialize()){
 						// selection view
-						if(request.getAggregationKey().toStringUtf8().equals("")){
+						if(JsqlParser.typeOfQuery(materialize.getQuery()) == JsqlParser.SELECT){
 							materialize.putToView(row);
 						}
 					}
@@ -497,7 +502,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	 */
 	public byte[] handleCell(Cell cell, KeyValue.Builder keyvalue, ParameterMessage request, String aggKey) {
 		// handle aggregation
-		aggregationManager.handle(cell, aggKey);
+		if(aggregationManager.isAvailable()) aggregationManager.handle(cell, aggKey);
 		// row key
 		byte[] rowBytes = new byte[cell.getRowLength()];
 		System.arraycopy(cell.getRowArray(), cell.getRowOffset(), rowBytes, 0, cell.getRowLength());
@@ -588,73 +593,37 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 */
 		private Map<String, List<Aggregation>> aggregations;
 
+		private boolean available = false;
 		private String deltaView;
 		/**
 		 * Loop check request.aggregations and add them to aggregation list
 		 * @param request
 		 */
 		public AggregationManager(ParameterMessage request){
-			deltaView = request.getViewName().toStringUtf8() + "_delta";
+			if(JsqlParser.typeOfQuery(request.getSQL().toStringUtf8()) == JsqlParser.AGGREGATION) {
+				deltaView = request.getViewName().toStringUtf8() + "_delta";
 
-			aggregations = new HashedMap();
-			// TODO: Buraya hepsini ekle olanlar normal view a olmayanlar deltada kalcak
+				aggregations = new HashedMap();
 
-			String key = request.getAggregationList().get(0).toStringUtf8().split(":")[1];
+				String key = request.getAggregationList().get(0).toStringUtf8().split(":")[1];
 
-			if(!aggregations.containsKey(key)){
-				List<Aggregation> aggList = new ArrayList<Aggregation>();
-				aggregations.put(key, aggList);
+				if (!aggregations.containsKey(key)) {
+					List<Aggregation> aggList = new ArrayList<Aggregation>();
+					aggregations.put(key, aggList);
+				}
+				aggregations.get(key).add(new Min());
+				aggregations.get(key).add(new Max());
+				aggregations.get(key).add(new Count());
+				aggregations.get(key).add(new Sum());
+
+				available = true;
 			}
-			aggregations.get(key).add(new Min());
-			aggregations.get(key).add(new Max());
-			aggregations.get(key).add(new Count());
-			aggregations.get(key).add(new Sum());
-
-
-//			for(ByteString aggregation:request.getAggregationList()){
-//
-//				// aggregation is in following format
-//				// sum:family.qualifier
-//				// max:family.qualifier
-//				// min:family.qualifier
-//				// avg:family.qualifier
-//				// count:family.qualifier
-//				// ...
-//				String function = aggregation.toStringUtf8().split(":")[0];
-//				String key = aggregation.toStringUtf8().split(":")[1];
-//
-//				// for every kind of aggregation new a class
-//				Aggregation agg = null;
-//				if(function.equalsIgnoreCase("sum")){
-//					agg = new Sum();
-//				}
-//				else if(function.equalsIgnoreCase("max")){
-//					agg = new Max();
-//				}
-//				else if(function.equalsIgnoreCase("min")){
-//					agg = new Min();
-//				}
-//				else if(function.equalsIgnoreCase("avg")){
-//					agg = new Avg();
-//				}
-//				else if(function.equalsIgnoreCase("count")){
-//					agg = new Count();
-//				}
-//
-//				// first check if the list is created
-//				// for every key build a list
-//				if(agg != null){
-//					if(!aggregations.containsKey(key)){
-//						List<Aggregation> aggList = new ArrayList<Aggregation>();
-//						aggregations.put(key, aggList);
-//					}
-//					aggregations.get(key).add(agg);
-//
-//				}
-//			}
-			
-			
 		}
+
+		public boolean isAvailable() {
+			return available;
+		}
+
 
 		/**
 		 * Identify the aggregation for a cell and execute all the aggregation for the cell
@@ -674,11 +643,15 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			//     if no, copy the list of aggregation from the list given the key of colfam.qualifier and then execute the aggregation
 			System.out.println("Aggregation handler: check if aggregations " + aggregations + " contains prefix " + keyPrefix);
 			if(aggregations.containsKey(keyPrefix)){
+				String row;
+				String colfam = "colfam";;
+				String qual;
+				String value;
 				if(aggKey.equals("")){
 					for(Aggregation aggregation:aggregations.get(keyPrefix)){
 						aggregation.execute(cell);
 					}
-
+					row = keyPrefix;
 					// TODO: implement delta view extension for no aggKey..
 				}else{
 					System.out.println("Check if contains key " + key);
@@ -704,17 +677,15 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 						aggregation.execute(cell);
 					}
 
-					String row = key;
-					String colfam = "colfam";
-					String qual = new String(CellUtil.cloneRow(cell));
-					String value = new String(CellUtil.cloneValue(cell));
-
-					try {
-						HBaseHelper.getHelper(HBaseConfiguration.create()).put(deltaView, row, colfam, qual, value);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					// Add to deltaview.
+					row = key;
+				}
+				// Add to deltaview.
+				qual = new String(CellUtil.cloneRow(cell));
+				value = new String(CellUtil.cloneValue(cell));
+				try {
+					HBaseHelper.getHelper(HBaseConfiguration.create()).put(deltaView, row, colfam, qual, value);
+				} catch (IOException e) {
+					e.printStackTrace();
 				}
 			}
 			
@@ -1021,8 +992,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 * @param aggregationRow
 		 */
 		public void putToDeltaView(BSVRow aggregationRow) { // Aggregation Delta View
-			// TODO: Implement correct version..
-
 			putToTable(deltaView, aggregationRow);
 		}
 

@@ -213,6 +213,8 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 //
 //            }
         }
+
+
         public Command execute(Put put) throws IOException {
             if(view == null) return this;
 
