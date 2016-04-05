@@ -131,7 +131,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		}
 		return scan;
 	}
-	private ResultMessage.Builder writeAggregations(ResultMessage.Builder response){
+	private ResultMessage.Builder putAggregations(ResultMessage.Builder response){
 		// add aggregation result to response
 		// put all the aggregation in one row
 		if(!aggregationManager.isAvailable()) return response;
@@ -197,7 +197,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		ResultMessage.Builder response = ResultMessage.newBuilder();
 
 		response = scanOverTable(scan, response);
-		response = writeAggregations(response);
+		response = putAggregations(response);
 
 		// closing connections
 		materialize.close();
@@ -652,7 +652,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 						aggregation.execute(cell);
 					}
 					row = keyPrefix;
-					// TODO: implement delta view extension for no aggKey..
 				}else{
 					System.out.println("Check if contains key " + key);
 					if(!aggregations.containsKey(key)){

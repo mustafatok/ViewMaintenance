@@ -23,11 +23,20 @@ import java.util.NavigableMap;
 
 public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
-    public void commonOperation(ObserverContext<RegionCoprocessorEnvironment> observerContext, Mutation op) throws IOException{
-        TableName table = observerContext.getEnvironment().getRegionInfo().getTable();
-        if(!table.isSystemTable()){
+    ObserverContext<RegionCoprocessorEnvironment> oContext;
 
-            Get get = new Get(table.getName());
+    private String viewQuery = null;
+    private String viewName = null;
+    private boolean successful = false;
+    TableName modifiedTable;
+
+
+
+    public void commonOperation(ObserverContext<RegionCoprocessorEnvironment> observerContext, Mutation op) throws IOException{
+        modifiedTable = observerContext.getEnvironment().getRegionInfo().getTable();
+        if(!modifiedTable.isSystemTable()){
+            oContext = observerContext;
+            Get get = new Get(modifiedTable.getName());
             Result result = observerContext.getEnvironment().getTable(TableName.valueOf("table_view")).get(get);
 
             if(result != null && !result.isEmpty()){ // There exists a view connected to the table.
@@ -41,18 +50,17 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 //                    ViewManager.refreshView(new String(viewName));
 
                     // TODO:  Incremental Processing.
-                    HTableInterface viewTable = observerContext.getEnvironment().getTable(TableName.valueOf(viewName));
-                    HTableInterface tableInterface = observerContext.getEnvironment().getTable(table);
-                    Command command = new Command();
+//                    HTableInterface deltaViewTable = observerContext.getEnvironment().getTable(TableName.valueOf(viewName + "_delta"));
+//                    HTableInterface tableInterface = observerContext.getEnvironment().getTable(table);
                     if(op instanceof Put){
                         Put put = (Put) op;
-                        command.addTable(tableInterface).addViewTable(viewTable).addViewQuery(new String(query)).execute(put);
+                        setViewName(new String(viewName)).setViewQuery(new String(query)).execute(put);
                     }else if(op instanceof Delete){
                         Delete delete = (Delete) op;
-                        command.addTable(tableInterface).addViewTable(viewTable).addViewQuery(new String(query)).execute(delete);
+                        setViewName(new String(viewName)).setViewQuery(new String(query)).execute(delete);
                     }
 
-                    if(!command.isSuccessful()){
+                    if(!isSuccessful()){
                         // TODO : LOG HERE
                     }
                 }
@@ -70,206 +78,179 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
     }
 
 
+    private ViewMaintenanceRegionObserver execute(Put put) throws IOException {
+        if(viewQuery == null) return this;
 
+        boolean errorFlag = false;
+        byte viewType = JsqlParser.typeOfQuery(viewQuery);
 
-
-
-
-
-
-
-
-    public class Command {
-        String viewQuery;
-        boolean successful = false;
-        private HTableInterface view = null;
-        private HTableInterface table = null;
-
-        public Command addTable(HTableInterface table){
-            this.table = table;
-            return this;
+        if(viewType == JsqlParser.SELECT){
+            this.select(put);
+        }else if(viewType == JsqlParser.JOIN){
+            this.join(put);
+        }else if (viewType == JsqlParser.AGGREGATION){
+            this.aggregation(put, JsqlParser.typeOfAggregation(viewQuery));
+        }else{
+            errorFlag = true;
         }
-        public Command addViewTable(HTableInterface view){
-            this.view = view;
-            return this;
-        }
-        public Command addViewQuery(String query){
-            this.viewQuery = query;
-            return this;
-        }
-        private void select(Put put) throws IOException {
-            Put viewPut = new Put(put.getRow());
-            NavigableMap<byte[], List<Cell>> familyCellMap = put.getFamilyCellMap();
+        successful = !errorFlag;
+        return this;
+    }
+
+    public ViewMaintenanceRegionObserver execute(Delete delete) throws IOException {
+        if(viewQuery == null) return this;
+
+        boolean errorFlag = false;
+        byte viewType = JsqlParser.typeOfQuery(viewQuery);
+
+        if(viewType == JsqlParser.SELECT){
+            Delete viewDelete = new Delete(delete.getRow());
+            NavigableMap<byte[], List<Cell>> familyCellMap = delete.getFamilyCellMap();
             for (Map.Entry<byte[], List<Cell>> entry : familyCellMap.entrySet()) {
                 List<Cell> cells = entry.getValue();
                 for(Cell c: cells){
-                    viewPut.add(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c))).getBytes(), CellUtil.cloneValue(c));
+                    viewDelete.deleteColumn(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c))).getBytes());
                 }
             }
-            view.put(viewPut);
+
+            HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+            view.delete(viewDelete);
             view.flushCommits();
+            view.close();
+
+        }else if(viewType == JsqlParser.JOIN){
+
+
+        }else if (viewType == JsqlParser.AGGREGATION){
+
+
+        }else{
+            errorFlag = true;
         }
-        private void join(Put put){
-
-        }
-
-
-        // TODO: Create delta views.
-        private void aggregation(Put put, HashSet<Byte> aggSet) throws IOException {
-//            if(aggSet == null) return;
-//            Result result = table.get(new Get(put.getRow()));
-//            if(result != null && !result.isEmpty()){
-//                NavigableMap<byte[], NavigableMap<byte[], NavigableMap<Long,byte[]>>> tableViewMap = result.getMap();
-////                    Map&family,Map<qualifier,Map<timestamp,value>>>
-//
-//
-//                long curr_ts = put.getTimeStamp();
-//                long tsdiff = Long.MAX_VALUE;
-//                long prev_val = 0;
-//
-//                for (Map.Entry<byte[], NavigableMap<byte[], NavigableMap<Long,byte[]>>> entry1 : tableViewMap.entrySet()) {
-//                    for (Map.Entry<byte[], NavigableMap<Long,byte[]>> entry2 : entry1.getValue().entrySet()) {
-//                        String qual = new String(entry2.getKey());
-//
-//                        if(!qual.equals("value")) continue;
-//                        for (Map.Entry<Long,byte[]> entry3 : entry2.getValue().entrySet()) {
-//                            Long ts = entry3.getKey();
-//                            byte[] val = entry3.getValue();
-//                            if(curr_ts - ts < tsdiff && curr_ts - ts != 0){
-//                                tsdiff = curr_ts - ts;
-//                                prev_val = Long.valueOf(new String(val)).longValue();
-//                            }
-//                        }
-//                    }
-//                }
-//
-//                // TODO : Check previous MAX and MIN for estimations..
-//
-//                long curr_val;
-//                curr_val = Long.valueOf(
-//                        new String(
-//                                CellUtil.cloneValue(
-//                                        put.get("colfam".getBytes(),"value".getBytes()).get(0)
-//                                )
-//                        )
-//
-//                );
-//
-//
-//                byte[] viewKey = ("colfam.value." + new String(result.getValue("colfam".getBytes(),"aggKey".getBytes()))).getBytes();
-//
-//                result = view.get(new Get((viewKey)));
-//                if(result != null && !result.isEmpty()){
-//                    if(aggType.equals("max")){
-//                        long viewMax = Long.valueOf(new String(result.getValue("colfam".getBytes(), "MAX".getBytes())));
-//                        if(viewMax < curr_val){
-//                            // Update View
-//                            Put viewPut = new Put(viewKey);
-//                            viewPut.add("colfam".getBytes(), "MAX".getBytes(), Long.toString(curr_val).getBytes());
-//                            view.put(viewPut);
-//                            view.flushCommits();
-//                        }
-//
-//                    }else if(aggType.equals("min")){
-//                        long viewMin = Long.valueOf(new String(result.getValue("colfam".getBytes(), "MIN".getBytes())));
-//                        if(viewMin > curr_val){
-//                            // Update View
-//                            Put viewPut = new Put(viewKey);
-//                            viewPut.add("colfam".getBytes(), "MIN".getBytes(), Long.toString(curr_val).getBytes());
-//                            view.put(viewPut);
-//                            view.flushCommits();
-//                        }
-//                    }else if(aggType.equals("count")){
-//                        if(tsdiff == Long.MAX_VALUE){
-////                                view.incrementColumnValue(viewKey, "colfam".getBytes(), "COUNT".getBytes(), 1);
-//                            long viewCnt = Long.valueOf(new String(result.getValue("colfam".getBytes(), "COUNT".getBytes())));
-//                            // Update View
-//                            Put viewPut = new Put(viewKey);
-//                            viewPut.add("colfam".getBytes(), "COUNT".getBytes(), Long.toString(viewCnt + 1).getBytes());
-//                            view.put(viewPut);
-//                            view.flushCommits();
-//                        }
-//                    }else if(aggType.equals("sum")){
-////                            view.incrementColumnValue(viewKey, "colfam".getBytes(), "SUM".getBytes(), curr_val - prev_val); // Gave an error
-//
-//                        long viewSum = Long.valueOf(new String(result.getValue("colfam".getBytes(), "SUM".getBytes())));
-//                        // Update View
-//                        Put viewPut = new Put(viewKey);
-//                        viewPut.add("colfam".getBytes(), "SUM".getBytes(), Long.toString(curr_val - prev_val).getBytes());
-////                            viewPut.add("colfam".getBytes(), "SUM".getBytes(), Long.toString(viewSum + (curr_val - prev_val)).getBytes());
-//                        view.put(viewPut);
-//                        view.flushCommits();
-//
-//
-//
-//
-//                    }else if(aggType.equals("avg")){
-////                            Long viewMax = new Long(result.getValue("colfam".getBytes(), "AVG".getBytes()).toString());
-//
-//                    }else{
-//
-//                    }
-//                }
-//
-//            }
-        }
+        successful = !errorFlag;
+        return this;
+    }
 
 
-        public Command execute(Put put) throws IOException {
-            if(view == null) return this;
 
-            boolean errorFlag = false;
-            byte viewType = JsqlParser.typeOfQuery(viewQuery);
+    public ViewMaintenanceRegionObserver setViewName(String viewName) {
+        this.viewName = viewName;
+        return this;
+    }
 
-            if(viewType == JsqlParser.SELECT){
-                this.select(put);
-            }else if(viewType == JsqlParser.JOIN){
-                this.join(put);
-            }else if (viewType == JsqlParser.AGGREGATION){
-                this.aggregation(put, JsqlParser.typeOfAggregation(viewQuery));
-            }else{
-                errorFlag = true;
+    public ViewMaintenanceRegionObserver setViewQuery(String viewQuery) {
+        this.viewQuery = viewQuery;
+        return this;
+    }
+    private boolean isSuccessful(){
+        return successful;
+    }
+
+
+    private void select(Put put) throws IOException {
+        Put viewPut = new Put(put.getRow());
+        NavigableMap<byte[], List<Cell>> familyCellMap = put.getFamilyCellMap();
+        for (Map.Entry<byte[], List<Cell>> entry : familyCellMap.entrySet()) {
+            List<Cell> cells = entry.getValue();
+            for(Cell c: cells){
+                viewPut.add(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c))).getBytes(), CellUtil.cloneValue(c));
             }
-            successful = !errorFlag;
-            return this;
         }
+        HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+
+        view.put(viewPut);
+        view.flushCommits();
+        view.close();
+    }
+    private void join(Put put){
+
+    }
 
 
-        public Command execute(Delete delete) throws IOException {
-            if(view == null) return this;
+    // TODO: Create delta views.
+    private void aggregation(Put put, HashSet<Byte> aggSet) throws IOException {
+        if(aggSet == null) return;
+        byte[] colfam = "colfam".getBytes();
 
-            boolean errorFlag = false;
-            byte viewType = JsqlParser.typeOfQuery(viewQuery);
+        byte[] oldDeltaValue = null;
 
-            if(viewType == JsqlParser.SELECT){
-                Delete viewDelete = new Delete(delete.getRow());
-                NavigableMap<byte[], List<Cell>> familyCellMap = delete.getFamilyCellMap();
-                for (Map.Entry<byte[], List<Cell>> entry : familyCellMap.entrySet()) {
-                    List<Cell> cells = entry.getValue();
-                    for(Cell c: cells){
-                        viewDelete.deleteColumn(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c))).getBytes());
-                    }
+        int MIN = Integer.MAX_VALUE;
+        int MAX = Integer.MIN_VALUE;
+        int SUM = 0;
+        int COUNT = 0;
+
+        int newValue = 0;
+
+        String groupBy = JsqlParser.getGroupBy(viewQuery);
+//        String groupBy = "aggKey";
+        String rowDeltaPrefix = "colfam.value";
+
+
+        HTableInterface table = oContext.getEnvironment().getTable(modifiedTable);
+        Result result = table.get(new Get(put.getRow()));
+        if(result != null && !result.isEmpty()) {
+            NavigableMap<byte[], byte[]> rowMap = result.getFamilyMap(colfam);
+
+            for (Map.Entry<byte[], byte[]> entry : rowMap.entrySet()) {
+                byte[] qual = entry.getKey();
+                byte[] value = entry.getValue();
+
+                if(groupBy.equals(new String(qual))){
+                    rowDeltaPrefix = "colfam.value." + new String(value);
+                }else{ // TODO : Check if it is the value or if there are more values.
+                    newValue = Integer.valueOf(new String(value));
                 }
-                view.delete(viewDelete);
-                view.flushCommits();
-
-            }else if(viewType == JsqlParser.JOIN){
-
-
-            }else if (viewType == JsqlParser.AGGREGATION){
-
-
-            }else{
-                errorFlag = true;
             }
-            successful = !errorFlag;
-            return this;
         }
+        table.close();
+
+        Get getDelta = new Get(rowDeltaPrefix.getBytes());
 
 
-        public boolean isSuccessful(){
-            return successful;
+        HTableInterface deltaView = oContext.getEnvironment().getTable(TableName.valueOf(viewName + "_delta"));
+        result = deltaView.get(getDelta);
+
+        if(result != null && !result.isEmpty()){
+            oldDeltaValue = result.getValue(colfam, put.getRow());
+
+            MIN = Integer.valueOf((new String(result.getValue(colfam, "MIN".getBytes()))));
+            MAX = Integer.valueOf((new String(result.getValue(colfam, "MAX".getBytes()))));
+            SUM = Integer.valueOf((new String(result.getValue(colfam, "SUM".getBytes()))));
+            COUNT = Integer.valueOf((new String(result.getValue(colfam, "COUNT".getBytes()))));
         }
+
+        if(oldDeltaValue != null){
+            int oldValue = Integer.valueOf(new String(oldDeltaValue));
+
+            SUM += (newValue - oldValue);
+
+            if(newValue < MIN){
+                MIN = newValue;
+            }else if(oldValue == MIN && newValue > MIN){
+                // TODO : Recalculate..
+            }
+
+            if(newValue > MAX){
+                MAX = newValue;
+            }else if(oldValue == MAX && newValue < MAX){
+                // TODO : Recalculate..
+            }
+        }else{
+            COUNT++;
+            SUM += newValue;
+            MIN = (newValue < MIN ? newValue : MIN);
+            MAX = (newValue > MAX ? newValue : MAX);
+        }
+
+        Put deltaPut = new Put(getDelta.getRow());
+        deltaPut.add(colfam, put.getRow(), String.valueOf(newValue).getBytes());
+        deltaPut.add(colfam, "MIN".getBytes(), String.valueOf(MIN).getBytes());
+        deltaPut.add(colfam, "MAX".getBytes(), String.valueOf(MAX).getBytes());
+        deltaPut.add(colfam, "SUM".getBytes(), String.valueOf(SUM).getBytes());
+        deltaPut.add(colfam, "COUNT".getBytes(), String.valueOf(COUNT).getBytes());
+        deltaView.put(deltaPut);
+        deltaView.flushCommits();
+        deltaView.close();
     }
 }
 

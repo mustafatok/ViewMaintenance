@@ -498,6 +498,33 @@ public class JsqlParser {
 			return set;
 	}
 
+	public static String getGroupBy(String query){
+		CCJSqlParserManager pm = new CCJSqlParserManager();
+		try {
+			net.sf.jsqlparser.statement.Statement statement = pm.parse(new StringReader(query)); // parse sql statement
+			if (statement instanceof Select) {
+				Select selectStatement = (Select) statement;
+				if(selectStatement.getSelectBody() instanceof PlainSelect){
+					// get table name
+					PlainSelect plainSelect = (PlainSelect)selectStatement.getSelectBody();
+					if(plainSelect.getGroupByColumnReferences() != null && !plainSelect.getGroupByColumnReferences().isEmpty()){
+						String groupBy = ((Column) plainSelect.getGroupByColumnReferences().get(0)).getWholeColumnName();
+
+						if(groupBy.equals(new String("")))
+							return "";
+						else
+//							return "aggKey";
+							return groupBy.substring(groupBy.indexOf('.') + 1);
+					}
+				} // if(selectStatement.getSelectBody() instanceof PlainSelect)
+			}// if (statement instanceof Select)
+
+		} catch (JSQLParserException e) {
+			e.printStackTrace();
+		}
+		return "";
+	}
+
 	public static final byte AGGREGATION_MIN = 1;
 	public static final byte AGGREGATION_MAX = 2;
 	public static final byte AGGREGATION_SUM = 3;
