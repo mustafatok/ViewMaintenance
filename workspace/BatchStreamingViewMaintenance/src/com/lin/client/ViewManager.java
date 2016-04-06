@@ -46,10 +46,11 @@ public class ViewManager {
 
             if(qType == JsqlParser.AGGREGATION){
                 helper.dropTable(tableName + "_delta");
-                helper.createTable(tableName + "_delta", "colfam", "MIN", "MAX", "COUNT", "SUM", "AVG");
-//                helper.createTable(tableName + "_delta", "colfam", "MIN", "MAX", "COUNT", "SUM", "AVG");
+                helper.createTable(tableName + "_delta", "colfam");
+//                helper.createTable(tableName + "_delta", "colfam", "MIN", "MAX", "COUNT", "SUM", "AVG"); // TODO : Check if it is working without this..
             }else if(qType == JsqlParser.JOIN){
-
+                helper.dropTable(tableName + "_delta");
+                helper.createTable(tableName + "_delta", "colfam");
             }
         } catch(IOException e) {
             e.printStackTrace();
@@ -79,10 +80,11 @@ public class ViewManager {
         createViewTable(viewName, query);
 
         // TODO: Fix this to support joins.
+
+
         for(LogicalElement element = simpleLogicalPlan.getHead(); element != null; element = element.getNext() ) {
             element.setViewName(viewName);
             element.setMaterialize(true);
-
             putTableView(element.getTableName(), viewName, query);
         }
         simpleLogicalPlan.getHead().execute();

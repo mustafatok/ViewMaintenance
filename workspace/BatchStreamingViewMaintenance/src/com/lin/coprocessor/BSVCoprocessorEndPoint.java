@@ -337,7 +337,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			long count = 0;
 			Date begin = new Date();
 			System.out.println(begin+"Begin to scan");
-
 			do {
 				curVals.clear();
 				finish = scanner.next(curVals);
@@ -354,6 +353,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				}
 
 				// find the aggregation key first
+				// TODO: Add a control. It is doing unnecessary calculations for select and join views..
 				String aggKey = "";
 				for(Cell cell:row){
 					String columnName = new String(CellUtil.cloneFamily(cell)) + "." + new String(CellUtil.cloneQualifier(cell));
@@ -367,12 +367,12 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 				// build join table
 				if(request.getIsBuildJoinView()){
-					processJoinView(curVals);
+//					processJoinView(curVals);
 				}
 
-					/*
-					 * start of handling result
-					 */
+				/*
+				 * start of handling result
+				 */
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
 				System.out.println((new Date())+"Building row no." + count);
 
@@ -403,7 +403,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			} while (finish);
 			Date end = new Date();
 			System.out.println(end+" Finish scanning in " + (end.getTime()-begin.getTime()) + " million seconds");
-
 
 			System.out.println((new Date())+"Finish building response message");
 			response.setSize(count);
@@ -437,7 +436,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				
 				for(Cell cellForAdd:row){
 					System.out.println("Puting cell " + new String(CellUtil.cloneQualifier(cellForAdd)) + " = " + new String(CellUtil.cloneValue(cellForAdd)));
-					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), ((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd)))).getBytes(), CellUtil.cloneValue(cellForAdd));
+					// TODO : Check if this cell and outer cell are equal if they are do not add it to table...
+					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), //TODO : Change this with the table name...
+							((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd)))).getBytes(),
+							CellUtil.cloneValue(cellForAdd));
 				}
 				
 				try {

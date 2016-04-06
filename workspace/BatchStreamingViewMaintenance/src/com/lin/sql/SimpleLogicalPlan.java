@@ -5,7 +5,9 @@ public class SimpleLogicalPlan{
 	
 	// execution stack
 	private LogicalElement head = null;
-	
+
+	private int size = 0;
+
 	public LogicalElement getHead() {
 		return head;
 	}
@@ -55,6 +57,10 @@ public class SimpleLogicalPlan{
 		}else{
 			this.getLast().setNext(element);
 		}
-	}	
+		++size;
+	}
 
+	public int getSize() {
+		return size;
+	}
 }

@@ -58,14 +58,10 @@ public class JsqlParser {
 							LogicalElement element = new LogicalElement();
 							element.setSQL(input);
 //							element.setViewName(viewName);
-//							element.setMaterialize(!viewName.equals(""));
 							element.setReturningResults(isReturningResults);
 							handleSingleTable(plainSelect, tableName, element);
 							logicalPlan.add(element);
-							
-//							if(!viewName.equals("")){
-//								handleMaterialize(viewName, element);
-//							}
+
 						}else{
 							System.out.println("Handling select with Join");
 							
@@ -77,14 +73,7 @@ public class JsqlParser {
 							element.setSQL(SQL);
 //							element.setViewName(viewName);
 							element.setNonBlock(false);
-							
-//							if(!viewName.equals("")){
-//								System.out.println(
-//										"+++++ Construct separate query for first join table +++++\n"
-//										+ SQL);
-//								handleMaterialize(viewName, element);
-//							}
-							
+
 							// build plan for join table
 							// Assert only one join
 							Join join = (Join)plainSelect.getJoins().get(0);
@@ -95,13 +84,7 @@ public class JsqlParser {
 							elementJoin.setSQL(joinElementSQL);
 //							elementJoin.setViewName(viewName);
 							elementJoin.setNonBlock(true);
-							
-//							if(!viewName.equals("")){
-//								System.out.println(
-//										"+++++ Construct separate query for second join table +++++\n"
-//										+joinElementSQL);
-//								handleMaterialize(joinElementSQL, element);
-//							}
+
 							
 							// For each of the plan, the join key field should be filled
 							// Assert the join key of the left table is on the left and 
