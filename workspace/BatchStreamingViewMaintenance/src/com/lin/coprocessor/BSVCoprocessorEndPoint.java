@@ -165,8 +165,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				if(requiredAggFunctions.contains(aggregation.getType())){
 					rowFlag = true;
 					bsvRow.addKeyValue(keyValue.build());
-				}else{
-					rowFlag = false;
 				}
 				bsvRowDelta.addKeyValue(keyValue.clone());
 
@@ -201,6 +199,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 		// closing connections
 		materialize.close();
+
 		// Depending on the plan, return the results or nothing
 		System.out.println("Client wants the results: " + request.getIsReturningResults());
 		if(request.getIsReturningResults()){
@@ -376,12 +375,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 					 */
 				BSVRow.Builder bsvRow = BSVRow.newBuilder();
 				System.out.println((new Date())+"Building row no." + count);
-
-				// If is-materialize flag is true build the delta view for every row
-				if(request.getIsMaterialize()){
-					// TODO : Check this!!
-//					materialize.putToDeltaView(row);
-				}
 
 				boolean meetCondition = handleRow(request, row, bsvRow, aggKey);
 
@@ -1056,5 +1049,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		public String getQuery() {
 			return query;
 		}
+
 	}
 }
