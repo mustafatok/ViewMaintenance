@@ -88,15 +88,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 		// check if join
 		// If join, set is-materialize to be true.
-		// Fill joinKey and joinTable for later use
+		// Fill joinKey for later use
 		if(!request.getJoinKey().toStringUtf8().equals("")){
-			// Connect to the join table using the join table name from request
-//			try {
-//				joinTable = env.getTable(TableName.valueOf(request.getJoinTable().toByteArray()));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-
 			// fill join family and join qualifier for later use
 			joinFamily = request.getJoinKey().toStringUtf8().split("\\.")[0];
 			joinQualifier = request.getJoinKey().toStringUtf8().split("\\.")[1];
@@ -205,6 +198,39 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		}
 
 	}
+
+	private void putToReverseJoinTable(List<Cell> row)
+			throws InterruptedIOException, RetriesExhaustedWithDetailsException {
+		// find join key
+		for(Cell cell:row){
+			String cellFamilyClone = new String(CellUtil.cloneFamily(cell));
+			String cellQualifierClone = new String(CellUtil.cloneQualifier(cell));
+			String cellString = cellFamilyClone + "." + cellQualifierClone;
+
+			// use join key to put a row in reverse join table, use join key
+			// value as the row key
+			if(cellString.equals(joinFamily + "." + joinQualifier)){
+				Put put = new Put(CellUtil.cloneValue(cell));
+
+				for(Cell cellForAdd:row){
+					System.out.println("Puting cell " + new String(CellUtil.cloneQualifier(cellForAdd)) + " = " + new String(CellUtil.cloneValue(cellForAdd)));
+					String cellForAddRowClone = new String(CellUtil.cloneRow(cell));
+					String cellForAddQualifierClone = new String(CellUtil.cloneQualifier(cellForAdd));
+//					if(cellForAddQualifierClone.equals(cellQualifierClone)){
+//						continue;
+//					}
+					put.add(env.getRegionInfo().getTable().getName(),
+							(cellForAddRowClone + "_" + cellForAddQualifierClone).getBytes(),
+							CellUtil.cloneValue(cellForAdd));
+				}
+				materialize.putToDeltaView(put);
+
+
+				break;
+			}
+		}
+	}
+
 	private void processJoinView(List<Cell> curVals){
 		System.out.println("Join row: " + new String(CellUtil.cloneRow(curVals.get(0))));
 		// Construct join table view
@@ -282,44 +308,31 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			Map<String, Map<String, String>> leftJoin = tmp.get(familyList.get(0));
 			Map<String, Map<String, String>> rightJoin = tmp.get(familyList.get(1));
 			for(Entry<String, Map<String, String>> leftJoinRow:leftJoin.entrySet()){
+				Put put = new Put(leftJoinRow.getKey().getBytes());
+
 				for(Entry<String, Map<String, String>> rightJoinRow:rightJoin.entrySet()){
 					System.out.println("Joining " + leftJoinRow.getKey() + " and " + rightJoinRow.getKey());
 					// add all in left join
 					for(Entry<String, String> leftJoinCell:leftJoinRow.getValue().entrySet()){
-						Map<String, String> cellMap = new HashMap<String, String>();
-						fullJoinRow.put(
-								leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + leftJoinCell.getKey().split("_")[1] + "_" + leftJoinCell.getKey().split("_")[2],
-								leftJoinCell.getValue());
+						put.add("colfam".getBytes(),
+								leftJoinCell.getKey().split("_")[1].getBytes(),
+								leftJoinCell.getValue().getBytes());
 					}
 					// add all in right join
 					for(Entry<String, String> rightJoinCell:rightJoinRow.getValue().entrySet()){
-						Map<String, String> cellMap = new HashMap<String, String>();
-						fullJoinRow.put(
-								leftJoinRow.getKey() + rightJoinRow.getKey() + "_" + rightJoinCell.getKey().split("_")[1] + "_" + rightJoinCell.getKey().split("_")[2],
-								rightJoinCell.getValue());
+						put.add("colfam".getBytes(),
+								rightJoinCell.getKey().split("_")[1].getBytes(),
+								rightJoinCell.getValue().getBytes());
 					}
 				}
+
+				materialize.putToView(put);
+
 			}
 			System.out.println("Full join row : \n" + fullJoinRow);
 
-//			// Connect to join table view in order to put
-//			String joinTableName = request.getJoinTable().toStringUtf8();
-//			System.out.println("Going to connect to table " + joinTableName);
-//			Configuration conf = HBaseConfiguration.create();
-//			HTableInterface joinTable = null;
-//			try {
-//				//							joinTable = new HTable(conf, joinTableName);
-//				joinTable = env.getTable(TableName.valueOf(joinTableName));
-//				Put put = new Put(joinKey.getBytes());
-//				for(Entry<String, String> tmpMap:fullJoinRow.entrySet()){
-//					put.add("joinFamily".getBytes(),
-//							tmpMap.getKey().getBytes(),
-//							tmpMap.getValue().getBytes());
-//				}
-//				joinTable.put(put);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+
+
 		}
 	}
 	private ResultMessage.Builder scanOverTable(Scan scan, ResultMessage.Builder response){
@@ -365,7 +378,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 				// build join table
 				if(request.getIsBuildJoinView()){
-//					processJoinView(curVals);
+					processJoinView(curVals);
 				}
 
 				/*
@@ -418,42 +431,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			}
 		}
 		return response;
-	}
-	private void putToReverseJoinTable(List<Cell> row)
-			throws InterruptedIOException, RetriesExhaustedWithDetailsException {
-		// find join key
-		for(Cell cell:row){
-			String cellFamilyClone = new String(CellUtil.cloneFamily(cell));
-			String cellQualifierClone = new String(CellUtil.cloneQualifier(cell));
-			String cellString = cellFamilyClone + "." + cellQualifierClone;
-
-			// use join key to put a row in reverse join table, use join key 
-			// value as the row key
-			if(cellString.equals(joinFamily + "." + joinQualifier)){
-				Put put = new Put(CellUtil.cloneValue(cell));
-				
-				for(Cell cellForAdd:row){
-					System.out.println("Puting cell " + new String(CellUtil.cloneQualifier(cellForAdd)) + " = " + new String(CellUtil.cloneValue(cellForAdd)));
-					String cellForAddRowClone = new String(CellUtil.cloneRow(cell));
-					String cellForAddQualifierClone = new String(CellUtil.cloneQualifier(cellForAdd));
-					if(cellQualifierClone.equals(cellForAddQualifierClone)){
-						continue;
-					}
-					put.add(env.getRegionInfo().getTable().getName(),
-							(cellForAddRowClone + "_" + cellForAddQualifierClone).getBytes(),
-							CellUtil.cloneValue(cellForAdd));
-				}
-				materialize.putToDeltaView(put);
-
-//				try {
-//					joinTable.put(put);
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-				
-				break;
-			}
-		}
 	}
 
 	/**
@@ -992,6 +969,9 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			putToTable(deltaView, aggregationRow);
 		}
 
+		public void putToView(Put put) { // Aggregation Delta View
+			putToTable(view, put);
+		}
 		public void putToDeltaView(Put put) { // Aggregation Delta View
 			putToTable(deltaView, put);
 		}

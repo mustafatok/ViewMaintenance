@@ -75,8 +75,8 @@ public class ViewManager {
         try {
             helper = HBaseHelper.getHelper(conf);
             if(qType == JsqlParser.JOIN){
-                helper.dropTable(viewName + "_delta"); // TODO : Change delta to reverse.
-                helper.createTable(viewName + "_delta", leftTable, rightTable);
+                helper.dropTable(viewName + "_delta");
+                helper.createTable(viewName + "_delta", leftTable, rightTable, "joinFamily"); // TODO : Delete joinFamily and try.
             }
         } catch(IOException e) {
             e.printStackTrace();
@@ -111,11 +111,15 @@ public class ViewManager {
         for(LogicalElement element = simpleLogicalPlan.getHead(); element != null; element = element.getNext() ) {
             element.setViewName(viewName);
             element.setMaterialize(true);
-            putTableView(element.getTableName(), viewName, query);
+            if(i <= 1)
+                putTableView(element.getTableName(), viewName, query);
+
             if(i == 0)
                 leftTable = element.getTableName();
             else if (i == 1)
                 rightTable = element.getTableName();
+            else
+                element.setTableName(viewName + "_delta");
             ++i;
         }
 

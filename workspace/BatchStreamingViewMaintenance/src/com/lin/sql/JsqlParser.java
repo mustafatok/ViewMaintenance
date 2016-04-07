@@ -80,10 +80,7 @@ public class JsqlParser {
 							LogicalElement elementJoin = new LogicalElement();
 							elementJoin.setReturningResults(isReturningResults);
 							handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
-//							String joinElementSQL = elementJoin.constructSQLByField();
 							elementJoin.setSQL(input);
-//							elementJoin.setSQL(joinElementSQL);// TODO: Change this
-//							elementJoin.setViewName(viewName);
 							elementJoin.setNonBlock(true);
 
 							
@@ -96,30 +93,7 @@ public class JsqlParser {
 							String rightJoinKey = ((Column) ((EqualsTo) ((Join) plainSelect.getJoins().get(0)).getOnExpression()).getRightExpression()).getWholeColumnName();
 							System.out.println("right join key: " + rightJoinKey);
 							elementJoin.setJoinKey(rightJoinKey);
-							
-							// Since the two plan above cannot know other plan
-							// So we need to transfer the join table name to each of them
-							String joinTableName = "join" + tableName + "With" + ((Table)join.getRightItem()).getWholeTableName();
-							element.setJoinTable(joinTableName);
-							elementJoin.setJoinTable(joinTableName);
-							
-							// now we create an empty join table
-							// if already exist, delete it first
-							// The column family of join table will be fixed as colfam1
-							Configuration conf = HBaseConfiguration.create();
-							HBaseHelper helper;
-							try {
-								helper = HBaseHelper.getHelper(conf);
-								helper.dropTable(joinTableName);
-								// This is the reverse join table + join table
-								// it has three families:
-								// the first two family is represented as the SQL of each join table
-								// the third family is "joinFamily"
-								helper.createTable(joinTableName, element.getTableName(), elementJoin.getTableName() , "joinFamily");
-							} catch(IOException e){
-								e.printStackTrace();
-							}
-							
+
 							// add the two join plan element to the logical plan
 							logicalPlan.add(element);
 							logicalPlan.add(elementJoin);
@@ -132,8 +106,6 @@ public class JsqlParser {
 							elementResult.setWaitForBlock(2);
 							elementResult.setSQL(input);
 							elementResult.setJoin(join);
-							elementResult.setJoinTable(joinTableName);
-							elementResult.setTableName(joinTableName);
 							elementResult.setReturningResults(isReturningResults);
 							elementResult.setBuildJoinView(true);
 							logicalPlan.add(elementResult);
