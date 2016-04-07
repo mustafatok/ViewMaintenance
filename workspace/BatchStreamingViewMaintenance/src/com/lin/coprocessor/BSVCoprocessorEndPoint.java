@@ -235,23 +235,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		System.out.println("Join row: " + new String(CellUtil.cloneRow(curVals.get(0))));
 		// Construct join table view
 		// 1. construct temporary map
-		//              #######################################
-		// fam1  row1  | K1_C1_o | K1_C1_n | K1_C2_o | K1_C2_n | ...
-		//              #######################################
-		//       row2  | K2_C1_o | K2_C1_n | K2_C2_o | K2_C2_n | ...
-		//              #######################################
-		//         .
-		//         .
-		//         .
-		//
-		//	            #######################################
-		// fam2  row1  | L1_D1_o | L1_D1_n | L1_D2_o | L1_D2_n | ...
-		//              #######################################
-		//       row2  | L2_D1_o | L2_D1_n | L2_D2_o | L2_D2_n | ...
-		//              #######################################
-		//         .
-		//         .
-		//         .
+
 		Map<String, Map<String, Map<String, String>>> tmp = new HashMap<String, Map<String, Map<String, String>>>();
 		List<String> familyList = new ArrayList<String>();
 		String joinKey = null;
@@ -288,18 +272,7 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		System.out.println(tmp);
 
 		// 2. construct join row with temporary list
-		//             ###############################################################################################
-		// X1   K1L1  | K1L1_C1_o | K1L1_C1_n | K1L1_C2_o | K1L1_C2_n | K1L1_D1_o | K1L1_D1_n | K1L1_D2_o | K1L1_D2_n |
-		//             ###############################################################################################
-		//      K1L2  | K1L2_C1_o | K1L2_C1_n | K1L2_C2_o | K1L2_C2_n | K1L2_D1_o | K1L2_D1_n | K1L2_D2_o | K1L2_D2_n |
-		//             ###############################################################################################
-		//      K2L1  | K2L1_C1_o | K2L1_C1_n | K2L1_C2_o | K2L1_C2_n | K2L1_D1_o | K2L1_D1_n | K2L1_D2_o | K2L1_D2_n |
-		//             ###############################################################################################
-		//      K2L2  | K2L2_C1_o | K2L2_C1_n | K2L2_C2_o | K2L2_C2_n | K2L2_D1_o | K2L2_D1_n | K2L2_D2_o | K2L2_D2_n |
-		//             ###############################################################################################
-		//        .
-		//        .
-		//        .
+
 		Map<String, String> fullJoinRow = new HashMap<String, String>();
 		// now we consider only inner join
 		// if familyList has less than 2 element

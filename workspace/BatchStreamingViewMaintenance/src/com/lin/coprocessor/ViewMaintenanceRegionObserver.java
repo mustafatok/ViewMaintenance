@@ -16,10 +16,7 @@ import org.apache.hadoop.hbase.regionserver.wal.WALEdit;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.NavigableMap;
+import java.util.*;
 
 public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
@@ -155,7 +152,7 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
         for (Map.Entry<byte[], List<Cell>> entry : familyCellMap.entrySet()) {
             List<Cell> cells = entry.getValue();
             for(Cell c: cells){
-                viewDelete.deleteColumn(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c))).getBytes());
+                viewDelete.deleteColumns(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c))).getBytes());
             }
         }
 
@@ -165,8 +162,106 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
         view.close();
     }
 
-    private void join(Put put){
+    private void join(Put put) throws IOException {
+        byte[] colfam = "colfam".getBytes();
 
+        String newValue = "";
+
+        byte[] family = null;
+        byte[] joinKey = null;
+        byte[] qualifier = null;
+        byte[] value = null;
+
+        NavigableMap<byte[], List<Cell>> putFamilyCellMap = put.getFamilyCellMap();
+
+        for (Map.Entry<byte[], List<Cell>> entry : putFamilyCellMap.entrySet()) {
+            family = entry.getKey();
+            List<Cell> cells = entry.getValue();
+            // TODO: Check the size instead of traversing.
+            for (Cell cell : cells){
+                String qual = new String(CellUtil.cloneQualifier(cell));
+                String val = new String(CellUtil.cloneValue(cell));
+
+                if(qual.equals("joinkey")){
+                    joinKey = val.getBytes();
+                }else{
+                    qualifier = qual.getBytes();
+                    value = val.getBytes();
+                }
+            }
+        }
+
+
+        HTableInterface table = oContext.getEnvironment().getTable(modifiedTable);
+        Result result = table.get(new Get(put.getRow()));
+
+        if(joinKey != null && qualifier != null){
+            // TODO: Fill this later.
+        }else {
+            if(result != null && !result.isEmpty()) {
+                NavigableMap<byte[], byte[]> rowMap = result.getFamilyMap(colfam);
+
+                for (Map.Entry<byte[], byte[]> entry : rowMap.entrySet()) {
+                    byte[] qual = entry.getKey();
+                    byte[] val = entry.getValue();
+
+                    if("joinkey".equals(new String(qual))){
+                        joinKey = val;
+                    }else{
+                        qualifier = qual;
+                        value = val;
+                    }
+                }
+            }
+        }
+        table.close();
+
+        Get getDelta = new Get(joinKey);
+
+        HTableInterface deltaView = oContext.getEnvironment().getTable(TableName.valueOf(viewName + "_delta"));
+        result = deltaView.get(getDelta);
+        deltaView.close();
+
+        if(result != null && !result.isEmpty()){
+            // TODO: Delete the old one and insert new one.
+            
+        }else{
+            // TODO: Insert new one.
+        }
+    }
+
+    private void deleteFromJoinDeltaAndJoinView(byte[] joinKey, byte[] baseTableName, byte[] rowId, ArrayList<byte[]> familiesToDelete, boolean left) throws IOException {
+        HTableInterface deltaView = oContext.getEnvironment().getTable(TableName.valueOf(viewName + "_delta"));
+        HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+
+        Delete delete = new Delete(joinKey);
+        for(byte[] el : familiesToDelete){
+            delete.deleteColumns(baseTableName,(new String(rowId) + "_" + new String(el)).getBytes());
+        }
+        deltaView.delete(delete);
+        if(left){
+            delete = new Delete(rowId);
+            view.delete(delete);
+        }else{
+
+            NavigableMap<byte[], NavigableMap<byte[], byte[]>> map = deltaView.get(new Get(joinKey)).getNoVersionMap();
+            // Map&family,Map<qualifier,value>>
+
+            for(Map.Entry<byte[], NavigableMap<byte[], byte[]>> e : map.entrySet()){
+                byte[] family = e.getKey();
+                if((new String(family)).equals(new String(baseTableName))){
+                    continue;
+                }
+                for(Map.Entry<byte[], byte[]> e2 : e.getValue().entrySet()){
+                    byte[] tmpQual = e.getKey();
+                    byte[] leftRow = (new String(tmpQual)).split("_")[0].getBytes();
+                    delete = new Delete(leftRow);
+                    view.delete(delete);
+                }
+            }
+        }
+        deltaView.close();
+        view.close();
     }
 
 
@@ -228,14 +323,12 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
             if(newValue < MIN){
                 MIN = newValue;
             }else if(oldValue == MIN && newValue > MIN){
-                // TODO : Recalculate..
                 MIN = recalculateMin(result, put.getRow());
             }
 
             if(newValue > MAX){
                 MAX = newValue;
             }else if(oldValue == MAX && newValue < MAX){
-                // TODO : Recalculate..
                 MAX = recalculateMax(result, put.getRow());
             }
         }else{
