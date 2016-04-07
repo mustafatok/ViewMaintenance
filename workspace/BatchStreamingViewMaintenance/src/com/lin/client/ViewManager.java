@@ -17,7 +17,7 @@ import java.io.IOException;
  */
 public class ViewManager {
 
-    private static void createViewTable(String tableName, String query){
+    private static void createViewTable(String viewName, String query){
         // build an empty delta table with the following properties:
         //   =================================================
         //     table name: SQL(replace space with '_')_delta
@@ -41,16 +41,42 @@ public class ViewManager {
         byte qType = JsqlParser.typeOfQuery(query);
         try {
             helper = HBaseHelper.getHelper(conf);
-            helper.dropTable(tableName);
-            helper.createTable(tableName, "colfam");
+            helper.dropTable(viewName);
+            helper.createTable(viewName, "colfam");
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void createDeltaViewTable(String viewName, String query){
 
+
+        Configuration conf = HBaseConfiguration.create();
+        HBaseHelper helper;
+
+        byte qType = JsqlParser.typeOfQuery(query);
+        try {
+            helper = HBaseHelper.getHelper(conf);
             if(qType == JsqlParser.AGGREGATION){
-                helper.dropTable(tableName + "_delta");
-                helper.createTable(tableName + "_delta", "colfam");
+                helper.dropTable(viewName + "_delta");
+                helper.createTable(viewName + "_delta", "colfam");
 //                helper.createTable(tableName + "_delta", "colfam", "MIN", "MAX", "COUNT", "SUM", "AVG"); // TODO : Check if it is working without this..
-            }else if(qType == JsqlParser.JOIN){
-                helper.dropTable(tableName + "_delta");
-                helper.createTable(tableName + "_delta", "colfam");
+            }
+        } catch(IOException e) {
+            e.printStackTrace();
+        }
+    }
+    private static void createDeltaViewTable(String viewName, String query, String leftTable, String rightTable){
+
+
+        Configuration conf = HBaseConfiguration.create();
+        HBaseHelper helper;
+
+        byte qType = JsqlParser.typeOfQuery(query);
+        try {
+            helper = HBaseHelper.getHelper(conf);
+            if(qType == JsqlParser.JOIN){
+                helper.dropTable(viewName + "_delta"); // TODO : Change delta to reverse.
+                helper.createTable(viewName + "_delta", leftTable, rightTable);
             }
         } catch(IOException e) {
             e.printStackTrace();
@@ -79,14 +105,26 @@ public class ViewManager {
 
         createViewTable(viewName, query);
 
-        // TODO: Fix this to support joins.
-
-
+        String leftTable = "";
+        String rightTable = "";
+        int i = 0;
         for(LogicalElement element = simpleLogicalPlan.getHead(); element != null; element = element.getNext() ) {
             element.setViewName(viewName);
             element.setMaterialize(true);
             putTableView(element.getTableName(), viewName, query);
+            if(i == 0)
+                leftTable = element.getTableName();
+            else if (i == 1)
+                rightTable = element.getTableName();
+            ++i;
         }
+
+        if(simpleLogicalPlan.getSize() == 1){
+            createDeltaViewTable(viewName, query);
+        }else{
+            createDeltaViewTable(viewName, query, leftTable, rightTable);
+        }
+
         simpleLogicalPlan.getHead().execute();
     }
 

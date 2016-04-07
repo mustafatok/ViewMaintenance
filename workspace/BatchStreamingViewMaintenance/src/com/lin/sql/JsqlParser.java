@@ -69,8 +69,8 @@ public class JsqlParser {
 							LogicalElement element = new LogicalElement();
 							handleJoinTable(plainSelect, tableName, element);
 							element.setReturningResults(isReturningResults);
-							String SQL = element.constructSQLByField();
-							element.setSQL(SQL);
+//							String SQL = element.constructSQLByField();
+							element.setSQL(input);
 //							element.setViewName(viewName);
 							element.setNonBlock(false);
 
@@ -80,8 +80,9 @@ public class JsqlParser {
 							LogicalElement elementJoin = new LogicalElement();
 							elementJoin.setReturningResults(isReturningResults);
 							handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
-							String joinElementSQL = elementJoin.constructSQLByField();
-							elementJoin.setSQL(joinElementSQL);
+//							String joinElementSQL = elementJoin.constructSQLByField();
+							elementJoin.setSQL(input);
+//							elementJoin.setSQL(joinElementSQL);// TODO: Change this
 //							elementJoin.setViewName(viewName);
 							elementJoin.setNonBlock(true);
 
@@ -114,7 +115,7 @@ public class JsqlParser {
 								// it has three families:
 								// the first two family is represented as the SQL of each join table
 								// the third family is "joinFamily"
-								helper.createTable(joinTableName, Common.senitiseSQL(SQL), Common.senitiseSQL(joinElementSQL), "joinFamily");
+								helper.createTable(joinTableName, element.getTableName(), elementJoin.getTableName() , "joinFamily");
 							} catch(IOException e){
 								e.printStackTrace();
 							}
@@ -129,6 +130,7 @@ public class JsqlParser {
 							// Assert the third plan have the name of "joinTableAWithTableB"
 							LogicalElement elementResult = new LogicalElement();
 							elementResult.setWaitForBlock(2);
+							elementResult.setSQL(input);
 							elementResult.setJoin(join);
 							elementResult.setJoinTable(joinTableName);
 							elementResult.setTableName(joinTableName);

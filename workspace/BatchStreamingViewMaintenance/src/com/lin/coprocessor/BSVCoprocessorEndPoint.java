@@ -46,7 +46,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	private MaterializeManager materialize = null;
 	private String joinFamily = null;
 	private String joinQualifier = null;
-	private HTableInterface joinTable = null;
 	private ParameterMessage request = null;
 	private RpcCallback<ResultMessage> doneCallback;
 	@Override
@@ -61,7 +60,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 	@Override
 	public void stop(CoprocessorEnvironment env) throws IOException {
-		if(joinTable != null) joinTable.close();
 	}
 
 	@Override
@@ -93,11 +91,11 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		// Fill joinKey and joinTable for later use
 		if(!request.getJoinKey().toStringUtf8().equals("")){
 			// Connect to the join table using the join table name from request
-			try {
-				joinTable = env.getTable(TableName.valueOf(request.getJoinTable().toByteArray()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				joinTable = env.getTable(TableName.valueOf(request.getJoinTable().toByteArray()));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 
 			// fill join family and join qualifier for later use
 			joinFamily = request.getJoinKey().toStringUtf8().split("\\.")[0];
@@ -304,24 +302,24 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			}
 			System.out.println("Full join row : \n" + fullJoinRow);
 
-			// Connect to join table view in order to put
-			String joinTableName = request.getJoinTable().toStringUtf8();
-			System.out.println("Going to connect to table " + joinTableName);
-			Configuration conf = HBaseConfiguration.create();
-			HTableInterface joinTable = null;
-			try {
-				//							joinTable = new HTable(conf, joinTableName);
-				joinTable = env.getTable(TableName.valueOf(joinTableName));
-				Put put = new Put(joinKey.getBytes());
-				for(Entry<String, String> tmpMap:fullJoinRow.entrySet()){
-					put.add("joinFamily".getBytes(),
-							tmpMap.getKey().getBytes(),
-							tmpMap.getValue().getBytes());
-				}
-				joinTable.put(put);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			// Connect to join table view in order to put
+//			String joinTableName = request.getJoinTable().toStringUtf8();
+//			System.out.println("Going to connect to table " + joinTableName);
+//			Configuration conf = HBaseConfiguration.create();
+//			HTableInterface joinTable = null;
+//			try {
+//				//							joinTable = new HTable(conf, joinTableName);
+//				joinTable = env.getTable(TableName.valueOf(joinTableName));
+//				Put put = new Put(joinKey.getBytes());
+//				for(Entry<String, String> tmpMap:fullJoinRow.entrySet()){
+//					put.add("joinFamily".getBytes(),
+//							tmpMap.getKey().getBytes(),
+//							tmpMap.getValue().getBytes());
+//				}
+//				joinTable.put(put);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 		}
 	}
 	private ResultMessage.Builder scanOverTable(Scan scan, ResultMessage.Builder response){
@@ -436,17 +434,22 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 				
 				for(Cell cellForAdd:row){
 					System.out.println("Puting cell " + new String(CellUtil.cloneQualifier(cellForAdd)) + " = " + new String(CellUtil.cloneValue(cellForAdd)));
-					// TODO : Check if this cell and outer cell are equal if they are do not add it to table...
-					put.add(Common.senitiseSQL(request.getSQL().toStringUtf8()).getBytes(), //TODO : Change this with the table name...
-							((new String(CellUtil.cloneRow(cell))) + "_" + (new String(CellUtil.cloneQualifier(cellForAdd)))).getBytes(),
+					String cellForAddRowClone = new String(CellUtil.cloneRow(cell));
+					String cellForAddQualifierClone = new String(CellUtil.cloneQualifier(cellForAdd));
+					if(cellQualifierClone.equals(cellForAddQualifierClone)){
+						continue;
+					}
+					put.add(env.getRegionInfo().getTable().getName(),
+							(cellForAddRowClone + "_" + cellForAddQualifierClone).getBytes(),
 							CellUtil.cloneValue(cellForAdd));
 				}
-				
-				try {
-					joinTable.put(put);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
+				materialize.putToDeltaView(put);
+
+//				try {
+//					joinTable.put(put);
+//				} catch (IOException e) {
+//					e.printStackTrace();
+//				}
 				
 				break;
 			}
@@ -987,6 +990,10 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		 */
 		public void putToDeltaView(BSVRow aggregationRow) { // Aggregation Delta View
 			putToTable(deltaView, aggregationRow);
+		}
+
+		public void putToDeltaView(Put put) { // Aggregation Delta View
+			putToTable(deltaView, put);
 		}
 
 		/**

@@ -50,8 +50,7 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 //                    ViewManager.refreshView(new String(viewName));
 
                     // TODO:  Incremental Processing.
-//                    HTableInterface deltaViewTable = observerContext.getEnvironment().getTable(TableName.valueOf(viewName + "_delta"));
-//                    HTableInterface tableInterface = observerContext.getEnvironment().getTable(table);
+
                     if(op instanceof Put){
                         Put put = (Put) op;
                         setViewName(new String(viewName)).setViewQuery(new String(query)).execute(put);
@@ -110,8 +109,7 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
 
         }else if (viewType == JsqlParser.AGGREGATION){
-
-
+            // TODO: Implement delete in aggregation.
         }else{
             errorFlag = true;
         }
@@ -331,4 +329,3 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
         else return false;
     }
 }
-
