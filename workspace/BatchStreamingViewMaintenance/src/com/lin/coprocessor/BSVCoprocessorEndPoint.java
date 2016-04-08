@@ -202,6 +202,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 	private void putToReverseJoinTable(List<Cell> row)
 			throws InterruptedIOException, RetriesExhaustedWithDetailsException {
 		// find join key
+
+		// TODO: Optimize this by converting one for loop
 		for(Cell cell:row){
 			String cellFamilyClone = new String(CellUtil.cloneFamily(cell));
 			String cellQualifierClone = new String(CellUtil.cloneQualifier(cell));
@@ -224,8 +226,6 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 							CellUtil.cloneValue(cellForAdd));
 				}
 				materialize.putToDeltaView(put);
-
-
 				break;
 			}
 		}
@@ -281,10 +281,13 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 			Map<String, Map<String, String>> leftJoin = tmp.get(familyList.get(0));
 			Map<String, Map<String, String>> rightJoin = tmp.get(familyList.get(1));
 			for(Entry<String, Map<String, String>> leftJoinRow:leftJoin.entrySet()){
-				Put put = new Put(leftJoinRow.getKey().getBytes());
 
 				for(Entry<String, Map<String, String>> rightJoinRow:rightJoin.entrySet()){
+
 					System.out.println("Joining " + leftJoinRow.getKey() + " and " + rightJoinRow.getKey());
+
+					Put put = new Put((familyList.get(0) + "_" + leftJoinRow.getKey() + "_" + familyList.get(1) + "_" + rightJoinRow.getKey()).getBytes());
+
 					// add all in left join
 					for(Entry<String, String> leftJoinCell:leftJoinRow.getValue().entrySet()){
 						put.add("colfam".getBytes(),
@@ -297,9 +300,9 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 								rightJoinCell.getKey().split("_")[1].getBytes(),
 								rightJoinCell.getValue().getBytes());
 					}
+					materialize.putToView(put);
 				}
 
-				materialize.putToView(put);
 
 			}
 			System.out.println("Full join row : \n" + fullJoinRow);

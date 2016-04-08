@@ -13,27 +13,11 @@ import org.apache.hadoop.hbase.client.Result;
 import java.io.IOException;
 
 /**
- * Created by munline on 2/15/16.
+ * Created by tok on 2/15/16.
  */
 public class ViewManager {
 
     private static void createViewTable(String viewName, String query){
-        // build an empty delta table with the following properties:
-        //   =================================================
-        //     table name: SQL(replace space with '_')_delta
-        //   =================================================
-        //                family:qualifier1_old
-        //                family:qualifier1_new
-        //                family:qualifier2_old
-        //                family:qualifier2_new
-        //                         .
-        //                         .
-        //                         .
-        //                family:qualifiern_old
-        //                family:qualifiern_new
-        //
-        // The actual qualifier will be determined in every coprocessor and being put
-        // into the table in the coprocessor
 
         Configuration conf = HBaseConfiguration.create();
         HBaseHelper helper;
@@ -85,17 +69,34 @@ public class ViewManager {
 
 
     public static void putTableView(String tableName, String viewName, String query){
+       putTableView(tableName, viewName, query, "NA");
+    }
+
+    public static void putTableView(String tableName, String viewName, String query, String joinKey){
         Configuration conf = HBaseConfiguration.create();
         HBaseHelper helper;
         try {
             helper = HBaseHelper.getHelper(conf);
             helper.put("table_view", tableName, "views", viewName, query);
             helper.put("view_meta_data", viewName, "settings", "query", query);
-            helper.put("view_meta_data", viewName, "tables", tableName, "Test"); //TODO: Change Test
+            helper.put("view_meta_data", viewName, "tables", tableName, joinKey); //TODO: Change Test
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+    public static void putJoinInfo(String position, String tableName, String viewName){
+        Configuration conf = HBaseConfiguration.create();
+        HBaseHelper helper;
+        try {
+            helper = HBaseHelper.getHelper(conf);
+            helper.put("view_meta_data", viewName, "tables", position, tableName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
     public static void createMaterializedView(String viewName, String query){
         if(query == null)
@@ -111,15 +112,18 @@ public class ViewManager {
         for(LogicalElement element = simpleLogicalPlan.getHead(); element != null; element = element.getNext() ) {
             element.setViewName(viewName);
             element.setMaterialize(true);
-            if(i <= 1)
-                putTableView(element.getTableName(), viewName, query);
-
-            if(i == 0)
+            if(i <= 1) {
+                putTableView(element.getTableName(), viewName, query, element.getJoinKey());
+            }
+            if(i == 0) {
                 leftTable = element.getTableName();
-            else if (i == 1)
+                putJoinInfo("left", leftTable, viewName);
+            }else if (i == 1) {
                 rightTable = element.getTableName();
-            else
+                putJoinInfo("right", rightTable, viewName);
+            }else {
                 element.setTableName(viewName + "_delta");
+            }
             ++i;
         }
 
