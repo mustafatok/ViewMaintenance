@@ -60,7 +60,7 @@ public class ViewManager {
             helper = HBaseHelper.getHelper(conf);
             if(qType == JsqlParser.JOIN){
                 helper.dropTable(viewName + "_delta");
-                helper.createTable(viewName + "_delta", leftTable, rightTable, "joinFamily"); // TODO : Delete joinFamily and try.
+                helper.createTable(viewName + "_delta", leftTable, rightTable); // TODO : Delete joinFamily and try.
             }
         } catch(IOException e) {
             e.printStackTrace();
@@ -79,7 +79,7 @@ public class ViewManager {
             helper = HBaseHelper.getHelper(conf);
             helper.put("table_view", tableName, "views", viewName, query);
             helper.put("view_meta_data", viewName, "settings", "query", query);
-            helper.put("view_meta_data", viewName, "tables", tableName, joinKey); //TODO: Change Test
+            helper.put("view_meta_data", viewName, "tables", tableName, joinKey);
         } catch (IOException e) {
             e.printStackTrace();
         }

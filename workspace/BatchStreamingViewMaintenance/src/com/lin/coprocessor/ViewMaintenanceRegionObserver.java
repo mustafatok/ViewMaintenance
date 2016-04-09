@@ -225,12 +225,11 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
             NavigableMap<byte[], NavigableMap<byte[], byte[]>> map = deltaResult.getNoVersionMap();
             // Map&family,Map<qualifier,value>>
 
-
+            int i = 0;
             for (Map.Entry<byte[], NavigableMap<byte[], byte[]>> e : map.entrySet()) {
                 String family = new String(e.getKey()); //tableNames
-                for (Map.Entry<byte[], byte[]> e2 : e.getValue().entrySet()) {
-
-                    if(!family.equals(modifiedTable.getNameAsString())){
+                if(!family.equals(modifiedTable.getNameAsString())){
+                    for (Map.Entry<byte[], byte[]> e2 : e.getValue().entrySet()) {
                         byte[] serializedQual = e2.getKey(); // Qualifier Name.
                         String[] parseStr = (new String(serializedQual)).split("_");
                         if(parseStr.length < 2)
@@ -240,7 +239,12 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
                         String rightQual = parseStr[1];
                         byte[] rightVal = e2.getValue();
 
-                        String viewRowId = (new String(baseTableName) + "_" + (new String(put.getRow())) + "_" + new String(family) + "_" + rightTableRowId);
+                        String viewRowId;
+                        if(i == 0){
+                            viewRowId = (new String(family) + "_" +  rightTableRowId + "_" + new String(baseTableName) + "_" + (new String(put.getRow())));
+                        }else{
+                            viewRowId = (new String(baseTableName) + "_" + (new String(put.getRow())) + "_" + new String(family) + "_" + rightTableRowId);
+                        }
                         Put viewPut = new Put(viewRowId.getBytes());
                         // For left table
                         for (Map.Entry<byte[], byte[]> el : leftMap.entrySet()) {
@@ -251,8 +255,8 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
                         viewPut.add("colfam".getBytes(), rightQual.getBytes(), rightVal);
                         view.put(viewPut);
                     }
-
                 }
+                i++;
             }
         }
 
@@ -317,6 +321,8 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
             List<Delete> deleteList = new ArrayList<>();
             boolean deltaDeleteFlag = false;
+            int i = 0;
+
             for(Map.Entry<byte[], NavigableMap<byte[], byte[]>> e : map.entrySet()){
                 String family = new String(e.getKey()); //tableNames
 
@@ -333,12 +339,18 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
                             continue;
                         }
                     }else{
-                        String viewDeleteRowId = (new String(baseTableName) + "_" + (new String(deletedRowId)) + "_" + new String(family) + "_" + deltaRow);
+                        String viewDeleteRowId;
+                        if(i == 0){
+                            viewDeleteRowId = (new String(family) + "_" + deltaRow + "_" + new String(baseTableName) + "_" + (new String(deletedRowId)));
+                        }else{
+                            viewDeleteRowId = (new String(baseTableName) + "_" + (new String(deletedRowId)) + "_" + new String(family) + "_" + deltaRow);
+                        }
                         Delete delete = new Delete(viewDeleteRowId.getBytes());
                         deleteList.add(delete);
 
                     }
                 }
+                ++i;
             }
             view.delete(deleteList);
             if(deltaDeleteFlag)
@@ -379,7 +391,7 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver{
 
                 if(groupBy.equals(new String(qual))){
                     rowDeltaPrefix = "colfam.value." + new String(value);
-                }else{ // TODO : Check if it is the value or if there are more values.
+                }else{
                     newValue = Integer.valueOf(new String(value));
                 }
             }
