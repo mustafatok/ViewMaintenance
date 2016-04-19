@@ -17,14 +17,12 @@ import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.select.*;
 
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 
 import com.google.protobuf.ByteString;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
-import com.lin.test.HBaseHelper;
-import com.lin.utils.Common;
+import com.lin.utils.HBaseHelper;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 
 public class JsqlParser {

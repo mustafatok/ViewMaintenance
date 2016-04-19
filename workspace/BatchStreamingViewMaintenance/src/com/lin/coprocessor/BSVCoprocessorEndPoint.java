@@ -9,9 +9,8 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import com.lin.sql.JsqlParser;
-import com.lin.test.HBaseHelper;
+import com.lin.utils.HBaseHelper;
 import org.apache.commons.collections.map.HashedMap;
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.Coprocessor;
@@ -37,7 +36,6 @@ import com.lin.coprocessor.generated.BSVCoprocessorProtos.Execute;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
 import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
-import com.lin.utils.Common;
 
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		CoprocessorService{

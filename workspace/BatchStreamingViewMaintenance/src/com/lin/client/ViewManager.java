@@ -3,12 +3,9 @@ package com.lin.client;
 import com.lin.sql.JsqlParser;
 import com.lin.sql.LogicalElement;
 import com.lin.sql.SimpleLogicalPlan;
-import com.lin.test.HBaseHelper;
+import com.lin.utils.HBaseHelper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
-import org.apache.hadoop.hbase.TableName;
-import org.apache.hadoop.hbase.client.Get;
-import org.apache.hadoop.hbase.client.Result;
 
 import java.io.IOException;
 
@@ -42,7 +39,7 @@ public class ViewManager {
             helper = HBaseHelper.getHelper(conf);
             if(qType == JsqlParser.AGGREGATION){
                 helper.dropTable(viewName + "_delta");
-                helper.createTable(viewName + "_delta", "colfam");
+                helper.createTable(viewName + "_delta", "colfam", "checkSum");
 //                helper.createTable(tableName + "_delta", "colfam", "MIN", "MAX", "COUNT", "SUM", "AVG"); // TODO : Check if it is working without this..
             }
         } catch(IOException e) {
@@ -98,10 +95,10 @@ public class ViewManager {
     }
 
 
-    public static void createMaterializedView(String viewName, String query){
+    public static void createMaterializedView(String viewName, String query, boolean returningResults){
         if(query == null)
             return;
-        SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(query, true);
+        SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(query, returningResults);
         System.out.println(simpleLogicalPlan);
 
         createViewTable(viewName, query);
@@ -136,6 +133,9 @@ public class ViewManager {
         simpleLogicalPlan.getHead().execute();
     }
 
+    public static void createMaterializedView(String viewName, String query){
+        createMaterializedView(viewName, query, true);
+    }
 
     public static void refreshView(String viewName){
         Configuration conf = HBaseConfiguration.create();

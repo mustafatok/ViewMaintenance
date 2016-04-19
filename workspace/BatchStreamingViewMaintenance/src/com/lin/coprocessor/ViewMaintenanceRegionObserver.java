@@ -1,19 +1,13 @@
 package com.lin.coprocessor;
-import com.lin.client.ViewManager;
 import com.lin.sql.JsqlParser;
-import com.lin.test.HBaseHelper;
-import net.sf.jsqlparser.parser.JSqlParser;
-import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
-import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.coprocessor.BaseRegionObserver;
 import org.apache.hadoop.hbase.coprocessor.ObserverContext;
 import org.apache.hadoop.hbase.coprocessor.RegionCoprocessorEnvironment;
 import org.apache.hadoop.hbase.regionserver.wal.WALEdit;
-import org.apache.hadoop.hbase.util.Bytes;
 
 import java.io.IOException;
 import java.util.*;
@@ -524,7 +518,7 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
                     deltaView.put(createDeltaViewPut(getDelta.getRow(), colfam, MIN, MAX, COUNT, SUM));
 
                     HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
-                    
+
                     view.put(createViewPut(getDelta.getRow(), colfam, MIN, MAX, COUNT, SUM, aggSet));
                     view.flushCommits();
                     view.close();
