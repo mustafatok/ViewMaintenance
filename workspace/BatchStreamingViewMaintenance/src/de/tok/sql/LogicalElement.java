@@ -1,12 +1,12 @@
-package com.lin.sql;
+package de.tok.sql;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+import de.tok.coprocessor.generated.BSVCoprocessorProtos;
 import net.sf.jsqlparser.statement.select.Join;
 
 import org.apache.hadoop.conf.Configuration;
@@ -17,17 +17,12 @@ import org.apache.hadoop.hbase.util.Bytes;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.ServiceException;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.Execute;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
 
 public class LogicalElement implements Runnable{
 	private LogicalElement next = null;
 	private String tableName = null;
-	private List<BSVColumn> columns = new ArrayList<BSVColumn>();
-	private List<Condition> conditions = new ArrayList<Condition>();
+	private List<BSVCoprocessorProtos.BSVColumn> columns = new ArrayList<BSVCoprocessorProtos.BSVColumn>();
+	private List<BSVCoprocessorProtos.Condition> conditions = new ArrayList<BSVCoprocessorProtos.Condition>();
 	private List<ByteString> aggregations = new ArrayList<ByteString>();
 	private String aggregationKey = "";
 	private String joinKey = "";
@@ -92,27 +87,27 @@ public class LogicalElement implements Runnable{
 		this.tableName = tableName;
 	}
 
-	public List<BSVColumn> getParameters() {
+	public List<BSVCoprocessorProtos.BSVColumn> getParameters() {
 		return columns;
 	}
 
-	public void setParameters(List<BSVColumn> columns) {
+	public void setParameters(List<BSVCoprocessorProtos.BSVColumn> columns) {
 		this.columns = columns;
 	}
 
-	public List<BSVColumn> getColumns() {
+	public List<BSVCoprocessorProtos.BSVColumn> getColumns() {
 		return columns;
 	}
 
-	public void setColumns(List<BSVColumn> columns) {
+	public void setColumns(List<BSVCoprocessorProtos.BSVColumn> columns) {
 		this.columns = columns;
 	}
 
-	public List<Condition> getConditions() {
+	public List<BSVCoprocessorProtos.Condition> getConditions() {
 		return conditions;
 	}
 
-	public void setConditions(List<Condition> conditions) {
+	public void setConditions(List<BSVCoprocessorProtos.Condition> conditions) {
 		this.conditions = conditions;
 	}
 
@@ -262,15 +257,15 @@ public class LogicalElement implements Runnable{
 		HTable table;
 		try {
 			table = new HTable(conf, this.tableName);
-			ParameterMessage.Builder request = ParameterMessage.newBuilder();
+			BSVCoprocessorProtos.ParameterMessage.Builder request = BSVCoprocessorProtos.ParameterMessage.newBuilder();
 			
 			// add columns
-			for(BSVColumn bsvColumn:this.columns){
+			for(BSVCoprocessorProtos.BSVColumn bsvColumn:this.columns){
 				request.addColumn(bsvColumn);
 			}
 			
 			// add conditions
-			for(Condition condition:conditions){
+			for(BSVCoprocessorProtos.Condition condition:conditions){
 				request.addCondition(condition);
 			}
 			
@@ -310,17 +305,17 @@ public class LogicalElement implements Runnable{
 			System.out.println("=======================================================================");
 			Date begin = new Date();
 			System.out.println(begin + " Beging to execute batch job");
-			Map<byte[], ResultMessage> results = table.batchCoprocessorService(
-					Execute.getDescriptor().findMethodByName("batch"),
+			Map<byte[], BSVCoprocessorProtos.ResultMessage> results = table.batchCoprocessorService(
+					BSVCoprocessorProtos.Execute.getDescriptor().findMethodByName("batch"),
 					request.build(), HConstants.EMPTY_START_ROW,
 					HConstants.EMPTY_END_ROW,
-					ResultMessage.getDefaultInstance());
+					BSVCoprocessorProtos.ResultMessage.getDefaultInstance());
 			Date end = new Date();
 			System.out.println(end + " Finish batch job in " + (end.getTime() - begin.getTime()) + " miliseconds");
 			
 			long total = 0;
-			for (Map.Entry<byte[], ResultMessage> entry : results.entrySet()) {
-				ResultMessage response = entry.getValue();
+			for (Map.Entry<byte[], BSVCoprocessorProtos.ResultMessage> entry : results.entrySet()) {
+				BSVCoprocessorProtos.ResultMessage response = entry.getValue();
 				total += response.getSize();
 				System.out.println("Region: " + Bytes.toString(entry.getKey())
 						+ ", Count: " + response.getSize());

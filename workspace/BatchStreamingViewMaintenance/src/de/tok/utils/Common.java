@@ -1,4 +1,4 @@
-package com.lin.utils;
+package de.tok.utils;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;

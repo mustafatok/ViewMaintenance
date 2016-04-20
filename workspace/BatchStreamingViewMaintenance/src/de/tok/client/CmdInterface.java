@@ -1,4 +1,4 @@
-package com.lin.client;
+package de.tok.client;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -19,9 +19,9 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.client.Put;
 import org.apache.hadoop.hbase.util.Bytes;
 
-import com.lin.sql.JsqlParser;
-import com.lin.sql.SimpleLogicalPlan;
-import com.lin.utils.HBaseHelper;
+import de.tok.sql.JsqlParser;
+import de.tok.sql.SimpleLogicalPlan;
+import de.tok.utils.HBaseHelper;
 
 public class CmdInterface {
 	public static void main(String[] args) {

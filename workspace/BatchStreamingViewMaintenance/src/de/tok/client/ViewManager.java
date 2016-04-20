@@ -1,9 +1,9 @@
-package com.lin.client;
+package de.tok.client;
 
-import com.lin.sql.JsqlParser;
-import com.lin.sql.LogicalElement;
-import com.lin.sql.SimpleLogicalPlan;
-import com.lin.utils.HBaseHelper;
+import de.tok.sql.JsqlParser;
+import de.tok.sql.LogicalElement;
+import de.tok.sql.SimpleLogicalPlan;
+import de.tok.utils.HBaseHelper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 

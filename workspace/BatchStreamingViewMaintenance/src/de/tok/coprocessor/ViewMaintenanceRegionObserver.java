@@ -1,5 +1,5 @@
-package com.lin.coprocessor;
-import com.lin.sql.JsqlParser;
+package de.tok.coprocessor;
+import de.tok.sql.JsqlParser;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
 import org.apache.hadoop.hbase.TableName;

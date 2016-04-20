@@ -1,4 +1,4 @@
-package com.lin.sql;
+package de.tok.sql;
 
 import java.util.ArrayList;
 import java.util.Iterator;

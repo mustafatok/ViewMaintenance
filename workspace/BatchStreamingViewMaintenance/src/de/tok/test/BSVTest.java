@@ -1,11 +1,11 @@
-package com.lin.test;
+package de.tok.test;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-import com.lin.utils.HBaseHelper;
+import de.tok.utils.HBaseHelper;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 import org.apache.hadoop.hbase.HConstants;
@@ -13,10 +13,10 @@ import org.apache.hadoop.hbase.client.HTable;
 import org.apache.hadoop.hbase.util.Bytes;
 
 import com.google.protobuf.ByteString;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.Execute;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.Execute;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
 
 public class BSVTest {
 

@@ -1,4 +1,4 @@
-package com.lin.utils;
+package de.tok.utils;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.hbase.HColumnDescriptor;

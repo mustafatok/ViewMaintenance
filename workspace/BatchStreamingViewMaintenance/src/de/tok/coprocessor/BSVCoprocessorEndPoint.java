@@ -1,4 +1,4 @@
-package com.lin.coprocessor;
+package de.tok.coprocessor;
 
 import java.io.IOException;
 import java.io.InterruptedIOException;
@@ -8,8 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.Map.Entry;
 
-import com.lin.sql.JsqlParser;
-import com.lin.utils.HBaseHelper;
+import de.tok.sql.JsqlParser;
+import de.tok.utils.HBaseHelper;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
@@ -29,13 +29,13 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.RpcCallback;
 import com.google.protobuf.RpcController;
 import com.google.protobuf.Service;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVRow;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.Execute;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.KeyValue;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.BSVRow;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.Condition;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.Execute;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.KeyValue;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.ParameterMessage;
+import de.tok.coprocessor.generated.BSVCoprocessorProtos.ResultMessage;
 
 public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 		CoprocessorService{

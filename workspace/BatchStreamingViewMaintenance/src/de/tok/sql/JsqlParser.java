@@ -1,10 +1,12 @@
-package com.lin.sql;
+package de.tok.sql;
 
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.List;
 
+import de.tok.coprocessor.generated.BSVCoprocessorProtos;
+import de.tok.utils.HBaseHelper;
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Function;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
@@ -20,9 +22,6 @@ import net.sf.jsqlparser.statement.select.*;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 
 import com.google.protobuf.ByteString;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.BSVColumn;
-import com.lin.coprocessor.generated.BSVCoprocessorProtos.Condition;
-import com.lin.utils.HBaseHelper;
 import org.apache.hadoop.hbase.HColumnDescriptor;
 
 public class JsqlParser {
@@ -166,7 +165,7 @@ public class JsqlParser {
 				String famCol = columnList.get(j).toString();
 				System.out.println("detected family and column " + famCol);
 
-				BSVColumn column = BSVColumn.newBuilder()
+				BSVCoprocessorProtos.BSVColumn column = BSVCoprocessorProtos.BSVColumn.newBuilder()
 						.setFamily(ByteString.copyFrom(famCol.split("\\.")[1].getBytes()))
 						.setColumn(ByteString.copyFrom(famCol.split("\\.")[2].getBytes())).build();
 				
@@ -298,7 +297,7 @@ public class JsqlParser {
 					String famCol = item.toString();
 					System.out.println("detected family and column " + famCol);
 
-					BSVColumn column = BSVColumn.newBuilder()
+					BSVCoprocessorProtos.BSVColumn column = BSVCoprocessorProtos.BSVColumn.newBuilder()
 							.setFamily(ByteString.copyFrom(famCol.split("\\.")[0].getBytes()))
 							.setColumn(ByteString.copyFrom(famCol.split("\\.")[1].getBytes())).build();
 
@@ -376,12 +375,12 @@ public class JsqlParser {
 	public static void buildCondition(String leftExpression,
 			String rightExpression, String GREATER_THAN, LogicalElement element) {
 		// left operation should be a BSVColumn
-		BSVColumn column = BSVColumn.newBuilder()
+		BSVCoprocessorProtos.BSVColumn column = BSVCoprocessorProtos.BSVColumn.newBuilder()
 				.setFamily(ByteString.copyFrom(leftExpression.split("\\.")[0].getBytes()))
 				.setColumn(ByteString.copyFrom(leftExpression.split("\\.")[1].getBytes())).build();
 		
 		// build condition
-		Condition condition = Condition.newBuilder()
+		BSVCoprocessorProtos.Condition condition = BSVCoprocessorProtos.Condition.newBuilder()
 				.setColumn(column)
 				.setOperator(ByteString.copyFrom(GREATER_THAN.getBytes()))
 				.setValue(ByteString.copyFrom(rightExpression.getBytes())).build();

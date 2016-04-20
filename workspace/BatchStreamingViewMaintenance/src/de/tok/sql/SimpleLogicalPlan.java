@@ -1,4 +1,4 @@
-package com.lin.sql;
+package de.tok.sql;
 
 
 public class SimpleLogicalPlan{

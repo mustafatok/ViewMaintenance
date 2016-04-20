@@ -5,7 +5,7 @@
     <target name="create_run_jar">
         <jar destfile="/Users/xiaojielin/Documents/workspace/ViewMaintenance/hbase-0.98.12-hadoop1/lib/BSVM.jar" filesetmanifest="mergewithoutmain">
             <manifest>
-                <attribute name="Main-Class" value="com.lin.client.CmdInterface"/>
+                <attribute name="Main-Class" value="de.tok.client.CmdInterface"/>
                 <attribute name="Class-Path" value="."/>
             </manifest>
             <fileset dir="/Users/xiaojielin/Documents/workspace/ViewMaintenance/workspace/BatchStreamingViewMaintenance/target/classes"/>

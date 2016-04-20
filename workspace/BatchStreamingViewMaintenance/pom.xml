@@ -26,7 +26,7 @@
                 <manifest>
                     <addClasspath>true</addClasspath>
                     <classpathPrefix>lib/</classpathPrefix>
-                    <mainClass>com.lin.client.CmdInterface</mainClass>
+                    <mainClass>de.tok.client.CmdInterface</mainClass>
                 </manifest>
             </archive>
         </configuration>
