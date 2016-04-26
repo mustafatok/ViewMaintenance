@@ -161,6 +161,11 @@ public class HBaseHelper {
 		}
 		tbl.close();
 	}
+	public void put(String table, Put put) throws IOException {
+		HTable tbl = new HTable(conf, table);
+		tbl.put(put);
+		tbl.close();
+	}
 
 	public String getValue(String table, String row, String colfam, String qual) throws IOException {
 		Get get = new Get(row.getBytes());

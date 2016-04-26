@@ -1,7 +1,7 @@
 package de.tok.client;
 
 import de.tok.sql.JsqlParser;
-import de.tok.sql.LogicalElement;
+import de.tok.sql.SelectElement;
 import de.tok.sql.SimpleLogicalPlan;
 import de.tok.utils.HBaseHelper;
 import org.apache.hadoop.conf.Configuration;
@@ -106,7 +106,7 @@ public class ViewManager {
         String leftTable = "";
         String rightTable = "";
         int i = 0;
-        for(LogicalElement element = simpleLogicalPlan.getHead(); element != null; element = element.getNext() ) {
+        for(SelectElement element = (SelectElement)simpleLogicalPlan.getHead(); element != null; element = (SelectElement)element.getNext() ) {
             element.setViewName(viewName);
             element.setMaterialize(true);
             if(i <= 1) {

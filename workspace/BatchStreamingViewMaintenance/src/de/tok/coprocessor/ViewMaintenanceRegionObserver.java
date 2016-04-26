@@ -2,6 +2,7 @@ package de.tok.coprocessor;
 import de.tok.sql.JsqlParser;
 import org.apache.hadoop.hbase.Cell;
 import org.apache.hadoop.hbase.CellUtil;
+import org.apache.hadoop.hbase.CoprocessorEnvironment;
 import org.apache.hadoop.hbase.TableName;
 import org.apache.hadoop.hbase.client.*;
 import org.apache.hadoop.hbase.coprocessor.BaseRegionObserver;
@@ -22,14 +23,17 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
     TableName modifiedTable;
     private boolean prePut = false;
 
+    HTableInterface tableView;
 
     public void commonOperation(ObserverContext<RegionCoprocessorEnvironment> observerContext, Mutation op) throws IOException {
-        modifiedTable = observerContext.getEnvironment().getRegionInfo().getTable();
+        RegionCoprocessorEnvironment env = observerContext.getEnvironment();
+        modifiedTable = env.getRegionInfo().getTable();
         if (!modifiedTable.isSystemTable()) {
             oContext = observerContext;
             Get get = new Get(modifiedTable.getName());
-            Result result = observerContext.getEnvironment().getTable(TableName.valueOf("table_view")).get(get);
-
+//            HTableInterface tableView = env.getTable(viewTableName);
+            Result result = tableView.get(get);
+//
             if (result != null && !result.isEmpty()) { // There exists a view connected to the table.
                 NavigableMap<byte[], byte[]> tableViewMap = result.getFamilyMap("views".getBytes());
 
@@ -56,6 +60,16 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
                 }
             }
         }
+    }
+
+    @Override
+    public void start(CoprocessorEnvironment e) throws IOException {
+        tableView = e.getTable(TableName.valueOf("table_view"));
+    }
+
+    @Override
+    public void stop(CoprocessorEnvironment e) throws IOException {
+        tableView.close();
     }
 
     @Override

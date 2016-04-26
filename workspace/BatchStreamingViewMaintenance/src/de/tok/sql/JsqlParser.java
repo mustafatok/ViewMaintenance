@@ -2,23 +2,24 @@ package de.tok.sql;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
 import de.tok.coprocessor.generated.BSVCoprocessorProtos;
 import de.tok.utils.HBaseHelper;
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.Function;
-import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThan;
-import net.sf.jsqlparser.expression.operators.relational.GreaterThanEquals;
-import net.sf.jsqlparser.expression.operators.relational.MinorThan;
-import net.sf.jsqlparser.expression.operators.relational.MinorThanEquals;
+import net.sf.jsqlparser.expression.StringValue;
+import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 
+import net.sf.jsqlparser.statement.update.Update;
 import org.apache.hadoop.hbase.HBaseConfiguration;
 
 import com.google.protobuf.ByteString;
@@ -52,7 +53,7 @@ public class JsqlParser {
 						// check if it is single table or join
 						if(plainSelect.getJoins() == null){
 							System.out.println("Handling select with single table");
-							LogicalElement element = new LogicalElement();
+							SelectElement element = new SelectElement();
 							element.setSQL(input);
 //							element.setViewName(viewName);
 							element.setReturningResults(isReturningResults);
@@ -63,7 +64,7 @@ public class JsqlParser {
 							System.out.println("Handling select with Join");
 							
 							// build plan for the first table of from
-							LogicalElement element = new LogicalElement();
+							SelectElement element = new SelectElement();
 							handleJoinTable(plainSelect, tableName, element);
 							element.setReturningResults(isReturningResults);
 //							String SQL = element.constructSQLByField();
@@ -74,7 +75,7 @@ public class JsqlParser {
 							// build plan for join table
 							// Assert only one join
 							Join join = (Join)plainSelect.getJoins().get(0);
-							LogicalElement elementJoin = new LogicalElement();
+							SelectElement elementJoin = new SelectElement();
 							elementJoin.setReturningResults(isReturningResults);
 							handleJoinTable(plainSelect, ((Table)join.getRightItem()).getWholeTableName(), elementJoin);
 							elementJoin.setSQL(input);
@@ -99,7 +100,7 @@ public class JsqlParser {
 							// since reverse join table will be generated in the last two plan
 							// the third plan will just scan the results from it.
 							// Assert the third plan have the name of "joinTableAWithTableB"
-							LogicalElement elementResult = new LogicalElement();
+							SelectElement elementResult = new SelectElement();
 							elementResult.setWaitForBlock(2);
 							elementResult.setSQL(input);
 							elementResult.setJoin(join);
@@ -110,7 +111,60 @@ public class JsqlParser {
 					} // if(tableName != null)
 				} // if(selectStatement.getSelectBody() instanceof PlainSelect)
 			}// if (statement instanceof Select)
-	
+			else if (statement instanceof Insert){
+				PutElement putElement = new PutElement();
+				Insert insertStatement = (Insert) statement;
+				String tableName = insertStatement.getTable().getName();
+				List<String> columnList = new ArrayList<>();
+				final List<String> values = new ArrayList<>();
+
+				for(Column c: (List<Column>) insertStatement.getColumns()){
+					columnList.add(c.getWholeColumnName());
+				}
+
+				ItemsListVisitor visitor = new ItemsListVisitor() {
+
+					@Override
+					public void visit(SubSelect subSelect) {
+
+					}
+
+					@Override
+					public void visit(ExpressionList expressionList) {
+						List<Expression> list = expressionList.getExpressions();
+						for (Expression el: list) {
+							if(el instanceof StringValue){
+								values.add(((StringValue) el).getValue());
+							}else{
+								values.add(el.toString());
+							}
+						}
+					}
+				};
+				insertStatement.getItemsList().accept(visitor);
+				putElement.setTableName(tableName);
+				putElement.setColumnList(columnList);
+				putElement.setValues(values);
+				logicalPlan.add(putElement);
+			}else if (statement instanceof Update){
+				PutElement putElement = new PutElement();
+				Update updateStatement = (Update) statement;
+				String tableName = updateStatement.getTable().getName();
+				List<String> columnList = new ArrayList<>();
+				List<String> values = new ArrayList<>();
+
+				for(Column c: (List<Column>) updateStatement.getColumns()){
+					columnList.add(c.getWholeColumnName());
+				}
+				for(Expression val: (List<Column>) updateStatement.getExpressions()){
+					values.add(val.toString());
+				}
+
+				putElement.setTableName(tableName);
+				putElement.setColumnList(columnList);
+				putElement.setValues(values);
+				logicalPlan.add(putElement);
+			}
 		} catch (JSQLParserException e) {
 			e.printStackTrace();
 		}
@@ -118,7 +172,7 @@ public class JsqlParser {
 	}
 
 
-	public static void handleJoinTable(PlainSelect plainSelect, String tableName, LogicalElement element) {
+	public static void handleJoinTable(PlainSelect plainSelect, String tableName, SelectElement element) {
 		element.setTableName(tableName); // set table name
 		
 		// set materialize
@@ -248,7 +302,7 @@ public class JsqlParser {
 		}
 	}
 
-	public static void handleSingleTable(PlainSelect plainSelect, String tableName, LogicalElement element) {
+	public static void handleSingleTable(PlainSelect plainSelect, String tableName, SelectElement element) {
 		element.setTableName(tableName); // set table name
 		
 		// get select items (columns to be select)
@@ -373,7 +427,7 @@ public class JsqlParser {
 	}
 
 	public static void buildCondition(String leftExpression,
-			String rightExpression, String GREATER_THAN, LogicalElement element) {
+			String rightExpression, String GREATER_THAN, SelectElement element) {
 		// left operation should be a BSVColumn
 		BSVCoprocessorProtos.BSVColumn column = BSVCoprocessorProtos.BSVColumn.newBuilder()
 				.setFamily(ByteString.copyFrom(leftExpression.split("\\.")[0].getBytes()))
