@@ -41,7 +41,11 @@ public class CmdInterface {
 				} else if (argIn[0].equals("load")) {
 					load(argIn);
 				} else if (argIn[0].equals("test")){
-					test(argIn);
+//					test(argIn);
+					int row = Integer.parseInt(argIn[1]);
+					incrementalTest(select, row);
+					incrementalTest(agg, row);
+					incrementalTest(join, row);
 				} else if(argIn[0].equals("create")){
 					if (argIn.length > 3 && argIn[1].equals("view")){
 						createMaterializedView(argIn[2], input, true);
@@ -713,5 +717,84 @@ public class CmdInterface {
 		}
 	}
 
+	private static void incrementalTest(int type, int row){
+		// testtable 1
+
+		Configuration conf = HBaseConfiguration.create();
+		HBaseHelper helper;
+		try {
+			helper = HBaseHelper.getHelper(conf);
+			helper.dropTable("select_view");
+			helper.dropTable("table_view");
+			helper.dropTable("view_meta_data");
+			helper.createTable("table_view", "views");
+			helper.createTable("view_meta_data", "settings", "tables");
+
+			if(type == select) {
+				helper.dropTable("testtable1");
+				helper.createTable("testtable1", "colfam");
+				createMaterializedView("select_view", "create view select_view select colfam.qual1 from testtable1", false);
+
+			}else if(type == agg) {
+				helper.dropTable("testtable5");
+				helper.createTable("testtable5", "colfam");
+				createMaterializedView("agg_view", "create view agg_view select count(colfam.value), sum(colfam.value), avg(colfam.value) from testtable5 group by colfam.aggKey", false);
+
+			}else if(type == join){
+				helper.dropTable("testtable3");
+				helper.dropTable("testtable4");
+				helper.createTable("testtable3", "colfam");
+				helper.createTable("testtable4", "colfam");
+				createMaterializedView("join_view", "create view join_view select testtable3.colfam.qualifierTesttable3, testtable4.colfam.qualifierTesttable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey", false);
+
+			}
+
+
+			long totalTime = 0;
+			System.out.println("Started!");
+//			System.out.println(type);
+
+			for(int i = 1; i <= row; i++){
+//				System.out.println("put row " + i);
+				long startTime = System.nanoTime();
+				if(type == select)
+					handleSQL("INSERT INTO testtable1(row, colfam.qual1) VALUES(row" + i + ", val" + i + ")", false);
+				else if(type == agg)
+					handleSQL("INSERT INTO testtable5(row, colfam.aggKey, colfam.value) VALUES(row" + i + ", a" + (i % 20) + ", " + i + ")", false);
+				else if(type == join){
+					handleSQL("INSERT INTO testtable3(row, colfam.joinKey, colfam.qualifierTesttable3) VALUES(row" + i + ", j" + i + ", " + i + ")", false);
+					handleSQL("INSERT INTO testtable4(row, colfam.joinKey, colfam.qualifierTesttable4) VALUES(row" + i + ", j" + i + ", " + (row + 1 - i) + ")", false);
+				}
+				long endTime = System.nanoTime();
+				long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds
+				totalTime += duration;
+			}
+			System.out.println("Insert : " + totalTime);
+			totalTime = 0;
+			for(int i = 1; i <= row; i++){
+				long startTime = System.nanoTime();
+				if(type == select)
+					handleSQL("UPDATE testtable1 SET row = row" + i + ", colfam.qual1 = " + (row + 1 - i) + "", false);
+				else if(type == agg)
+					handleSQL("UPDATE testtable5 SET row = row" + i + ", colfam.value = " + (row + 1 - i) + "", false);
+				else if(type == join){
+					handleSQL("UPDATE testtable3 SET row = row" + i + ", colfam.qualifierTesttable3 = " + (row + 1 - i) + "", false);
+				}
+				long endTime = System.nanoTime();
+				long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds
+				totalTime += duration;
+			}
+			System.out.println("Update : " + totalTime);
+
+
+		} catch(IOException e){
+			e.printStackTrace();
+		}
+	}
 	static int rows;
+
+	private static final int select = 1;
+	private static final int agg = 2;
+	private static final int join = 3;
+
 }

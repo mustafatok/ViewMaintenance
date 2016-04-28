@@ -9,6 +9,7 @@ import java.util.List;
 import de.tok.coprocessor.generated.BSVCoprocessorProtos;
 import de.tok.utils.HBaseHelper;
 import net.sf.jsqlparser.JSQLParserException;
+import net.sf.jsqlparser.expression.BinaryExpression;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.Function;
 import net.sf.jsqlparser.expression.StringValue;
@@ -16,6 +17,7 @@ import net.sf.jsqlparser.expression.operators.relational.*;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.schema.Table;
+import net.sf.jsqlparser.statement.delete.Delete;
 import net.sf.jsqlparser.statement.insert.Insert;
 import net.sf.jsqlparser.statement.select.*;
 
@@ -164,6 +166,18 @@ public class JsqlParser {
 				putElement.setColumnList(columnList);
 				putElement.setValues(values);
 				logicalPlan.add(putElement);
+			}else if (statement instanceof Delete){
+				DeleteElement deleteElement = new DeleteElement();
+				Delete deleteStatement = (Delete) statement;
+				String tableName = deleteStatement.getTable().getName();
+				EqualsTo exp = ((EqualsTo) deleteStatement.getWhere());
+				String le = exp.getLeftExpression().toString();
+				String re = exp.getRightExpression().toString();
+				if(le.equals("row"))
+					deleteElement.setRow(re.getBytes());
+
+				deleteElement.setTableName(tableName);
+				logicalPlan.add(deleteElement);
 			}
 		} catch (JSQLParserException e) {
 			e.printStackTrace();

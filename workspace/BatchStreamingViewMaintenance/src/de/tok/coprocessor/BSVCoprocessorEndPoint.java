@@ -352,7 +352,8 @@ public class BSVCoprocessorEndPoint extends Execute implements Coprocessor,
 
 				// build join table
 				if(request.getIsBuildJoinView()){
-					processJoinView(curVals);
+					if(curVals != null && !curVals.isEmpty())
+						processJoinView(curVals);
 				}
 
 				/*
