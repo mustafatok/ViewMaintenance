@@ -30,17 +30,17 @@ public class BSVTest {
 //			helper = HBaseHelper.getHelper(conf);
 //			helper.dropTable("testtable1");
 //			helper.createTable("testtable1", "colfam1", "colfam2");
-//			
+//
 //			String[] rows = {};
 //			List<String> stringArray = new ArrayList<String>();
 //			for(int i = 1; i <= 100; i++){
 //				stringArray.add("row" + i);
 //			}
 //			rows = stringArray.toArray(new String[0]);
-//			helper.put("testtable1", 
-//					rows, 
+//			helper.put("testtable1",
+//					rows,
 //					new String[] { "colfam1", "colfam2" },
-//					new String[] { "qual1", "qual2" }, 
+//					new String[] { "qual1", "qual2" },
 //					new long[] { 1, 2 },
 //					new String[] { "1", "2" });
 //			System.out.println("Before endpoint call...");

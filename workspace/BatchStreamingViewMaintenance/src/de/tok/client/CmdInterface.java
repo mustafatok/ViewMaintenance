@@ -1,10 +1,9 @@
 package de.tok.client;
 
+import java.awt.*;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
 
 import org.apache.commons.cli.BasicParser;
@@ -22,13 +21,16 @@ import org.apache.hadoop.hbase.util.Bytes;
 import de.tok.sql.JsqlParser;
 import de.tok.sql.SimpleLogicalPlan;
 import de.tok.utils.HBaseHelper;
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
 
 public class CmdInterface {
 	public static void main(String[] args) {
 		// Read from input
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String input;
-
+//		Logger.getLogger("zookeeper").setLevel(Level.FATAL);
+		Logger.getRootLogger().setLevel(Level.FATAL);
 		boolean esc = false;
 		while (!esc) {
 			try {
@@ -42,10 +44,24 @@ public class CmdInterface {
 					load(argIn);
 				} else if (argIn[0].equals("test")){
 //					test(argIn);
-					int row = Integer.parseInt(argIn[1]);
-					incrementalTest(select, row);
-					incrementalTest(agg, row);
-					incrementalTest(join, row);
+					int type = Integer.parseInt(argIn[1]);
+					int row = Integer.parseInt(argIn[2]);
+					int sampling = Integer.parseInt(argIn[3]);
+
+					if(type == select)
+						incrementalTest(select, row, sampling, 1);
+					else if(type == agg)
+						for (int i = 1; i <= 10; ++i){
+							System.out.println("Agg - " + i + ": ");
+							incrementalTest(agg, row, sampling, row/i);
+						}
+					else if(type == join)
+						for (int i = 1; i <= 10; ++i){
+							System.out.println("Join - " + i + ": ");
+							incrementalTest(join, row, sampling, row/i);
+						}
+
+//					incrementalTest(join, row);
 				} else if(argIn[0].equals("create")){
 					if (argIn.length > 3 && argIn[1].equals("view")){
 						createMaterializedView(argIn[2], input, true);
@@ -111,7 +127,7 @@ public class CmdInterface {
 	 */
 	public static void handleSQL(String input, boolean isReturningResults) {
 		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(input, isReturningResults);
-		System.out.println(simpleLogicalPlan);
+//		System.out.println(simpleLogicalPlan);
 		simpleLogicalPlan.getHead().execute();
 	}
 
@@ -717,11 +733,11 @@ public class CmdInterface {
 		}
 	}
 
-	private static void incrementalTest(int type, int row){
+	private static void testInit(int type) {
 		// testtable 1
-
 		Configuration conf = HBaseConfiguration.create();
 		HBaseHelper helper;
+
 		try {
 			helper = HBaseHelper.getHelper(conf);
 			helper.dropTable("select_view");
@@ -731,65 +747,313 @@ public class CmdInterface {
 			helper.createTable("view_meta_data", "settings", "tables");
 
 			if(type == select) {
-				helper.dropTable("testtable1");
-				helper.createTable("testtable1", "colfam");
-				createMaterializedView("select_view", "create view select_view select colfam.qual1 from testtable1", false);
+				helper.dropTable("selecttable1");
+				helper.createTable("selecttable1", "colfam");
+
+				helper.dropTable("selecttable2");
+				helper.createTable("selecttable2", "colfam");
+
+				helper.dropTable("selecttable3");
+				helper.createTable("selecttable3", "colfam");
+
+
+				createMaterializedView("select_view_2", "create view select_view_2 select colfam.qual1 from selecttable2", false);
+
+
+				createMaterializedView("select_view_3", "create view select_view_3 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_4", "create view select_view_4 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_5", "create view select_view_5 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_6", "create view select_view_6 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_7", "create view select_view_7 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_8", "create view select_view_8 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_9", "create view select_view_9 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_10", "create view select_view_10 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_11", "create view select_view_11 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_12", "create view select_view_12 select colfam.qual1 from selecttable3", false);
+				createMaterializedView("select_view_13", "create view select_view_13 select colfam.qual1 from selecttable3", false);
 
 			}else if(type == agg) {
-				helper.dropTable("testtable5");
-				helper.createTable("testtable5", "colfam");
-				createMaterializedView("agg_view", "create view agg_view select count(colfam.value), sum(colfam.value), avg(colfam.value) from testtable5 group by colfam.aggKey", false);
+				helper.dropTable("aggtable1");
+				helper.createTable("aggtable1", "colfam");
+
+				helper.dropTable("aggtable2");
+				helper.createTable("aggtable2", "colfam");
+
+				helper.dropTable("aggtable3");
+				helper.createTable("aggtable3", "colfam");
+
+
+				createMaterializedView("agg_view1", "create view agg_view1 select min(colfam.value) from aggtable1 group by colfam.aggKey", false);
+
+				createMaterializedView("agg_view2", "create view agg_view2 select min(colfam.value) from aggtable2 group by colfam.aggKey", false);
+				createMaterializedView("agg_view3", "create view agg_view3 select max(colfam.value) from aggtable2 group by colfam.aggKey", false);
+				createMaterializedView("agg_view4", "create view agg_view4 select count(colfam.value) from aggtable2 group by colfam.aggKey", false);
+				createMaterializedView("agg_view5", "create view agg_view5 select sum(colfam.value) from aggtable2 group by colfam.aggKey", false);
+				createMaterializedView("agg_view6", "create view agg_view6 select avg(colfam.value) from aggtable2 group by colfam.aggKey", false);
+
+				createMaterializedView("agg_view7", "create view agg_view7 select min(colfam.value), max(colfam.value), count(colfam.value), sum(colfam.value), avg(colfam.value) from aggtable3 group by colfam.aggKey", false);
+				createMaterializedView("agg_view8", "create view agg_view8 select min(colfam.value), max(colfam.value), count(colfam.value), sum(colfam.value), avg(colfam.value) from aggtable3 group by colfam.aggKey", false);
+				createMaterializedView("agg_view9", "create view agg_view9 select min(colfam.value), max(colfam.value), count(colfam.value), sum(colfam.value), avg(colfam.value) from aggtable3 group by colfam.aggKey", false);
+				createMaterializedView("agg_view10", "create view agg_view10 select min(colfam.value), max(colfam.value), count(colfam.value), sum(colfam.value), avg(colfam.value) from aggtable3 group by colfam.aggKey", false);
+				createMaterializedView("agg_view11", "create view agg_view11 select min(colfam.value), max(colfam.value), count(colfam.value), sum(colfam.value), avg(colfam.value) from aggtable3 group by colfam.aggKey", false);
 
 			}else if(type == join){
-				helper.dropTable("testtable3");
-				helper.dropTable("testtable4");
-				helper.createTable("testtable3", "colfam");
-				helper.createTable("testtable4", "colfam");
-				createMaterializedView("join_view", "create view join_view select testtable3.colfam.qualifierTesttable3, testtable4.colfam.qualifierTesttable4 from testtable3 join testtable4 on colfam.joinkey=colfam.joinkey", false);
+				helper.dropTable("jointable11");
+				helper.dropTable("jointable12");
+				helper.createTable("jointable11", "colfam");
+				helper.createTable("jointable12", "colfam");
+
+				createMaterializedView("join_view", "create view join_view select jointable11.colfam.qualifierTesttable3, jointable12.colfam.qualifierTesttable4 from jointable11 join jointable12 on colfam.joinkey=colfam.joinkey", false);
 
 			}
-
-
-			long totalTime = 0;
-			System.out.println("Started!");
-//			System.out.println(type);
-
-			for(int i = 1; i <= row; i++){
-//				System.out.println("put row " + i);
-				long startTime = System.nanoTime();
-				if(type == select)
-					handleSQL("INSERT INTO testtable1(row, colfam.qual1) VALUES(row" + i + ", val" + i + ")", false);
-				else if(type == agg)
-					handleSQL("INSERT INTO testtable5(row, colfam.aggKey, colfam.value) VALUES(row" + i + ", a" + (i % 20) + ", " + i + ")", false);
-				else if(type == join){
-					handleSQL("INSERT INTO testtable3(row, colfam.joinKey, colfam.qualifierTesttable3) VALUES(row" + i + ", j" + i + ", " + i + ")", false);
-					handleSQL("INSERT INTO testtable4(row, colfam.joinKey, colfam.qualifierTesttable4) VALUES(row" + i + ", j" + i + ", " + (row + 1 - i) + ")", false);
-				}
-				long endTime = System.nanoTime();
-				long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds
-				totalTime += duration;
-			}
-			System.out.println("Insert : " + totalTime);
-			totalTime = 0;
-			for(int i = 1; i <= row; i++){
-				long startTime = System.nanoTime();
-				if(type == select)
-					handleSQL("UPDATE testtable1 SET row = row" + i + ", colfam.qual1 = " + (row + 1 - i) + "", false);
-				else if(type == agg)
-					handleSQL("UPDATE testtable5 SET row = row" + i + ", colfam.value = " + (row + 1 - i) + "", false);
-				else if(type == join){
-					handleSQL("UPDATE testtable3 SET row = row" + i + ", colfam.qualifierTesttable3 = " + (row + 1 - i) + "", false);
-				}
-				long endTime = System.nanoTime();
-				long duration = (endTime - startTime);  //divide by 1000000 to get milliseconds
-				totalTime += duration;
-			}
-			System.out.println("Update : " + totalTime);
-
-
-		} catch(IOException e){
+		}
+		catch(IOException e){
 			e.printStackTrace();
 		}
+
+	}
+
+
+	private static void incrementalTest(int type, int row, int sampling, int aggDivisor){
+			testInit(type);
+//			LinkedList<Point>[] coordinates = new LinkedList[3];
+			ArrayList<LinkedList<Point>> coordinates = new ArrayList<LinkedList<Point>>(3);
+
+			for(int i = 0; i < 3; ++i) coordinates.add(i, new LinkedList<Point>());
+
+			long totalTime[] = new long[3];
+			long sum[] = new long[3];
+			long cnt[] = new long[3];
+
+			System.out.println("Started!");
+			System.out.println("Insert : ");
+			for(int i = 1; i <= (type == join?2*row:row); i++){
+
+				String in[] = new String[3];
+
+				if(type == select) {
+					in[0] = "INSERT INTO selecttable1(row, colfam.qual1) VALUES(row" + i + ", val" + i + ")";
+					in[1] = "INSERT INTO selecttable2(row, colfam.qual1) VALUES(row" + i + ", val" + i + ")";
+					in[2] = "INSERT INTO selecttable3(row, colfam.qual1) VALUES(row" + i + ", val" + i + ")";
+				}else if(type == agg) {
+					in[0] = "INSERT INTO aggtable1(row, colfam.aggKey, colfam.value) VALUES(row" + i + ", a" + (i % aggDivisor) + ", " + i + ")";
+					in[1] = "INSERT INTO aggtable2(row, colfam.aggKey, colfam.value) VALUES(row" + i + ", a" + (i % aggDivisor) + ", " + i + ")";
+					in[2] = "INSERT INTO aggtable3(row, colfam.aggKey, colfam.value) VALUES(row" + i + ", a" + (i % aggDivisor) + ", " + i + ")";
+				}else if(type == join){
+					if(i <= row/2)
+						in[0] = "INSERT INTO jointable11(row, colfam.joinKey, colfam.qualifierTesttable3) VALUES(row" + i + ", j" + (i % aggDivisor) + ", " + i + ")";
+					else if(i <= row)
+						in[0] = "INSERT INTO jointable12(row, colfam.joinKey, colfam.qualifierTesttable4) VALUES(row" + (i - row/2) + ", j" + ((i - row/2) % aggDivisor) + ", " + (row + 1 - (i - row/2)) + ")";
+					else if(i <= 3*row/2)
+						in[0] = "INSERT INTO jointable11(row, colfam.joinKey, colfam.qualifierTesttable3) VALUES(row" + (i - row/2) + ", j" + ((i - row/2) % aggDivisor) + ", " + (i - row/2) + ")";
+					else
+						in[0] = "INSERT INTO jointable12(row, colfam.joinKey, colfam.qualifierTesttable4) VALUES(row" + (i - row) + ", j" + (i % aggDivisor) + ", " + (2*row + 1 - i) + ")";
+				}
+
+
+				long duration[] = new long[3];
+
+				for (int j = 0; j < 3; ++j){
+					if(j > 0 && type == join)
+						break;
+					duration[j] = analyze(in[j]);
+					totalTime[j] += duration[j];
+					if(i % sampling == 0) {
+						coordinates.get(j).add(new Point(i, (int) ((totalTime[j])/sampling) / 1000000));
+						sum[j] = sum[j] + (totalTime[j] / sampling);
+						cnt[j] = cnt[j] + 1;
+						totalTime[j] = 0;
+					}
+				}
+			}
+
+			for (int j = 0; j < 3; ++j){
+				if(j > 0 && type == join)
+					break;
+				System.out.println("Results - " + (j + 1) + " : " + convert(coordinates.get(j)));
+				System.out.println("Avg - " + (j + 1) + " : " + (sum[j] / cnt[j]) / 1000000);
+			}
+
+
+
+
+			System.out.println("Update1 : ");
+
+			coordinates = new ArrayList<LinkedList<Point>>(3);
+
+			for(int i = 0; i < 3; ++i)
+				coordinates.add(i, new LinkedList<Point>());
+
+			totalTime = new long[3];
+			sum = new long[3];
+			cnt = new long[3];
+
+			for(int i = 1; i <= row; i++){
+
+				String in[] = new String[3];
+				if(type == select) {
+					in[0] = "UPDATE selecttable1 SET row = row" + i + ", colfam.qual1 = " + (row + 1 - i);
+					in[1] = "UPDATE selecttable2 SET row = row" + i + ", colfam.qual1 = " + (row + 1 - i);
+					in[2] = "UPDATE selecttable3 SET row = row" + i + ", colfam.qual1 = " + (row + 1 - i);
+				}else if(type == agg) {
+					in[0] = "UPDATE aggtable1 SET row = row" + i + ", colfam.value = " + (row + 1 - i);
+					in[1] = "UPDATE aggtable2 SET row = row" + i + ", colfam.value = " + (row + 1 - i);
+					in[2] = "UPDATE aggtable3 SET row = row" + i + ", colfam.value = " + (row + 1 - i);
+				}else if(type == join) {
+					in[0] = "UPDATE jointable11 SET row = row" + i + ", colfam.qualifierTesttable3 = " + (row + 1 - i);
+				}
+				long duration[] = new long[3];
+
+				for (int j = 0; j < 3; ++j){
+					if(j > 0 && type == join)
+						break;
+					duration[j] = analyze(in[j]);
+					totalTime[j] += duration[j];
+					if(i % sampling == 0) {
+						coordinates.get(j).add(new Point(i, (int) ((totalTime[j])/sampling) / 1000000));
+						sum[j] = sum[j] + (totalTime[j] / sampling);
+						cnt[j] = cnt[j] + 1;
+						totalTime[j] = 0;
+					}
+				}
+			}
+			for (int j = 0; j < 3; ++j){
+				if(j > 0 && type == join)
+					break;
+				System.out.println("Results - " + (j + 1) + " : " + convert(coordinates.get(j)));
+				System.out.println("Avg - " + (j + 1) + " : " + (sum[j] / cnt[j]) / 1000000);
+			}
+
+			if(type == agg || type == join) {
+
+
+				System.out.println("Update2 : ");
+
+				coordinates = new ArrayList<LinkedList<Point>>(3);
+
+				for(int i = 0; i < 3; ++i)
+					coordinates.add(i, new LinkedList<Point>());
+
+				totalTime = new long[3];
+				sum = new long[3];
+				cnt = new long[3];
+
+
+				for(int i = 1; i <= row; i++){
+
+					String in[] = new String[3];
+					if(type == agg) {
+						in[0] = "UPDATE aggtable1 SET row = row" + i + ", colfam.aggKey = a" + (row + 1 - i) % aggDivisor;
+						in[1] = "UPDATE aggtable2 SET row = row" + i + ", colfam.aggKey = a" + (row + 1 - i) % aggDivisor;
+						in[2] = "UPDATE aggtable3 SET row = row" + i + ", colfam.aggKey = a" + (row + 1 - i) % aggDivisor;
+					} else if(type == join) {
+						in[0] = "UPDATE jointable11 SET row = row" + i + ", colfam.joinKey = j" + (row + 1 - i) % aggDivisor;
+					}
+					long duration[] = new long[3];
+
+					for (int j = 0; j < 3; ++j){
+						if(j > 0 && type == join)
+							break;
+						duration[j] = analyze(in[j]);
+						totalTime[j] += duration[j];
+						if(i % sampling == 0) {
+							coordinates.get(j).add(new Point(i, (int) ((totalTime[j])/sampling) / 1000000));
+							sum[j] = sum[j] + (totalTime[j] / sampling);
+							cnt[j] = cnt[j] + 1;
+							totalTime[j] = 0;
+						}
+					}
+				}
+				for (int j = 0; j < 3; ++j){
+					if(j > 0 && type == join)
+						break;
+					System.out.println("Results - " + (j + 1) + " : " + convert(coordinates.get(j)));
+					System.out.println("Avg - " + (j + 1) + " : " + (sum[j] / cnt[j]) / 1000000);
+				}
+
+
+			}
+
+
+
+
+
+			System.out.println("Delete : ");
+
+			coordinates = new ArrayList<LinkedList<Point>>(3);
+
+			for(int i = 0; i < 3; ++i)
+				coordinates.add(i, new LinkedList<Point>());
+
+
+			totalTime = new long[3];
+			sum = new long[3];
+			cnt = new long[3];
+
+			for(int i = 1; i <= row; i++){
+
+				String in[] = new String[3];
+
+				if(type == select) {
+					in[0] = "DELETE FROM selecttable1 WHERE row = row" + i;
+					in[1] = "DELETE FROM selecttable2 WHERE row = row" + i;
+					in[2] = "DELETE FROM selecttable3 WHERE row = row" + i;
+				}else if(type == agg) {
+					in[0] = "DELETE FROM aggtable1 WHERE row = row" + i;
+					in[1] = "DELETE FROM aggtable2 WHERE row = row" + i;
+					in[2] = "DELETE FROM aggtable3 WHERE row = row" + i;
+				}else if(type == join){
+					in[0] = "DELETE FROM jointable11 WHERE row = row" + i;
+				}
+
+				long duration[] = new long[3];
+
+				for (int j = 0; j < 3; ++j){
+					if(j > 0 && type == join)
+						break;
+					duration[j] = analyze(in[j]);
+					totalTime[j] += duration[j];
+					if(i % sampling == 0) {
+						coordinates.get(j).add(new Point(i, (int) ((totalTime[j])/sampling) / 1000000));
+						sum[j] = sum[j] + (totalTime[j] / sampling);
+						cnt[j] = cnt[j] + 1;
+						totalTime[j] = 0;
+					}
+				}
+			}
+			for (int j = 0; j < 3; ++j){
+				if(j > 0 && type == join)
+					break;
+				System.out.println("Results - " + (j + 1) + " : " + convert(coordinates.get(j)));
+				System.out.println("Avg - " + (j + 1) + " : " + (sum[j] / cnt[j]) / 1000000);
+			}
+
+	}
+
+	private static long analyze(String query){
+		long startTime;
+		long endTime;
+
+		SimpleLogicalPlan simpleLogicalPlan = JsqlParser.parse(query, false);
+		//	parserEnd = System.nanoTime();
+
+		startTime = System.nanoTime();
+		simpleLogicalPlan.getHead().execute();
+		endTime = System.nanoTime();
+
+		return (endTime - startTime);  //divide by 1000000 to get milliseconds
+
+	}
+	private static String convert(LinkedList<Point> coordinates){
+		String s = "";
+		for (Point p:coordinates) {
+//			if(!s.equals(""))
+//				s += ", ";
+
+			s += "(" + p.getX() + ", " + p.getY() + ")";
+		}
+		return s;
+
 	}
 	static int rows;
 

@@ -23,6 +23,7 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
     TableName modifiedTable;
     private boolean prePut = false;
 
+    HashMap<String, HTableInterface> cache = new HashMap<>();
     HTableInterface tableView;
 
     public void commonOperation(ObserverContext<RegionCoprocessorEnvironment> observerContext, Mutation op) throws IOException {
@@ -70,6 +71,9 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
     @Override
     public void stop(CoprocessorEnvironment e) throws IOException {
         tableView.close();
+        for (HTableInterface view :cache.values()) {
+            view.close();
+        }
     }
 
     @Override
@@ -152,11 +156,18 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
                 viewPut.add(CellUtil.cloneFamily(c), (new String(CellUtil.cloneQualifier(c))).getBytes(), CellUtil.cloneValue(c));
             }
         }
-        HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+        HTableInterface view;
+
+        if(cache.containsKey(viewName)){
+            view = cache.get(viewName);
+        }else{
+            view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+            cache.put(viewName, view);
+        }
 
         view.put(viewPut);
         view.flushCommits();
-        view.close();
+
     }
 
     private void select(Delete delete) throws IOException {
@@ -164,10 +175,19 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
     }
     private void deleteFromView(byte[] row) throws IOException {
         Delete viewDelete = new Delete(row);
-        HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+//        HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+        HTableInterface view;
+
+        String tableName = viewName;
+        if(cache.containsKey(tableName)){
+            view = cache.get(tableName);
+        }else{
+            view = oContext.getEnvironment().getTable(TableName.valueOf(tableName));
+            cache.put(tableName, view);
+        }
         view.delete(viewDelete);
         view.flushCommits();
-        view.close();
+//        view.close();
     }
 
     private void join(Put put) throws IOException {
@@ -406,7 +426,14 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
         String rowDeltaPrefix = "colfam.value";
 
 
-        HTableInterface table = oContext.getEnvironment().getTable(modifiedTable);
+        HTableInterface table;
+        String tableName = modifiedTable.getNameAsString();
+        if(cache.containsKey(tableName)){
+            table = cache.get(tableName);
+        }else{
+            table = oContext.getEnvironment().getTable(modifiedTable);
+            cache.put(tableName, table);
+        }
         Result result = table.get(new Get(put.getRow()));
         if (result != null && !result.isEmpty()) {
             NavigableMap<byte[], byte[]> rowMap = result.getFamilyMap(colfam);
@@ -422,11 +449,20 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
                 }
             }
         }
-        table.close();
+//        table.close();
 
         Get getDelta = new Get(rowDeltaPrefix.getBytes());
 
-        HTableInterface deltaView = oContext.getEnvironment().getTable(TableName.valueOf(viewName + "_delta"));
+        HTableInterface deltaView;
+
+        tableName = viewName + "_delta";
+        if(cache.containsKey(tableName)){
+            deltaView = cache.get(tableName);
+        }else{
+            deltaView = oContext.getEnvironment().getTable(TableName.valueOf(tableName));
+            cache.put(tableName, deltaView);
+        }
+
         result = deltaView.get(getDelta);
 
         if (result != null && !result.isEmpty()) {
@@ -464,14 +500,21 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
 
         deltaView.put(createDeltaViewPut(getDelta.getRow(), colfam, MIN, MAX, COUNT, SUM, put.getRow(), newValue));
         deltaView.flushCommits();
-        deltaView.close();
+//        deltaView.close();
 
-        HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+        HTableInterface view;
+
+        tableName = viewName;
+        if(cache.containsKey(tableName)){
+            view = cache.get(tableName);
+        }else{
+            view = oContext.getEnvironment().getTable(TableName.valueOf(tableName));
+            cache.put(tableName, view);
+        }
 
         view.put(createViewPut(getDelta.getRow(), colfam, MIN, MAX, COUNT, SUM, aggSet));
         view.flushCommits();
-        view.close();
-
+//        view.close();
     }
 
     private void aggregation(Delete delete) throws IOException {
@@ -498,7 +541,16 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
 
         Get getDelta = new Get(deltaViewRowId.getBytes());
 
-        HTableInterface deltaView = oContext.getEnvironment().getTable(TableName.valueOf(viewName + "_delta"));
+//        HTableInterface deltaView = oContext.getEnvironment().getTable(TableName.valueOf(viewName + "_delta"));
+        HTableInterface deltaView;
+
+        String tableName = viewName + "_delta";
+        if(cache.containsKey(tableName)){
+            deltaView = cache.get(tableName);
+        }else{
+            deltaView = oContext.getEnvironment().getTable(TableName.valueOf(tableName));
+            cache.put(tableName, deltaView);
+        }
         Result result = deltaView.get(getDelta);
 
         if (result != null && !result.isEmpty()) {
@@ -531,11 +583,20 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
                     delete.deleteColumns(colfam, deleteRowId);
                     deltaView.put(createDeltaViewPut(getDelta.getRow(), colfam, MIN, MAX, COUNT, SUM));
 
-                    HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
+//                    HTableInterface view = oContext.getEnvironment().getTable(TableName.valueOf(viewName));
 
+                    HTableInterface view;
+
+                    tableName = viewName;
+                    if(cache.containsKey(tableName)){
+                        view = cache.get(tableName);
+                    }else{
+                        view = oContext.getEnvironment().getTable(TableName.valueOf(tableName));
+                        cache.put(tableName, view);
+                    }
                     view.put(createViewPut(getDelta.getRow(), colfam, MIN, MAX, COUNT, SUM, aggSet));
                     view.flushCommits();
-                    view.close();
+//                    view.close();
                 }
             }else{
                 deleteFromView(getDelta.getRow());
@@ -543,7 +604,7 @@ public class ViewMaintenanceRegionObserver extends BaseRegionObserver {
 
             deltaView.delete(delete);
             deltaView.flushCommits();
-            deltaView.close();
+//            deltaView.close();
 
         }
 
